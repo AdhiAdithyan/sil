@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-17 10:55:52.812873",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "solution_name",
+  "item_group",
+  "item",
+  "column_break_phjy",
+  "solution_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "solution_name",
+   "fieldtype": "Data",
+   "label": "Solution Name"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_phjy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "solution_detail",
+   "fieldtype": "Small Text",
+   "label": "Solution Detail"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:46.764331",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "Solution Type",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

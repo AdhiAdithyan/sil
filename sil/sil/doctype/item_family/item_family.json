@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:family_name",
+ "creation": "2024-07-10 16:17:19.484563",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "family_name",
+  "series_prefix",
+  "last_serial_no",
+  "do_you_have_a_serial_no",
+  "column_break_ecvr",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "family_name",
+   "fieldtype": "Data",
+   "label": "Family Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "series_prefix",
+   "fieldtype": "Data",
+   "label": "Series Prefix"
+  },
+  {
+   "fieldname": "last_serial_no",
+   "fieldtype": "Data",
+   "label": "Last Serial No"
+  },
+  {
+   "fieldname": "do_you_have_a_serial_no",
+   "fieldtype": "Select",
+   "label": "Do You Have A Serial No",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "column_break_ecvr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:44.904089",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "Item Family",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

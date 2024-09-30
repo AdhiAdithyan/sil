@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:cluster",
+ "creation": "2024-07-10 16:03:55.471391",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cluster_manager",
+  "cluster",
+  "statesprovince",
+  "column_break_smau",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "cluster_manager",
+   "fieldtype": "Link",
+   "label": "Cluster Manager",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "cluster",
+   "fieldtype": "Link",
+   "label": "Cluster",
+   "options": "Cluster",
+   "unique": 1
+  },
+  {
+   "fieldname": "statesprovince",
+   "fieldtype": "Table MultiSelect",
+   "label": "States/Province",
+   "options": "States"
+  },
+  {
+   "fieldname": "column_break_smau",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:43.966061",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "Cluster Manager",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

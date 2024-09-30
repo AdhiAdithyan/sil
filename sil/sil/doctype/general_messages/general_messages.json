@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-18 12:07:21.343034",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "message_type",
+  "employee",
+  "recommendation",
+  "suggestion",
+  "concern",
+  "feedback",
+  "others",
+  "hr",
+  "reporting_authority"
+ ],
+ "fields": [
+  {
+   "fieldname": "message_type",
+   "fieldtype": "Select",
+   "label": "Message type",
+   "options": "\nRecommendation\nSuggestion\nConcern\nFeedback\nOthers"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "depends_on": "eval:doc.message_type == \"Recommendation\"",
+   "fieldname": "recommendation",
+   "fieldtype": "Small Text",
+   "label": "Recommendation"
+  },
+  {
+   "depends_on": "eval:doc.message_type == \"Suggestion\"",
+   "fieldname": "suggestion",
+   "fieldtype": "Small Text",
+   "label": "Suggestion"
+  },
+  {
+   "depends_on": "eval:doc.message_type == \"Concern\"",
+   "fieldname": "concern",
+   "fieldtype": "Small Text",
+   "label": "Concern"
+  },
+  {
+   "depends_on": "eval:doc.message_type == \"Feedback\"",
+   "fieldname": "feedback",
+   "fieldtype": "Small Text",
+   "label": "Feedback"
+  },
+  {
+   "depends_on": "eval:doc.message_type == \"Others\"",
+   "fieldname": "others",
+   "fieldtype": "Small Text",
+   "label": "Others"
+  },
+  {
+   "default": "0",
+   "fieldname": "hr",
+   "fieldtype": "Check",
+   "label": "HR"
+  },
+  {
+   "default": "0",
+   "fieldname": "reporting_authority",
+   "fieldtype": "Check",
+   "label": "Reporting Authority"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:46.580307",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "General Messages",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

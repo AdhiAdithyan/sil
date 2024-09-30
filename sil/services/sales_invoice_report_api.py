@@ -1,0 +1,255 @@
+import frappe
+from io import BytesIO
+from openpyxl import Workbook
+from frappe import _
+from frappe import ValidationError
+from frappe.utils.file_manager import save_file
+
+
+def validate_filters(filters):
+    if not filters:
+        raise frappe.ValidationError(_("Filters are required for this report."))
+    if not isinstance(filters, dict):
+        raise frappe.ValidationError(_("Invalid filters format. Filters should be a dictionary."))
+
+def get_columns():
+    # Define columns with field names and labels
+    return [
+        {"label": "Sr", "fieldname": "sr", "fieldtype": "Int", "width": 50, "align": "left"},
+        {"label": "ID", "fieldname": "name", "fieldtype": "Link", "options": "Sales Invoice", "width": 120, "align": "left"},
+        {"label": "Docstatus", "fieldname": "docstatus", "fieldtype": "Int", "width": 80, "align": "left"},
+        {"label": "Sales Type", "fieldname": "sales_type", "fieldtype": "Data", "width": 120, "align": "left"},
+        {"label": "Currency", "fieldname": "currency", "fieldtype": "Link", "options": "Currency", "width": 80, "align": "left"},
+        {"label": "Customer Name", "fieldname": "customer_name", "fieldtype": "Data", "width": 200, "align": "left"},
+        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Cluster Manager", "fieldname": "cluster_manager", "fieldtype": "Data", "width": 150, "align": "left"},
+        {"label": "Cluster", "fieldname": "cluster", "fieldtype": "Data", "width": 100, "align": "left"},
+        {"label": "Date", "fieldname": "posting_date", "fieldtype": "Date", "width": 100, "align": "left"},
+        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left"},
+        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left"},
+        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left"},
+        {"label": "Alias Name", "fieldname": "alias_name", "fieldtype": "Data", "width": 200, "align": "left"},
+        {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Currency", "width": 180, "align": "right"},
+        {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left"},
+    ]
+
+def get_data(filters):
+    try:
+        data = []
+        print(f"get_data:{filters}")
+        invoices = frappe.get_all(
+            "Sales Invoice",
+            filters=filters,
+
+            fields=["name", "docstatus", "currency", "customer_name", "grand_total", 
+                    "total_taxes_and_charges", "posting_date", "net_total", "paid_amount", "total"],
+            order_by="creation asc"
+        )
+        
+        if not invoices:
+            frappe.throw(_("No Sales Invoices found for the given filters."))
+
+        for idx, inv in enumerate(invoices, 1):
+            items = frappe.get_all(
+                "Sales Invoice Item",
+                filters={"parent": inv.name},
+                fields=["amount", "item_name", "qty", "rate", "net_amount", "name as item_id"]
+            )
+            
+            if not items:
+                frappe.throw(_("No items found for Sales Invoice {0}").format(inv.name))
+            
+            count = 0
+            for item in items:
+                if count == 0:
+                    count=1
+                    row = {
+                        "sr": idx,
+                        "name": inv.name,
+                        "docstatus": inv.docstatus,
+                        "sales_type": get_sales_type(inv.name),
+                        "currency": inv.currency,
+                        "customer_name": inv.customer_name,
+                        "grand_total": "{:.2f}".format(inv.grand_total),
+                        "total_taxes_and_charges": "{:.2f}".format(inv.total_taxes_and_charges),
+                        "cluster_manager": get_cluster_manager(inv.name),
+                        "cluster": get_cluster(inv.name),
+                        "posting_date": inv.posting_date,
+                        "net_total": "{:.2f}".format(inv.net_total),
+                        "paid_amount": "{:.2f}".format(inv.paid_amount),
+                        "regional_manager": get_regional_manager(inv.name),
+                        "total": "{:.2f}".format(inv.total),
+                        "zonal_manager": get_zonal_manager(inv.name),
+                        "amount": "{:.2f}".format(item.amount),
+                        "item_name": item.item_name,
+                        "alias_name": get_alias_name(item.item_name),
+                        "qty": item.qty,
+                        "unit_rate": "{:.2f}".format(item.rate),
+                        "net_amount": "{:.2f}".format(item.net_amount),
+                        "item_id": item.item_id,
+                    }
+                else:
+                    row={
+                        "amount": "{:.2f}".format(item.amount),
+                        "item_name": item.item_name,
+                        "alias_name": get_alias_name(item.item_name),
+                        "qty": item.qty,
+                        "unit_rate": "{:.2f}".format(item.rate),
+                        "net_amount": "{:.2f}".format(item.net_amount),
+                        "item_id": item.item_id,
+                    }      
+                data.append(row)
+        
+        total_row = calculate_totals(data)
+        data.append(total_row)
+        
+        return data
+
+    except Exception as e:
+        frappe.throw(_("Error retrieving data: {0}").format(str(e)))
+
+def calculate_totals(data):
+    total_grand_total = sum(float(d.get("grand_total", 0)) for d in data)
+    total_paid_amount = sum(float(d.get("paid_amount", 0)) for d in data)
+    total_net_total = sum(float(d.get("net_total", 0)) for d in data)
+    return {
+        "sr": "",
+        "name": "Total",
+        "grand_total": "{:.2f}".format(total_grand_total),
+        "paid_amount": "{:.2f}".format(total_paid_amount),
+        "net_total": "{:.2f}".format(total_net_total)
+    }
+
+def generate_excel(columns, data):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sales Invoice Report"
+
+    # Write headers
+    headers = [col["label"] for col in columns]
+    ws.append(headers)
+
+    # Write data rows
+    for row in data:
+        ws.append([row.get(col["fieldname"]) for col in columns])
+
+    # Save Excel to a byte stream
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    return excel_file
+
+
+def get_sales_type(invoice_name):
+    try:
+        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
+        customer = frappe.get_doc("Customer", sales_invoice.customer)
+        return customer.customer_type
+    except Exception as e:
+        frappe.throw(_("Error fetching sales type: {0}").format(str(e)))
+
+
+def get_cluster_manager(invoice_name):
+    try:
+        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
+        return sales_invoice.custom_cluster_manager or "Not Assigned"
+    except Exception as e:
+        frappe.throw(_("Error fetching cluster manager: {0}").format(str(e)))
+
+def get_cluster(invoice_name):
+    try:
+        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
+        return sales_invoice.custom_cluster or "Not Assigned"
+    except Exception as e:
+        frappe.throw(_("Error fetching cluster: {0}").format(str(e)))
+
+def get_regional_manager(invoice_name):
+    try:
+        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
+        return sales_invoice.custom_regional_manager or "Not Assigned"
+    except Exception as e:
+        frappe.throw(_("Error fetching regional manager: {0}").format(str(e)))
+
+def get_zonal_manager(invoice_name):
+    try:
+        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
+        return sales_invoice.custom_zonal_manager or "Not Assigned"
+    except Exception as e:
+        frappe.throw(_("Error fetching zonal manager: {0}").format(str(e)))
+
+
+def get_alias_name(item_name):
+    try:
+        # SQL query to fetch the alias name for the given item_name
+        query = """
+            SELECT custom_alias_name 
+            FROM tabItem
+            WHERE 'item_name' = %s
+        """
+        result = frappe.db.sql(query, item_name, as_dict=True)
+        
+        if result:
+            return result[0].get("custom_alias_name") or item_name
+        else:
+            return item_name
+
+    except Exception as e:
+        frappe.throw(_("Error fetching alias name: {0}").format(str(e)))
+
+
+@frappe.whitelist(allow_guest=True)
+def generate_and_download_sales_invoice_report(filters=None):
+    try:
+        if filters is not None:
+            try:
+                filters = frappe.parse_json(filters)
+                validate_filters(filters)
+            except Exception as e:
+                return {'error': str(e)}
+    
+        # Ensure .xlsx is an allowed file type
+        allowed_file_types = frappe.db.get_single_value('Website Settings', 'allowed_file_types')
+        if '.xlsx' not in allowed_file_types:
+            allowed_file_types += ',.xlsx'
+            frappe.db.set_single_value('Website Settings', 'allowed_file_types', allowed_file_types)
+
+        # Get columns and data
+        columns = get_columns()
+        data = get_data(filters)
+        
+        if not data:
+            frappe.throw(_("No data found for the given filters."))
+
+
+        # Generate Excel file using openpyxl
+        excel_file = generate_excel(columns, data)
+
+        # Save file to private folder
+        file_name = "Sales_Invoice_Report.xlsx"
+        file_data = excel_file.getvalue()
+        
+        # Create a file record in Frappe
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": file_name,
+            "file_url": "/private/files/" + file_name,
+            "is_private": 1,
+            "content": file_data
+        })
+        file_doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+
+        # Return file URL
+        return {"file_url": file_doc.file_url}
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), _("Failed to generate report"))
+        return {"error": _("An error occurred: {0}").format(str(e))}    

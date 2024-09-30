@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-17 10:47:35.568656",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "version_name",
+  "released_on",
+  "last_updated_on",
+  "column_break_wdnd",
+  "description",
+  "project"
+ ],
+ "fields": [
+  {
+   "fieldname": "version_name",
+   "fieldtype": "Data",
+   "label": "Version Name"
+  },
+  {
+   "fieldname": "released_on",
+   "fieldtype": "Datetime",
+   "label": "Released On"
+  },
+  {
+   "fieldname": "last_updated_on",
+   "fieldtype": "Datetime",
+   "label": "Last Updated On"
+  },
+  {
+   "fieldname": "column_break_wdnd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:46.968151",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "Project Version",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

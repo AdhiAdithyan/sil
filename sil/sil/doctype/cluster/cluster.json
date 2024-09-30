@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:cluster_name",
+ "creation": "2024-07-10 16:02:27.368345",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "column_break_hsjd",
+  "amended_from",
+  "section_break_gpng",
+  "cluster_name",
+  "parent_region",
+  "description",
+  "is_tallyupdated"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_break_hsjd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Cluster",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_gpng",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cluster_name",
+   "fieldtype": "Data",
+   "label": "Cluster Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "parent_region",
+   "fieldtype": "Link",
+   "label": "Parent Region",
+   "options": "Region"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_tallyupdated",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Is_TallyUpdated",
+   "options": "\n0\n1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-08-02 10:39:43.348064",
+ "modified_by": "Administrator",
+ "module": "sil",
+ "name": "Cluster",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
