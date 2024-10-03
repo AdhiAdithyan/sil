@@ -1,0 +1,79 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-09 17:01:30.680091",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-09 17:01:30.688360",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-09 17:01:30.702651",
+  "name": "Review",
+  "workflow_action_name": "Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:31:08.764126",
+  "name": "Submit",
+  "workflow_action_name": "Submit"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:31:16.349489",
+  "name": "Save",
+  "workflow_action_name": "Save"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:30:44.992330",
+  "name": "Proceed to Billing",
+  "workflow_action_name": "Proceed to Billing"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:31:24.507006",
+  "name": "Proceed For Approval",
+  "workflow_action_name": "Proceed For Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:30:31.977434",
+  "name": "Proceed to Customer Support",
+  "workflow_action_name": "Proceed to Customer Support"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:27:17.092285",
+  "name": "Proceed to Production",
+  "workflow_action_name": "Proceed to Production"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:31:01.594658",
+  "name": "Proceed to Accounts",
+  "workflow_action_name": "Proceed to Accounts"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2024-07-18 12:30:54.220131",
+  "name": "Rejected",
+  "workflow_action_name": "Rejected"
+ }
+]
