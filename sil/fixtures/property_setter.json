@@ -3694,5 +3694,21 @@
   "property_type": "Data",
   "row_name": null,
   "value": "[\"customer\", \"item\", \"item_family\", \"custom_sales_invoice\", \"column_break_ypbj\", \"date\", \"serial_no\", \"custom_item_classification\", \"sales_order\", \"custom_section_break_txxsq\", \"custom_prod_mother_board_no\", \"custom_prod_keyboard_no\", \"custom_column_break_nb2ht\", \"custom_prod_lcd_no\", \"custom_prod_printer_no\", \"custom_warranty\", \"custom_warranty_start\", \"custom_column_break_e0zua\", \"custom_warranty_expiry\", \"custom_annual_maintenance_details\", \"custom_amc1_start\", \"custom_amc2_start\", \"custom_amc3_start\", \"custom_amc4_start\", \"custom_amc5_start\", \"custom_amc6_start\", \"custom_column_break_bkehn\", \"custom_amc1_end\", \"custom_amc2_end\", \"custom_amc3_end\", \"custom_amc4_end\", \"custom_amc5_end\", \"custom_amc6_end\"]"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Appointment Letter",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocType",
+  "field_name": null,
+  "is_system_generated": 0,
+  "modified": "2024-10-03 13:56:46.359777",
+  "module": null,
+  "name": "Appointment Letter-main-default_print_format",
+  "property": "default_print_format",
+  "property_type": "Data",
+  "row_name": null,
+  "value": ""
  }
 ]
