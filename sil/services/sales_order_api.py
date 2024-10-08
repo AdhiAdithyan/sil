@@ -342,7 +342,7 @@ def saveGeneratedSerialNumber(doc):
 
 
 @frappe.whitelist(allow_guest=True)
-def updateItemFamilySerialNoList():
+def updateItemFamilySerialNoList(self):
     try:
         frappe.clear_cache()
 

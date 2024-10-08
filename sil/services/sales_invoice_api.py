@@ -247,8 +247,8 @@ def updateInvoiceUploadStatusWithDate(data):
         return {"success": False, "message": "An error occurred while processing the request"}
 
 
-@frappe.whitelist(allow_guest=True)
-def on_submit(invoice_name):
+# @frappe.whitelist(allow_guest=True)
+# def on_submit(invoice_name):
     # Fetch the Sales Invoice document using the provided invoice name
     # sales_invoice = frappe.get_doc('Sales Invoice', invoice_name)
     
@@ -272,7 +272,7 @@ def on_submit(invoice_name):
     #         'amount': item.amount
     #     })
     
-    return {"message":"Data saved"}#invoice_details
+    # return {"message":"Data saved"}#invoice_details
 
 
 @frappe.whitelist(allow_guest=True)

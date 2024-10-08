@@ -25,6 +25,8 @@ def getAllCustWithStatus(data):
         data_dict=frappe.parse_json(data)
         #Extract the relevant data
         status=data_dict.get("Status")
+
+        CompanyName=data_dict.get("CompanyName")
         # Cast status to integer
         status = int(status)
         #0 for new
