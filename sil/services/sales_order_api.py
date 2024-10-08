@@ -235,11 +235,17 @@ def generateSerialNo(items_series, form_doc):
                             
                             if hasSerialNo=="NO" or hasSerialNo=="No":
                                 value=pad_string_with_zeros(str(last_series + 1),15)
-                                current_serialNo = f"{updated_last_series}B - {value}B"
+                                if updated_last_series == value:
+                                    current_serialNo = f"{updated_last_series}B"
+                                else:
+                                    current_serialNo = f"{updated_last_series}B - {value}B"    
                             else:
                                 item_prefix_len=len(item_prefix)
                                 value=pad_string_with_zeros(str(last_series + 1),15-item_prefix_len)
-                                current_serialNo = f"{item_prefix}{updated_last_series}B - {item_prefix}{value}B"   
+                                if updated_last_series == value:
+                                    current_serialNo = f"{item_prefix}{updated_last_series}B"   
+                                else:
+                                    current_serialNo = f"{item_prefix}{updated_last_series}B - {item_prefix}{value}B"       
 
 
                             # Update the Item Series No with the new serial numbers
