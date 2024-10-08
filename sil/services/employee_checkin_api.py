@@ -5,6 +5,8 @@ from frappe.model.document import Document
 from frappe.utils import cint, get_datetime
 from datetime import datetime
 import json
+import traceback
+
 
 from hrms.hr.doctype.shift_assignment.shift_assignment import (
 	get_actual_start_end_datetime_of_shift,
@@ -74,7 +76,11 @@ def AddCheckInStatus(data):
         if not employee:
             frappe.throw(_("No Employee found for the given name: {}".format(name)))
         
+        print(f"Employee checkin name:{name}")
+        print(f"Employee checkin date_time_str:{date_time_str}")
+
         resp= minLoginTimeCalc(name,date_time_str)
+        
         print(f"Employee checkin response:{str(resp)}")
         # return {"success": False, "message": "Error adding Employee Check-in",
         # "Resp":f"{str(resp)}"}
@@ -88,15 +94,18 @@ def AddCheckInStatus(data):
             log_type = entry.get('log_type')
             last_entry_date = entry.get('last_entry_date')
 
-            if date_change == 0 and time_change > time_interval:
-                return handle_same_day_checkin(log_type, name, date_time_str)
-            elif date_change == 0 and time_change <= time_interval:
-                return {
+            if date_change == 0:
+                if time_change > time_interval:
+                    return handle_same_day_checkin(log_type, name, date_time_str)
+                else:
+                    return {
                     "success": False,
                     "message": "Error adding Employee Check-in. Please try after some time."
-                }
+                    }   
             else:
                 return handle_different_day_checkin(log_type, name, date_time_str,last_entry_date)
+
+            
 
         # # Get the last check-in details to check for duplicates
         # last_checkin_details = get_last_checkin_details(employee.employee_name)
@@ -122,18 +131,6 @@ def get_last_checkin_details(employee_name):
     # Fetch the last check-in details for the employee
     return frappe.db.get_value("Employee Checkin", {"employee": employee_name}, "*", order_by="time DESC", as_dict=True)
 
-
-# def handle_same_day_checkin(last_checkin_details, name, date_time_str):
-#     if last_checkin_details.log_type == "IN":
-#         return create_checkin("OUT", name, date_time_str)
-#     elif last_checkin_details.log_type == "OUT":
-#         return create_checkin("IN", name, date_time_str)
-
-
-# def handle_different_day_checkin(last_checkin_details, name, date_time_str):
-#     if last_checkin_details.log_type == "IN":
-#         create_checkin("OUT", name, last_checkin_details.time)
-#     return create_checkin("IN", name, date_time_str)
 
 
 def handle_same_day_checkin(log_type, name, date_time_str):
@@ -161,13 +158,24 @@ def create_checkin(log_type, name, date_time_str):
 
     # Create and insert Employee Checkin Log
     employee_checkin_log = {
-        "doctype": "Employee Checkin Log",
+        "doctype": "Employee Checkin log",
         "employee": name,
         "log_type": log_type,
         "time": date_time_str,
         "is_valid": "Valid"
     }
-    frappe.get_doc(employee_checkin_log).insert(ignore_permissions=True)
+
+    try:
+        frappe.get_doc(employee_checkin_log).insert(ignore_permissions=True)
+    except Exception as e:
+        # Log error for Employee Checkin Log insertion failure
+        frappe.logger().error(f"Error inserting Employee Checkin Log: {str(e)}")
+        frappe.logger().error(traceback.format_exc())
+        return {
+            "success": False,
+            "message": f"Error inserting Employee Checkin Log: {str(e)}",
+            "traceback": traceback.format_exc()
+        }    
 
     # Commit the transaction
     frappe.db.commit()
@@ -210,17 +218,17 @@ def getAllEmployeeDetails():
 
 
 
-def minLoginTimeCalc(name,date_time_str):
-    return frappe.db.sql("""SELECT TE.name,
-        TS.custom_attendance_capture_acceptance_interval as time_interval,
-        IFNULL(TA.time,'') AS lastPunchTime,IFNULL(DATEDIFF(%s,
-        TA.time),0) AS datechange,IFNULL(TIMESTAMPDIFF(MINUTE,TA.time,
-        %s),TS.custom_attendance_capture_acceptance_interval+1)
-        AS timechange,IFNULL(log_type,'OUT') AS log_type,IFNULL(TA.time,'') as last_entry_date FROM tabEmployee TE LEFT OUTER JOIN 
-        `tabEmployee Checkin` TA ON TA.employee_name=TE.name LEFT OUTER JOIN 
-        `tabShift Type` TS ON TE.default_shift=TS.name WHERE TE.employee_name=%s
-        ORDER BY TA.time DESC LIMIT 1;""",
-        (date_time_str,date_time_str,name,),as_dict=True)  
+# def minLoginTimeCalc(name,date_time_str):
+#     return frappe.db.sql("""SELECT TE.name,
+#         TS.custom_attendance_capture_acceptance_interval as time_interval,
+#         IFNULL(TA.time,'') AS lastPunchTime,IFNULL(DATEDIFF(%s,
+#         TA.time),0) AS datechange,IFNULL(TIMESTAMPDIFF(MINUTE,TA.time,
+#         %s),TS.custom_attendance_capture_acceptance_interval+1)
+#         AS timechange,IFNULL(log_type,'OUT') AS log_type,IFNULL(TA.time,'') as last_entry_date FROM tabEmployee TE LEFT OUTER JOIN 
+#         `tabEmployee Checkin` TA ON TA.employee_name=TE.name LEFT OUTER JOIN 
+#         `tabShift Type` TS ON TE.default_shift=TS.name WHERE TE.employee_name=%s
+#         ORDER BY TA.time DESC LIMIT 1;""",
+#         (date_time_str,date_time_str,name,),as_dict=True)  
     # return frappe.db.sql("""SELECT TE.name,
     # TS.custom_attendance_capture_acceptance_interval as time_interval,
     # IFNULL(TA.time,'') AS lastPunchTime,IFNULL(DATEDIFF(%s,
@@ -233,4 +241,19 @@ def minLoginTimeCalc(name,date_time_str):
     # (date_time_str,date_time_str,name,),as_dict=True)  
 
 
-
+def minLoginTimeCalc(name, date_time_str):
+    return frappe.db.sql("""
+        SELECT TE.name,
+               TS.custom_attendance_capture_acceptance_interval AS time_interval,
+               IFNULL(TA.time, '') AS lastPunchTime,
+               IFNULL(DATEDIFF(%s, TA.time), 0) AS datechange,
+               IFNULL(TIMESTAMPDIFF(MINUTE, TA.time, %s), TS.custom_attendance_capture_acceptance_interval + 1) AS timechange,
+               IFNULL(log_type, 'OUT') AS log_type,
+               IFNULL(TA.time, '') AS last_entry_date
+        FROM `tabEmployee` TE
+        LEFT JOIN `tabEmployee Checkin` TA ON TA.employee_name = TE.name
+        LEFT JOIN `tabShift Type` TS ON TE.default_shift = TS.name
+        WHERE TE.employee_name = %s
+        ORDER BY TA.time DESC
+        LIMIT 1
+    """, (date_time_str, date_time_str, name), as_dict=True)
