@@ -215,7 +215,7 @@ def send_email_with_attachment(email, subject, message, filepath, filename):
 
 def get_combined_checkin_report_to_hr(period='daily'):
     """Send combined check-in reports to HR."""
-    start_days = -2 if period == 'daily' else -7
+    start_days = -2 if period == 'daily' else -100
     today = getdate(nowdate())
     start_date = add_days(today, start_days)
     end_date = today
@@ -240,7 +240,7 @@ def get_combined_checkin_report_to_hr(period='daily'):
             all_checkins.extend(checkins)
 
     html_content = generate_report_html(all_checkins)
-    filename = f"{'Weekly' if period == 'weekly' else 'Daily'}_Checkin_Report_Last_{-start_days}_Days.xls"
+    filename = f"{'Weekly' if period == 'weekly' else 'Daily'}_Checkin_Report_Last_{-start_days}_Days.xlsx"
     filepath = save_html_to_tempfile(html_content, filename)
 
     # send_email_with_attachment(hr_email, f"{'Weekly' if period == 'weekly' else 'Daily'} Check-in Report for All Employees", f"Please find attached the check-in report for all employees for the last {-start_days} days.", filepath, filename)
@@ -393,3 +393,17 @@ def get_employee_email(employee):
         return employee.prefered_email
     return None
     
+
+def allow_xls_file_type():
+    # Get the File Settings singleton document
+    file_settings = frappe.get_single("File Settings")
+    
+    # Add '.xls' to the list of allowed file types if it's not already there
+    if '.xls' not in file_settings.allowed_file_types:
+        file_settings.allowed_file_types.append('.xls')
+        file_settings.save()
+
+    # Add '.xls' to the list of allowed file types if it's not already there
+    if '.xlsx' not in file_settings.allowed_file_types:
+        file_settings.allowed_file_types.append('.xls')
+        file_settings.save()    
