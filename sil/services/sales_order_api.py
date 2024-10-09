@@ -340,29 +340,34 @@ def getAllSalesOrder():
 def saveGeneratedSerialNumber(doc):
     pass        
 
-
+ 
 @frappe.whitelist(allow_guest=True)
-def updateItemFamilySerialNoList(self):
+def updateItemFamilySerialNoList(doc, method):
     try:
         frappe.clear_cache()
 
+        # Fetch sales order and parent from Sales Invoice Item table
         sales_invoice_item = frappe.db.sql("""
         SELECT DISTINCT sales_order, parent 
         FROM `tabSales Invoice Item`
-        WHERE sales_order IS NOT NULL ;""", as_dict=True)
+        WHERE sales_order IS NOT NULL;""", as_dict=True)
 
-        for record in data:
+        # Loop through the sales invoice items and update the Item Family Serial No List
+        for record in sales_invoice_item:
             sales_order = record['sales_order']
             parent = record['parent']
             print(f"Sales Order: {sales_order}, Parent: {parent}")
 
-            frappe.db.sql("""Update `tabItem Family Serial No List` set 
-            custom_sales_invoice=%s where custom_sales_order=%s;""",(parent,sales_order,), as_dict=True)
-        
+            frappe.db.sql("""UPDATE `tabItem Family Serial No List` 
+            SET custom_sales_invoice=%s WHERE custom_sales_order=%s;""", 
+            (parent, sales_order), as_dict=True)
+
         frappe.db.commit()
-        print(f"sales_invoice_item :{sales_invoice_item}")
-        return {"message":"success"}
+        print(f"sales_invoice_item: {sales_invoice_item}")
+        return {"message": "success"}
     except Exception as e:
-        print(str(e))  
- 
+        print(str(e))
+        frappe.log_error(f"Error in updateItemFamilySerialNoList: {str(e)}")
+        return {"message": "failed", "error": str(e)}
+
 
