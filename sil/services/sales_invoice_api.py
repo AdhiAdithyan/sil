@@ -53,11 +53,36 @@ def getAllE_BillDetailsByBillNumber(data):
 
 
 @frappe.whitelist(allow_guest=True)
-def getAllInvoiceDetails():
+def getAllInvoiceDetails(data):
     # Clear the cache
     frappe.clear_cache()
+    
+    #Parse the JSON data
+    data_dict=frappe.parse_json(data)
+    #Extract the relevant data
+    CompanyName=data_dict.get("CompanyName")
 
     # ensure_column_exists("Sales Invoice", "is_tally_updated", "Int")
+    # invoices = frappe.db.sql("""
+    #     SELECT tsi.name,tsi.posting_date,tsi.base_total_taxes_and_charges,tsi.rounded_total,
+	# 	tsi.rounding_adjustment,tsi.total_taxes_and_charges,tsi.discount_amount,
+	# 	IF(tsi.tax_category='In-State',tsi.total_taxes_and_charges/2,0)CGST_Amount,
+	# 	IF(tsi.tax_category='In-State',tsi.total_taxes_and_charges/2,0)SGST_Amount,
+	# 	IF(tsi.tax_category='In-State',0,tsi.total_taxes_and_charges)IGST_Amount,
+	# 	tsi.customer_name,tsi.customer_address,tsi.paid_amount,tsi.grand_total,
+	# 	tsi.total_taxes_and_charges,tsi.remarks,tsi.custom_sales_type,
+	# 	tsi.billing_address_gstin,tsi.einvoice_status,customer_address,tsi.custom_clusterproduct, 
+	# 	til.irn, til.acknowledgement_number, til.acknowledged_on, SUBSTRING(tsi.place_of_supply, 1,
+	# 	INSTR(tsi.place_of_supply, '-') - 1) AS place_code_of_supply_,
+	# 	SUBSTRING(tsi.place_of_supply, INSTR(tsi.place_of_supply, '-')+ 1) AS place_name_of_supply_, 
+	# 	tc.custom_customer_category, ta.pincode, tsi.other_charges_calculation,tsi.custom_cluster  
+	# FROM `tabSales Invoice` tsi  
+	# 	LEFT OUTER JOIN `tabe-Invoice Log` til  ON til.sales_invoice = tsi.name  
+	# 	LEFT OUTER JOIN  `tabCustomer` tc ON tc.name = tsi.customer  
+	# 	LEFT OUTER JOIN  `tabAddress` ta  ON ta.name = tsi.customer  
+	# WHERE tsi.is_tally_updated = 0 and tsi.docstatus=1 ORDER BY tsi.creation;
+    # """, as_dict=True)
+
     invoices = frappe.db.sql("""
         SELECT tsi.name,tsi.posting_date,tsi.base_total_taxes_and_charges,tsi.rounded_total,
 		tsi.rounding_adjustment,tsi.total_taxes_and_charges,tsi.discount_amount,
@@ -70,13 +95,14 @@ def getAllInvoiceDetails():
 		til.irn, til.acknowledgement_number, til.acknowledged_on, SUBSTRING(tsi.place_of_supply, 1,
 		INSTR(tsi.place_of_supply, '-') - 1) AS place_code_of_supply_,
 		SUBSTRING(tsi.place_of_supply, INSTR(tsi.place_of_supply, '-')+ 1) AS place_name_of_supply_, 
-		tc.custom_customer_category, ta.pincode, tsi.other_charges_calculation,tsi.custom_cluster  
+		tc.custom_customer_category, ta.pincode, tsi.other_charges_calculation,tsi.custom_cluster,
+        (NET_TOTAL-(TOTAL-discount_amount)) AS discount_variation 
 	FROM `tabSales Invoice` tsi  
 		LEFT OUTER JOIN `tabe-Invoice Log` til  ON til.sales_invoice = tsi.name  
 		LEFT OUTER JOIN  `tabCustomer` tc ON tc.name = tsi.customer  
 		LEFT OUTER JOIN  `tabAddress` ta  ON ta.name = tsi.customer  
-	WHERE tsi.is_tally_updated = 0 and tsi.docstatus=1 ORDER BY tsi.creation;
-    """, as_dict=True)
+	WHERE tsi.is_tally_updated = 0 and tsi.docstatus=1 and company=%s ORDER BY tsi.creation;
+    """,(CompanyName,),as_dict=True)
 
     # for invoice in invoices:
     #     if "other_charges_calculation" in invoice:
