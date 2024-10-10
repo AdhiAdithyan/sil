@@ -2486,7 +2486,7 @@
   "doctype": "Workflow",
   "document_type": "Sales Order",
   "is_active": 1,
-  "modified": "2024-08-01 13:05:00.265432",
+  "modified": "2024-09-26 14:38:53.608792",
   "name": "Sales Order Workflow Final",
   "override_status": 0,
   "send_email_alert": 1,

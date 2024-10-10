@@ -4,13 +4,19 @@ from openpyxl import Workbook
 from frappe import _
 from frappe import ValidationError
 from frappe.utils.file_manager import save_file
+from frappe.utils import getdate
 
 
 def validate_filters(filters):
-    if not filters:
-        raise frappe.ValidationError(_("Filters are required for this report."))
-    if not isinstance(filters, dict):
-        raise frappe.ValidationError(_("Invalid filters format. Filters should be a dictionary."))
+    # if not filters:
+    #     raise frappe.ValidationError(_("Filters are required for this report."))
+    # if not isinstance(filters, dict):
+    #     raise frappe.ValidationError(_("Invalid filters format. Filters should be a dictionary."))
+    if not filters.starting_posting_date or not filters.ending_posting_date:
+        frappe.throw(_("From Date and To Date are required."))
+    
+    if getdate(filters.starting_posting_date) > getdate(filters.ending_posting_date):
+        frappe.throw(_("From Date cannot be after To Date."))
 
 def get_columns():
     # Define columns with field names and labels
@@ -41,17 +47,38 @@ def get_columns():
     ]
 
 def get_data(filters):
+    print(f"filters :{filters}")
     try:
         data = []
+        
+        conditions = []
+        # if filters.custom_zonal_manager:
+        #     conditions.append(f"si.custom_zonal_manager = '{filters.custom_zonal_manager}'")
+        # if filters.custom_regional_manager:
+        #     conditions.append(f"si.custom_regional_manager = '{filters.custom_regional_manager}'")
+        # if filters.custom_cluster:
+        #     conditions.append(f"si.custom_cluster = '{filters.custom_cluster}'")
+        # if filters.custom_cluster_manager:
+        #     conditions.append(f"si.custom_cluster_manager = '{filters.custom_cluster_manager}'")
+        # if filters.customer_name:
+        #     conditions.append(f"si.customer = '{filters.customer_name}'")
+        if filters.starting_posting_date and filters.ending_posting_date:
+            conditions.append(f"si.posting_date BETWEEN '{filters.starting_posting_date}' AND '{filters.ending_posting_date}'")
+        
+        where_clause = " AND ".join(conditions) if conditions else "1=1"
+        
         print(f"get_data:{filters}")
-        invoices = frappe.get_all(
-            "Sales Invoice",
-            filters=filters,
 
-            fields=["name", "docstatus", "currency", "customer_name", "grand_total", 
-                    "total_taxes_and_charges", "posting_date", "net_total", "paid_amount", "total"],
-            order_by="creation asc"
-        )
+        invoices = frappe.db.sql(f"""
+                        SELECT
+                            si.name, si.docstatus, si.currency, si.customer_name, si.grand_total, 
+                            si.total_taxes_and_charges, si.posting_date, si.net_total, 
+                            si.paid_amount, si.total FROM
+                            `tabSales Invoice` si
+                        WHERE {where_clause}
+                        ORDER BY si.posting_date DESC
+                    """, as_dict=True)
+
         
         if not invoices:
             frappe.throw(_("No Sales Invoices found for the given filters."))
@@ -113,6 +140,7 @@ def get_data(filters):
         return data
 
     except Exception as e:
+        print(f"Error retrieving data: {e}")
         frappe.throw(_("Error retrieving data: {0}").format(str(e)))
 
 def calculate_totals(data):
@@ -188,11 +216,10 @@ def get_zonal_manager(invoice_name):
 
 def get_alias_name(item_name):
     try:
-        # SQL query to fetch the alias name for the given item_name
         query = """
             SELECT custom_alias_name 
             FROM tabItem
-            WHERE 'item_name' = %s
+            WHERE item_name = %s
         """
         result = frappe.db.sql(query, item_name, as_dict=True)
         
@@ -202,28 +229,32 @@ def get_alias_name(item_name):
             return item_name
 
     except Exception as e:
+        frappe.log_error(frappe.get_traceback(), _("Error fetching alias name: {0}").format(str(e)))
         frappe.throw(_("Error fetching alias name: {0}").format(str(e)))
 
 
 @frappe.whitelist(allow_guest=True)
 def generate_and_download_sales_invoice_report(filters=None):
     try:
+        print(f"generate_and_download_sales_invoice_report filters :{filters}")
+
         if filters is not None:
             try:
                 filters = frappe.parse_json(filters)
+                # filters = frappe._dict(filters)
                 validate_filters(filters)
             except Exception as e:
                 return {'error': str(e)}
     
-        # Ensure .xlsx is an allowed file type
-        allowed_file_types = frappe.db.get_single_value('Website Settings', 'allowed_file_types')
-        if '.xlsx' not in allowed_file_types:
-            allowed_file_types += ',.xlsx'
-            frappe.db.set_single_value('Website Settings', 'allowed_file_types', allowed_file_types)
-
+        
         # Get columns and data
         columns = get_columns()
+
+        print(f"columns :{columns}")
+
         data = get_data(filters)
+        print(f"data :{data}")
+
         
         if not data:
             frappe.throw(_("No data found for the given filters."))
@@ -248,7 +279,11 @@ def generate_and_download_sales_invoice_report(filters=None):
         frappe.db.commit()
 
         # Return file URL
-        return {"file_url": file_doc.file_url}
+        # return {"file_url": file_doc.file_url}
+        return {
+            'file_url': file_doc.file_url,
+            'file_name': file_name
+        }
 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), _("Failed to generate report"))

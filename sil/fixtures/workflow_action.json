@@ -916,5 +916,749 @@
   "status": "Completed",
   "user": null,
   "workflow_state": "Pending Approval from Production Manager"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Order Creator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:40:02.605246",
+  "name": "u8ma1gqqol",
+  "permitted_roles": [
+   {
+    "parent": "u8ma1gqqol",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Order Creator"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00220",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "HE ZM",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:40:28.304398",
+  "name": "u8ubjm1ggs",
+  "permitted_roles": [
+   {
+    "parent": "u8ubjm1ggs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RB1 RM"
+   },
+   {
+    "parent": "u8ubjm1ggs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "SCM2"
+   },
+   {
+    "parent": "u8ubjm1ggs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "HE ZM"
+   },
+   {
+    "parent": "u8ubjm1ggs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00220",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from RB1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Acc Manager2",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:40:35.645327",
+  "name": "u90k9m6eki",
+  "permitted_roles": [
+   {
+    "parent": "u90k9m6eki",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Acc Manager2"
+   },
+   {
+    "parent": "u90k9m6eki",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00220",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Acc Manager2"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Cus Manager2",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:40:39.327835",
+  "name": "u91pkk9cdf",
+  "permitted_roles": [
+   {
+    "parent": "u91pkk9cdf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RB1 RM"
+   },
+   {
+    "parent": "u91pkk9cdf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "HE ZM"
+   },
+   {
+    "parent": "u91pkk9cdf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "u91pkk9cdf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Cus Manager2"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00220",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Customer Support2"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:40:42.770114",
+  "name": "u92r37abvr",
+  "permitted_roles": [
+   {
+    "parent": "u92r37abvr",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Prod Manager"
+   },
+   {
+    "parent": "u92r37abvr",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00220",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Production Manager"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Order Creator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:43:48.637926",
+  "name": "uasuqoooms",
+  "permitted_roles": [
+   {
+    "parent": "uasuqoooms",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Order Creator"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00221",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "HE ZM",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:44:01.876615",
+  "name": "ub12ks0v68",
+  "permitted_roles": [
+   {
+    "parent": "ub12ks0v68",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RB1 RM"
+   },
+   {
+    "parent": "ub12ks0v68",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "SCM2"
+   },
+   {
+    "parent": "ub12ks0v68",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "HE ZM"
+   },
+   {
+    "parent": "ub12ks0v68",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00221",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from RB1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Acc Manager2",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:44:05.763480",
+  "name": "ub293vov1u",
+  "permitted_roles": [
+   {
+    "parent": "ub293vov1u",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Acc Manager2"
+   },
+   {
+    "parent": "ub293vov1u",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00221",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Acc Manager2"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Cus Manager2",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:44:08.836010",
+  "name": "ub38tanon1",
+  "permitted_roles": [
+   {
+    "parent": "ub38tanon1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RB1 RM"
+   },
+   {
+    "parent": "ub38tanon1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "HE ZM"
+   },
+   {
+    "parent": "ub38tanon1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "ub38tanon1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Cus Manager2"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00221",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Customer Support2"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-05 15:44:12.468784",
+  "name": "ub4c4jphfl",
+  "permitted_roles": [
+   {
+    "parent": "ub4c4jphfl",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Prod Manager"
+   },
+   {
+    "parent": "ub4c4jphfl",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00221",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Production Manager"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:39:02.465141",
+  "name": "6rmg2ml4lu",
+  "permitted_roles": [
+   {
+    "parent": "6rmg2ml4lu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6rmg2ml4lu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   },
+   {
+    "parent": "6rmg2ml4lu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   },
+   {
+    "parent": "6rmg2ml4lu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "SCM1"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00222",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from RA1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Acc Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:39:05.958716",
+  "name": "6rnjdfekd2",
+  "permitted_roles": [
+   {
+    "parent": "6rnjdfekd2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6rnjdfekd2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Acc Manager1"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00222",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Acc Manager1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Cus Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:39:10.863695",
+  "name": "6rp4val42l",
+  "permitted_roles": [
+   {
+    "parent": "6rp4val42l",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Cus Manager1"
+   },
+   {
+    "parent": "6rp4val42l",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6rp4val42l",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   },
+   {
+    "parent": "6rp4val42l",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00222",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Customer Support1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:39:15.014845",
+  "name": "6rqehs55tg",
+  "permitted_roles": [
+   {
+    "parent": "6rqehs55tg",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6rqehs55tg",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Prod Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00222",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Production Manager"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Order Creator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:41:46.710781",
+  "name": "6t9rabniu2",
+  "permitted_roles": [
+   {
+    "parent": "6t9rabniu2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Order Creator"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00223",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:41:49.873420",
+  "name": "6taqnd4mku",
+  "permitted_roles": [
+   {
+    "parent": "6taqnd4mku",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6taqnd4mku",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   },
+   {
+    "parent": "6taqnd4mku",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   },
+   {
+    "parent": "6taqnd4mku",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "SCM1"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00223",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from RA1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Acc Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:41:52.550371",
+  "name": "6tbli39jce",
+  "permitted_roles": [
+   {
+    "parent": "6tbli39jce",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6tbli39jce",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Acc Manager1"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00223",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Acc Manager1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Cus Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:41:55.214871",
+  "name": "6tcgne94pf",
+  "permitted_roles": [
+   {
+    "parent": "6tcgne94pf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Cus Manager1"
+   },
+   {
+    "parent": "6tcgne94pf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6tcgne94pf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   },
+   {
+    "parent": "6tcgne94pf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00223",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Customer Support1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-09-26 14:41:58.340977",
+  "name": "6tdfk628aq",
+  "permitted_roles": [
+   {
+    "parent": "6tdfk628aq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "6tdfk628aq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Prod Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00223",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Production Manager"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Order Creator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-10-09 09:38:36.923311",
+  "name": "o4di5dibeh",
+  "permitted_roles": [
+   {
+    "parent": "o4di5dibeh",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Order Creator"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00224",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-10-09 09:39:10.304706",
+  "name": "o4nv0f7c1e",
+  "permitted_roles": [
+   {
+    "parent": "o4nv0f7c1e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "o4nv0f7c1e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "SCM1"
+   },
+   {
+    "parent": "o4nv0f7c1e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   },
+   {
+    "parent": "o4nv0f7c1e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00224",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from RA1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Acc Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-10-09 09:39:16.756237",
+  "name": "o4pv74pvng",
+  "permitted_roles": [
+   {
+    "parent": "o4pv74pvng",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Acc Manager1"
+   },
+   {
+    "parent": "o4pv74pvng",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00224",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Acc Manager1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Cus Manager1",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-10-09 09:39:20.824543",
+  "name": "o4r8rbbhod",
+  "permitted_roles": [
+   {
+    "parent": "o4r8rbbhod",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Cus Manager1"
+   },
+   {
+    "parent": "o4r8rbbhod",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "o4r8rbbhod",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "PN ZM"
+   },
+   {
+    "parent": "o4r8rbbhod",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "RA1 RM"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00224",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Customer Support1"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Managment",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2024-10-09 09:39:27.170396",
+  "name": "o4t7c4ejjj",
+  "permitted_roles": [
+   {
+    "parent": "o4t7c4ejjj",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Managment"
+   },
+   {
+    "parent": "o4t7c4ejjj",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Prod Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SO24B25/I/00224",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Approval from Production Manager"
  }
 ]

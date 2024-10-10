@@ -488,20 +488,20 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "ok-sign",
-  "modified": "2024-07-09 17:01:30.602587",
-  "name": "Approved",
-  "style": "Success",
-  "workflow_state_name": "Approved"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
   "icon": "",
   "modified": "2024-07-18 12:05:50.529220",
   "name": "Pending Approval from Acc Manager3",
   "style": "",
   "workflow_state_name": "Pending Approval from Acc Manager3"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2024-07-09 17:01:30.602587",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
  },
  {
   "docstatus": 0,
@@ -543,6 +543,15 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
+  "modified": "2024-07-18 12:05:50.445879",
+  "name": "Pending Approval from Customer Support3",
+  "style": "",
+  "workflow_state_name": "Pending Approval from Customer Support3"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
   "modified": "2024-07-18 12:05:50.827963",
   "name": "Pending Approval from RB1",
   "style": "",
@@ -556,15 +565,6 @@
   "name": "Pending Approval from Customer Support2",
   "style": "",
   "workflow_state_name": "Pending Approval from Customer Support2"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
-  "modified": "2024-07-18 12:05:50.445879",
-  "name": "Pending Approval from Customer Support3",
-  "style": "",
-  "workflow_state_name": "Pending Approval from Customer Support3"
  },
  {
   "docstatus": 0,

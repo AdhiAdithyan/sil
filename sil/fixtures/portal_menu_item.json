@@ -223,5 +223,20 @@
   "route": "/admissions",
   "target": null,
   "title": "Admission"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Portal Menu Item",
+  "enabled": 1,
+  "modified": "2024-10-08 13:00:42.284804",
+  "name": "5dibcaqh87",
+  "parent": "Portal Settings",
+  "parentfield": "custom_menu",
+  "parenttype": "Portal Settings",
+  "reference_doctype": "Issue",
+  "role": "Website Order Creator",
+  "route": "issue-sales",
+  "target": null,
+  "title": "Issue"
  }
 ]
