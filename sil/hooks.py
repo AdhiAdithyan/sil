@@ -245,17 +245,17 @@ doc_events = {
 }
 
 
-scheduler_events = {
-    "cron": {
+# scheduler_events = {
+#     "cron": {
         # "0 10 * * *": [
         #     "sil.services.employee_checkin_report_new_api.generate_and_send_daily_and_last_day_report",
         #     "sil.services.employee_checkin_report_new_api.generate_and_send_team_reports"
         # ],
-        "0 10 * * 1": [  # Executes every Monday at 10:00
-            "sil.services.employee_checkin_report_new_api.get_weekly_checkin_report_to_hr"
-        ]
-    }
-}
+#         "0 10 * * 1": [  # Executes every Monday at 10:00
+#             "sil.services.employee_checkin_report_new_api.get_weekly_checkin_report_to_hr"
+#         ]
+#     }
+# }
 
 
 fixtures = [
