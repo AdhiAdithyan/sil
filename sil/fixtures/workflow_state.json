@@ -2,6 +2,24 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-10-11 14:55:06.614191",
+  "name": "Details Entered",
+  "style": "",
+  "workflow_state_name": "Details Entered"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-10-11 14:55:23.253489",
+  "name": "Details Pending",
+  "style": "",
+  "workflow_state_name": "Details Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
   "icon": "question-sign",
   "modified": "2024-07-09 17:01:30.598412",
   "name": "Pending",
