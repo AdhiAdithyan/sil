@@ -31,7 +31,6 @@ def getAllBillItemDetails():
     return frappe.db.sql("""Select * from `tabSales Invoice Item`;""",as_dict=True)    
 
 
-
 @frappe.whitelist(allow_guest=True)
 def getAllE_BillDetailsByBillNumber(data):
     try:

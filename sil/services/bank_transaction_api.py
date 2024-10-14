@@ -22,7 +22,15 @@ def getPaymentEntryDetails():
     frappe.clear_cache()
 
     # for returning all the e-invoice details which are not updated in the tally application.
-    return frappe.db.sql("""Select * from `tabPayment Entry`;""",as_dict=True)        
+    # return frappe.db.sql("""Select * from `tabPayment Entry`;""",as_dict=True)        
+    # Fetch the payment entry details
+    return frappe.get_all('Payment Entry',  fields=["*"])
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllPaymentreference():
+    frappe.clear_cache()    
+    return frappe.get_all('Payment Entry Reference',  fields=["*"])
 
 
 @frappe.whitelist(allow_guest=True)
@@ -34,120 +42,110 @@ def getBankTransactionPaymentsDetails():
     return frappe.db.sql("""Select * from `tabBank Transaction Payments`;""",as_dict=True)        
 
 
-# @frappe.whitelist(allow_guest=False)
-# def getAllBankTransactionDetails():
-#     # Clear the cache
-#     frappe.clear_cache()
-
-#     # Return all the payment details with JSON aggregation of payment entries
-#     bank_transactions =  frappe.db.sql("""
-#         SELECT 
-#             bt.name,
-#             bt.date,
-#             bt.status,
-#             bt.currency,
-#             bt.deposit,
-#             bt.allocated_amount,
-#             bt.unallocated_amount,
-#             bt.bank_account,
-#             bt.reference_number,
-#             bt.transaction_id,
-#             bt.transaction_type,
-#             bt.company,
-#             JSON_ARRAYAGG(JSON_OBJECT(
-#                 'payment_entry_name', pe.name,
-#                 'posting_date', pe.posting_date,
-#                 'party_type', pe.party_type,
-#                 'party', pe.party,
-#                 'paid_amount', pe.paid_amount,
-#                 'received_amount', pe.received_amount,
-#                 'payment_type', pe.payment_type,
-#                 'company', pe.company,
-#                 'party_balance', pe.party_balance
-#             )) AS payment_entries
-#         FROM 
-#             `tabBank Transaction` bt
-#         LEFT JOIN `tabBank Transaction Payments` btp ON btp.parent = bt.name
-#         LEFT JOIN `tabPayment Entry` pe ON pe.name = btp.payment_entry
-#         GROUP BY bt.name
-#     ;""", as_dict=True)
-
-#     # Parse payment_entries field from string to JSON object
-#     for transaction in bank_transactions:
-#         if transaction['payment_entries']:
-#             transaction['payment_entries'] = json.loads(transaction['payment_entries'])
-
-#     return bank_transactions
-
-
 @frappe.whitelist(allow_guest=False)
 def getAllBankTransactionDetails():
-    # Clear the cache
-    frappe.clear_cache()
+    try:
+        # Clear the cache
+        frappe.clear_cache()
 
-    # Get all Bank Transactions
-    bank_transactions = frappe.get_all(
-        'Bank Transaction',
-        fields=[
-            'name', 'date', 'status', 'currency', 'deposit', 
-            'allocated_amount', 'unallocated_amount', 'bank_account',
-            'reference_number', 'transaction_id', 'transaction_type',
-            'company'
-        ]
-    )
-
-    # For each bank transaction, get related Payment Entries
-    for transaction in bank_transactions:
-        # Get all Bank Transaction Payments associated with this Bank Transaction
-        payments = frappe.get_all(
-            'Bank Transaction Payments',
-            filters={'parent': transaction['name']},
-            fields=['payment_entry']
+        # Get all Bank Transactions
+        bank_transactions = frappe.get_all(
+            'Bank Transaction',
+            fields=[
+                'name', 'date', 'status', 'currency', 'deposit', 
+                'allocated_amount', 'unallocated_amount', 'bank_account',
+                'reference_number', 'transaction_id', 'transaction_type',
+                'company'
+            ]
         )
 
-        payment_entries = []
+        if not bank_transactions:
+            frappe.log_error('No bank transactions found.', 'Bank Transaction Error')
+            return {'status': 'error', 'message': 'No bank transactions found.'}
 
-        # Loop through each payment entry and fetch the related Payment Entry details
-        for payment in payments:
-            payment_entry = frappe.get_doc('Payment Entry', payment['payment_entry'])
-            
-            print(f"payment_entry :{payment_entry}")
+        # For each bank transaction, get related Payment Entries
+        for transaction in bank_transactions:
+            # Check for missing or incomplete transaction details
+            if not transaction.get('name'):
+                frappe.log_error(f'Missing transaction name: {transaction}', 'Bank Transaction Error')
+                continue
 
-            # Get all fields from the document
-            all_fields = payment_entry.as_dict()
+            # Get all Bank Transaction Payments associated with this Bank Transaction
+            payments = frappe.get_all(
+                'Bank Transaction Payments',
+                filters={'parent': transaction['name']},
+                fields=['payment_entry']
+            )
 
-            # Get meta information of Payment Entry (for field details)
-            payment_entry_meta = frappe.get_meta('Payment Entry')
+            payment_entries = []
 
-            # Get detailed information of all fields
-            field_details = []
-            for df in payment_entry_meta.fields:
-                field_info = {
-                    'fieldname': df.fieldname,
-                    'label': df.label,
-                    'fieldtype': df.fieldtype,
-                    'options': df.options if df.fieldtype == 'Link' else None,
-                    'value': all_fields.get(df.fieldname)
+            if not payments:
+                frappe.log_error(f'No payments found for transaction {transaction["name"]}', 'Bank Transaction Error')
+                continue
+
+            # Loop through each payment entry and fetch the related Payment Entry details
+            for payment in payments:
+                if not payment.get('payment_entry'):
+                    frappe.log_error(f'Missing payment entry in {payment}', 'Payment Entry Error')
+                    continue
+
+                filters = {
+                    "name": payment['payment_entry']
                 }
-                field_details.append(field_info)
 
-            # Separate link fields from the rest for convenience
-            link_fields = [field for field in field_details if field['fieldtype'] == 'Link']
-            
-            payment_entries.append({
-                'payment_entry_name': payment_entry.name,
-                'posting_date': payment_entry.posting_date,
-                'party_type': payment_entry.party_type,
-                'party': payment_entry.party,
-                'paid_amount': payment_entry.paid_amount,
-                'received_amount': payment_entry.received_amount,
-                'payment_type': payment_entry.payment_type,
-                'company': payment_entry.company,
-                'party_balance': payment_entry.party_balance,
-                'linked_fields' :link_fields
-            })
+                # Fetch the payment entry details
+                payment_entry = frappe.get_all('Payment Entry', filters=filters, fields=["*"])
 
-        # Attach the payment entries as a list in the transaction
-        transaction['payment_entries'] = payment_entries
+                if not payment_entry:
+                    frappe.log_error(f'No Payment Entry found for payment {payment["payment_entry"]}', 'Payment Entry Error')
+                    continue
 
-    return bank_transactions
+                payment_entry = payment_entry[0]  # Assuming a single result is returned
+
+                if not payment_entry.get('name'):
+                    frappe.log_error(f'Missing Payment Entry name: {payment_entry}', 'Payment Entry Error')
+                    continue
+
+                filters = {
+                    "parent": payment_entry.get('name')
+                }
+
+                # Fetch the payment entry reference details
+                payment_entry_reference = frappe.get_all(
+                    'Payment Entry Reference',
+                    filters=filters,
+                    fields=['reference_name', 'total_amount', 'allocated_amount', 'outstanding_amount', 'due_date']
+                )
+
+                if not payment_entry_reference:
+                    frappe.log_error(f'No Payment Entry Reference found for Payment Entry {payment_entry["name"]}', 'Payment Entry Reference Error')
+                    continue
+
+                # Loop through each payment entry reference and append details
+                for reference in payment_entry_reference:
+                    payment_entries.append({
+                        'payment_entry_name': payment_entry.get('name'),
+                        'posting_date': payment_entry.get('posting_date'),
+                        'party_type': payment_entry.get('party_type'),
+                        'party': payment_entry.get('party'),
+                        'paid_amount': payment_entry.get('paid_amount'),
+                        'received_amount': payment_entry.get('received_amount'),
+                        'payment_type': payment_entry.get('payment_type'),
+                        'company': payment_entry.get('company'),
+                        'party_balance': payment_entry.get('party_balance'),
+                        'reference_name': reference.get('reference_name'),
+                        'total_amount': reference.get('total_amount'),
+                        'allocated_amount': reference.get('allocated_amount'),
+                        'outstanding_amount': reference.get('outstanding_amount'),
+                        'due_date': reference.get('due_date')
+                    })
+
+            # Attach the payment entries as a list in the transaction
+            transaction['payment_entries'] = payment_entries
+
+        return bank_transactions
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), 'Error in getAllBankTransactionDetails')
+        return {'status': 'error', 'message': str(e)}
+
