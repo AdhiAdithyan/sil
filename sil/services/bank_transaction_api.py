@@ -34,6 +34,29 @@ def getAllPaymentreference():
 
 
 @frappe.whitelist(allow_guest=True)
+def getAllDetailsByPaymentNo():
+    frappe.clear_cache()    
+    
+    data = frappe.request.get_data(as_text=True)
+
+    print(f"getAllDetailsByPaymentNo data:{data}")
+
+    json_data = json.loads(data)
+
+    print(f"getAllDetailsByPaymentNo json_data:{json_data}")
+
+    paymentNo = json_data.get("paymentNo")
+
+    print(f"PaymentNo :{paymentNo}")
+
+    filters = {
+                "parent": paymentNo
+                }
+
+    return frappe.get_all('Payment Entry Reference',  filters=filters ,  fields=["*"])    
+
+
+@frappe.whitelist(allow_guest=True)
 def getBankTransactionPaymentsDetails():
     # Clear the cache
     frappe.clear_cache()
@@ -74,7 +97,7 @@ def getAllBankTransactionDetails():
             payments = frappe.get_all(
                 'Bank Transaction Payments',
                 filters={'parent': transaction['name']},
-                fields=['payment_entry']
+                fields=['payment_entry','parent','payment_document']
             )
 
             payment_entries = []
@@ -138,6 +161,93 @@ def getAllBankTransactionDetails():
                         'allocated_amount': reference.get('allocated_amount'),
                         'outstanding_amount': reference.get('outstanding_amount'),
                         'due_date': reference.get('due_date')
+                    })
+
+            # Attach the payment entries as a list in the transaction
+            transaction['payment_entries'] = payment_entries
+
+        return bank_transactions
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), 'Error in getAllBankTransactionDetails')
+        return {'status': 'error', 'message': str(e)}
+
+
+@frappe.whitelist(allow_guest=False)
+def getAllBankTransaction():
+    try:
+        # Clear the cache
+        frappe.clear_cache()
+
+        # Get all Bank Transactions
+        bank_transactions = frappe.get_all(
+            'Bank Transaction',
+            fields=[
+                'name', 'date', 'status', 'currency', 'deposit', 
+                'allocated_amount', 'unallocated_amount', 'bank_account',
+                'reference_number', 'transaction_id', 'transaction_type',
+                'company'
+            ]
+        )
+
+        if not bank_transactions:
+            frappe.log_error('No bank transactions found.', 'Bank Transaction Error')
+            return {'status': 'error', 'message': 'No bank transactions found.'}
+
+        # For each bank transaction, get related Payment Entries
+        for transaction in bank_transactions:
+            # Check for missing or incomplete transaction details
+            if not transaction.get('name'):
+                frappe.log_error(f'Missing transaction name: {transaction}', 'Bank Transaction Error')
+                continue
+
+            # Get all Bank Transaction Payments associated with this Bank Transaction
+            payments = frappe.get_all(
+                'Bank Transaction Payments',
+                filters={'parent': transaction['name']},
+                fields=['payment_entry','parent','payment_document']
+            )
+
+            payment_entries = []
+
+            if not payments:
+                frappe.log_error(f'No payments found for transaction {transaction["name"]}', 'Bank Transaction Error')
+                continue
+
+            # Loop through each payment entry and fetch the related Payment Entry details
+            for payment in payments:
+                if not payment.get('payment_entry'):
+                    frappe.log_error(f'Missing payment entry in {payment}', 'Payment Entry Error')
+                    continue
+
+                filters = {
+                    "name": payment['payment_entry']
+                }
+
+                # Fetch the payment entry details
+                payment_entry = frappe.get_all('Payment Entry', filters=filters, fields=["*"])
+
+                if not payment_entry:
+                    frappe.log_error(f'No Payment Entry found for payment {payment["payment_entry"]}', 'Payment Entry Error')
+                    continue
+
+                payment_entry = payment_entry[0]  # Assuming a single result is returned
+
+                if not payment_entry.get('name'):
+                    frappe.log_error(f'Missing Payment Entry name: {payment_entry}', 'Payment Entry Error')
+                    continue
+
+
+                payment_entries.append({
+                        'payment_entry_name': payment_entry.get('name'),
+                        'posting_date': payment_entry.get('posting_date'),
+                        'party_type': payment_entry.get('party_type'),
+                        'party': payment_entry.get('party'),
+                        'paid_amount': payment_entry.get('paid_amount'),
+                        'received_amount': payment_entry.get('received_amount'),
+                        'payment_type': payment_entry.get('payment_type'),
+                        'company': payment_entry.get('company'),
+                        'party_balance': payment_entry.get('party_balance')
                     })
 
             # Attach the payment entries as a list in the transaction
