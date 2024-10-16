@@ -9,6 +9,134 @@
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
+  "letter_head": null,
+  "modified": "2024-07-30 17:20:07.570971",
+  "module": "Accounts",
+  "name": "Cheques and Deposits Incorrectly cleared",
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "Payment Entry",
+  "reference_report": null,
+  "report_name": "Cheques and Deposits Incorrectly cleared",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [
+   {
+    "parent": "Cheques and Deposits Incorrectly cleared",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "Cheques and Deposits Incorrectly cleared",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts Manager"
+   }
+  ],
+  "timeout": 0
+ },
+ {
+  "add_total_row": 1,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2024-08-19 14:40:33.093455",
+  "module": "GST India",
+  "name": "GST Job Work Stock Movement",
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "Subcontracting Order",
+  "reference_report": null,
+  "report_name": "GST Job Work Stock Movement",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Item Manager"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Stock Manager"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Stock User"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts Manager"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Manufacturing Manager"
+   },
+   {
+    "parent": "GST Job Work Stock Movement",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Manufacturing User"
+   }
+  ],
+  "timeout": 0
+ },
+ {
+  "add_total_row": 0,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2024-09-09 12:31:25.295976",
+  "module": "Accounts",
+  "name": "Invalid Ledger Entries",
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "GL Entry",
+  "reference_report": null,
+  "report_name": "Invalid Ledger Entries",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [],
+  "timeout": 0
+ },
+ {
+  "add_total_row": 0,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
   "letter_head": "",
   "modified": "2017-06-23 04:46:43.209008",
   "module": "Manufacturing",
@@ -33,7 +161,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -69,7 +198,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -111,7 +241,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -153,7 +284,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -195,7 +327,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -231,7 +364,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -267,7 +401,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -303,7 +438,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -339,7 +475,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -387,7 +524,8 @@
     "parenttype": "Report",
     "role": "Stock Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -423,7 +561,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -453,7 +592,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -489,7 +629,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -561,7 +702,8 @@
     "parenttype": "Report",
     "role": "Item Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -633,7 +775,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -669,7 +812,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -699,7 +843,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -741,7 +886,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -789,7 +935,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -831,7 +978,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -867,7 +1015,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -921,7 +1070,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -963,7 +1113,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -999,7 +1150,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1041,7 +1193,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1089,7 +1242,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1137,7 +1291,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1185,7 +1340,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1233,7 +1389,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1269,7 +1426,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1305,7 +1463,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1341,7 +1500,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1389,7 +1549,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1425,7 +1586,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1473,7 +1635,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1509,7 +1672,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1545,7 +1709,8 @@
     "parenttype": "Report",
     "role": "Quality Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1599,7 +1764,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1641,7 +1807,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1677,7 +1844,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1713,7 +1881,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1749,7 +1918,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1772,7 +1942,8 @@
   "report_name": "Account Balance",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1795,7 +1966,8 @@
   "report_name": "Electronic Invoice Register",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1837,7 +2009,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -1867,7 +2040,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1921,7 +2095,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -1975,7 +2150,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2011,7 +2187,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2065,7 +2242,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2119,7 +2297,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2173,7 +2352,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2227,7 +2407,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2257,7 +2438,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2293,7 +2475,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2335,7 +2518,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2377,7 +2561,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2419,7 +2604,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2455,7 +2641,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2521,7 +2708,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2575,7 +2763,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2629,7 +2818,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2665,7 +2855,8 @@
     "parenttype": "Report",
     "role": "Quality Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2701,7 +2892,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2737,7 +2929,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2773,7 +2966,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2815,7 +3009,8 @@
     "parenttype": "Report",
     "role": "Manufacturing Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2851,7 +3046,8 @@
     "parenttype": "Report",
     "role": "Website Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -2893,7 +3089,8 @@
     "parenttype": "Report",
     "role": "Manufacturing Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2941,7 +3138,8 @@
     "parenttype": "Report",
     "role": "Stock Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -2983,7 +3181,8 @@
     "parenttype": "Report",
     "role": "Manufacturing Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3025,7 +3224,8 @@
     "parenttype": "Report",
     "role": "Stock Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -3073,7 +3273,8 @@
     "parenttype": "Report",
     "role": "Supplier"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3109,7 +3310,8 @@
     "parenttype": "Report",
     "role": "Projects Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3169,7 +3371,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -3223,7 +3426,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3271,7 +3475,8 @@
     "parenttype": "Report",
     "role": "Employee Self Service"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3294,7 +3499,8 @@
   "report_name": "Provident Fund Deductions",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3317,7 +3523,8 @@
   "report_name": "Professional Tax Deductions",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3353,7 +3560,8 @@
     "parenttype": "Report",
     "role": "HR User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3395,7 +3603,8 @@
     "parenttype": "Report",
     "role": "Employee"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -3443,7 +3652,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3479,7 +3689,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3515,7 +3726,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3545,7 +3757,8 @@
     "parenttype": "Report",
     "role": "Support Team"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3581,7 +3794,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3604,7 +3818,8 @@
   "report_name": "UAE VAT 201",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3640,7 +3855,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -3670,7 +3886,8 @@
     "parenttype": "Report",
     "role": "Support Team"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3700,7 +3917,8 @@
     "parenttype": "Report",
     "role": "Support Team"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3730,7 +3948,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3772,7 +3991,8 @@
     "parenttype": "Report",
     "role": "Manufacturing Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3808,7 +4028,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3844,7 +4065,8 @@
     "parenttype": "Report",
     "role": "Projects Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3898,7 +4120,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3934,7 +4157,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -3957,7 +4181,8 @@
   "report_name": "Dimension-wise Accounts Balance Report",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4023,7 +4248,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4065,7 +4291,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4107,7 +4334,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4155,7 +4383,8 @@
     "parenttype": "Report",
     "role": "Stock Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4197,7 +4426,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4239,7 +4469,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4275,7 +4506,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4311,7 +4543,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4334,7 +4567,8 @@
   "report_name": "VAT Audit Report",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4370,7 +4604,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4400,7 +4635,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4436,7 +4672,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4478,7 +4715,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4508,7 +4746,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -4562,7 +4801,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4610,7 +4850,8 @@
     "parenttype": "Report",
     "role": "Employee Self Service"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4640,7 +4881,8 @@
     "parenttype": "Report",
     "role": "Administrator"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4682,7 +4924,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -4712,7 +4955,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4748,7 +4992,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4778,7 +5023,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4832,7 +5078,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4880,7 +5127,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -4922,7 +5170,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -4964,7 +5213,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5018,7 +5268,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5072,7 +5323,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5108,7 +5360,8 @@
     "parenttype": "Report",
     "role": "Administrator"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5150,7 +5403,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5192,7 +5446,8 @@
     "parenttype": "Report",
     "role": "Quality Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5234,7 +5489,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5264,7 +5520,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5318,7 +5575,8 @@
     "parenttype": "Report",
     "role": "Employee"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5354,7 +5612,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5377,7 +5636,8 @@
   "report_name": "Stock Ledger Variance",
   "report_script": null,
   "report_type": "Script Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5413,7 +5673,8 @@
     "parenttype": "Report",
     "role": "Sales Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5461,7 +5722,8 @@
     "parenttype": "Report",
     "role": "Employee"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5497,7 +5759,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5533,7 +5796,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5556,7 +5820,8 @@
   "report_name": "Maintenance Schedules",
   "report_script": null,
   "report_type": "Query Report",
-  "roles": []
+  "roles": [],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5598,7 +5863,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5640,7 +5906,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5682,7 +5949,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5748,7 +6016,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5784,7 +6053,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5820,7 +6090,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -5868,7 +6139,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5898,7 +6170,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5934,7 +6207,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -5976,7 +6250,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6018,7 +6293,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6072,7 +6348,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6102,7 +6379,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6150,7 +6428,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6198,7 +6477,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6240,7 +6520,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6270,7 +6551,8 @@
     "parenttype": "Report",
     "role": "Fleet Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6306,7 +6588,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6348,7 +6631,8 @@
     "parenttype": "Report",
     "role": "HR User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6384,7 +6668,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6432,7 +6717,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6468,7 +6754,8 @@
     "parenttype": "Report",
     "role": "Expense Approver"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6504,7 +6791,8 @@
     "parenttype": "Report",
     "role": "HR User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6552,7 +6840,8 @@
     "parenttype": "Report",
     "role": "Leave Approver"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6594,7 +6883,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6630,7 +6920,8 @@
     "parenttype": "Report",
     "role": "HR User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6672,7 +6963,8 @@
     "parenttype": "Report",
     "role": "HR User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6714,7 +7006,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6756,7 +7049,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -6786,7 +7080,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6822,7 +7117,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6858,7 +7154,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6906,7 +7203,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6942,7 +7240,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -6990,7 +7289,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7032,7 +7332,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7074,7 +7375,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7128,7 +7430,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7170,7 +7473,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7206,7 +7510,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7242,7 +7547,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7290,7 +7596,8 @@
     "parenttype": "Report",
     "role": "Stock Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7326,7 +7633,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7380,7 +7688,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7416,7 +7725,8 @@
     "parenttype": "Report",
     "role": "Projects Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7452,7 +7762,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7488,7 +7799,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7536,7 +7848,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7608,7 +7921,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7656,7 +7970,8 @@
     "parenttype": "Report",
     "role": "Maintenance User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7704,7 +8019,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7758,7 +8074,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7794,7 +8111,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7836,7 +8154,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7884,7 +8203,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -7932,7 +8252,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -7986,7 +8307,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8028,7 +8350,8 @@
     "parenttype": "Report",
     "role": "Sales User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8064,7 +8387,8 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8112,7 +8436,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8160,7 +8485,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8196,7 +8522,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8232,7 +8559,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8268,7 +8596,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8310,7 +8639,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8358,7 +8688,8 @@
     "parenttype": "Report",
     "role": "Purchase User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8394,7 +8725,8 @@
     "parenttype": "Report",
     "role": "Purchase Master Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8436,7 +8768,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8502,7 +8835,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8538,7 +8872,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8574,7 +8909,8 @@
     "parenttype": "Report",
     "role": "Accounts Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8616,7 +8952,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8688,7 +9025,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 1,
@@ -8760,7 +9098,8 @@
     "parenttype": "Report",
     "role": "Manufacturing User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8802,7 +9141,8 @@
     "parenttype": "Report",
     "role": "Auditor"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8832,7 +9172,8 @@
     "parenttype": "Report",
     "role": "System Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8874,7 +9215,8 @@
     "parenttype": "Report",
     "role": "Stock User"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8916,7 +9258,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -8958,7 +9301,8 @@
     "parenttype": "Report",
     "role": "Employee"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -9000,7 +9344,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -9036,7 +9381,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -9078,7 +9424,8 @@
     "parenttype": "Report",
     "role": "HR Manager"
    }
-  ]
+  ],
+  "timeout": 0
  },
  {
   "add_total_row": 0,
@@ -9108,6 +9455,7 @@
     "parenttype": "Report",
     "role": "Accounts User"
    }
-  ]
+  ],
+  "timeout": 0
  }
 ]
