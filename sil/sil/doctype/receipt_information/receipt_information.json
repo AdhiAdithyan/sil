@@ -8,18 +8,28 @@
  "field_order": [
   "naming_series",
   "executive",
+  "branch",
+  "column_break_aljo",
+  "bank_account",
   "mode_of_payment",
   "date",
-  "receipt_type",
-  "column_break_aljo",
+  "section_break_unpa",
+  "reference_column",
+  "chequereference_number",
+  "reference_no",
+  "column_break_zcku",
+  "reference_image",
+  "section_break_vgyn",
   "amount",
-  "branch",
-  "bank_account",
+  "column_break_xxrm",
   "account_paid_to",
-  "section_break_sjjv",
-  "partial_payment",
   "section_break_xexp",
   "receipt_entry",
+  "section_break_asdj",
+  "unallocated_amount",
+  "section_break_boto",
+  "remark_column",
+  "remark",
   "section_break_cdcc",
   "issue_payment"
  ],
@@ -47,19 +57,14 @@
    "label": "Date"
   },
   {
-   "fieldname": "receipt_type",
-   "fieldtype": "Select",
-   "label": "Receipt Type",
-   "options": "\nIssue\nInvoice\nAdvance"
-  },
-  {
    "fieldname": "column_break_aljo",
    "fieldtype": "Column Break"
   },
   {
    "fieldname": "amount",
    "fieldtype": "Data",
-   "label": "Amount"
+   "label": "Amount",
+   "reqd": 1
   },
   {
    "fieldname": "branch",
@@ -76,17 +81,8 @@
    "fieldname": "account_paid_to",
    "fieldtype": "Link",
    "label": "Account Paid To",
-   "options": "Account"
-  },
-  {
-   "fieldname": "section_break_sjjv",
-   "fieldtype": "Section Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "partial_payment",
-   "fieldtype": "Check",
-   "label": "Partial Payment"
+   "options": "Account",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_xexp",
@@ -107,11 +103,72 @@
    "fieldtype": "Table",
    "label": "Issue Payment",
    "options": "Issue Payment"
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Cheque/Reference Date"
+  },
+  {
+   "fieldname": "chequereference_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cheque/Reference Number"
+  },
+  {
+   "fieldname": "section_break_unpa",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reference_column",
+   "fieldtype": "Column Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "column_break_zcku",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_image",
+   "fieldtype": "Attach Image",
+   "label": "Reference Image"
+  },
+  {
+   "fieldname": "section_break_vgyn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_asdj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "unallocated_amount",
+   "fieldtype": "Data",
+   "label": "Unallocated Amount"
+  },
+  {
+   "fieldname": "column_break_xxrm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_boto",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark_column",
+   "fieldtype": "Column Break",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "placeholder": "Enter Remarks"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-19 10:15:03.223650",
+ "modified": "2024-10-22 16:26:49.034811",
  "modified_by": "Administrator",
  "module": "sil",
  "name": "Receipt Information",
