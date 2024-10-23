@@ -25,9 +25,9 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
 
         elif reference_type == "Sales Order":
             # Fetch the required fields from Sales Order
-            order = frappe.get_all("Sales Order", filters={"customer": customer}, fields=["name", "grand_total", "delivery_date"])
+            order = frappe.get_all("Sales Order", filters={"customer": customer}, fields=["name"])
             if order:
-                response['reference_name'] = None
+                response['reference_name'] = order
                 response['outstanding_amount'] = 0.0
                 response['allocated_amount'] = 0.0
             else:
@@ -97,8 +97,12 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
         elif reference_type == "Sales Order":
             # Fetch the required fields from Sales Order
             order = frappe.get_all("Sales Order", filters={"customer": customer,"name":reference_name}, fields=["name", "grand_total", "delivery_date"])
-            if order:
-                response['outstanding_amount'] = order[0].get('grand_total')
+            sales_orders = frappe.db.sql("""SELECT (rounded_total-advance_paid) as outstanding_amount FROM `tabSales Order` 
+             where customer=%s and name=%s """,(customer,reference_name,), as_dict=True)
+            print("get_all_receipt_info_by_reference_name")
+            print(f"sales_orders :{sales_orders}")
+            if sales_orders:
+                response['outstanding_amount'] = sales_orders[0].get('outstanding_amount')
                 response['allocated_amount'] = 0.0
             else:
                 response['outstanding_amount'] = 0.0
@@ -106,9 +110,11 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
 
         elif reference_type == "Slip No":
             # Fetch the required fields from Issue Sales (Slip No equivalent)
-            slip = frappe.get_all("Issue Sales", filters={"customer": customer,"name":reference_name}, fields=["slip_no", "total_amount"])
+            # slip = frappe.get_all("Issue", filters={"customer": customer,"name":reference_name}, fields=["slip_no", "total_amount"])
+            slip=frappe.db.sql("""SELECT *  FROM `tabIssue` where 
+                `customer`=%s order by name asc;""",(customer,), as_dict=True)
             if slip:
-                response['outstanding_amount'] = slip[0].get('total_amount')
+                response['outstanding_amount'] = 0.0
                 response['allocated_amount'] = 0.0
             else:
                 response['outstanding_amount'] = 0.0

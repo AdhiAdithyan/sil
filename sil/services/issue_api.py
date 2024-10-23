@@ -6,6 +6,15 @@ from bs4 import BeautifulSoup
 
 
 @frappe.whitelist(allow_guest=True)
+def getAllIssueSales():
+    frappe.clear_cache()
+    # Fetch all addresses linked to the given customer
+    issue_history = frappe.get_all("Issue",fields=["*"])
+
+    return issue_history
+
+
+@frappe.whitelist(allow_guest=True)
 def getAllServiceHistoryBySerialNo(serial_no):
     frappe.clear_cache()
     # Fetch all addresses linked to the given customer
