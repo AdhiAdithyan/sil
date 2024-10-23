@@ -4,6 +4,10 @@ from frappe.model.document import Document
 from frappe.utils import now_datetime
 import datetime
 import time
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 
@@ -341,33 +345,64 @@ def saveGeneratedSerialNumber(doc):
     pass        
 
  
+# @frappe.whitelist(allow_guest=True)
+# def updateItemFamilySerialNoList(doc, method):
+#     try:
+#         frappe.clear_cache()
+
+#         # Fetch sales order and parent from Sales Invoice Item table
+#         sales_invoice_item = frappe.db.sql("""
+#         SELECT DISTINCT sales_order, parent 
+#         FROM `tabSales Invoice Item`
+#         WHERE sales_order IS NOT NULL;""", as_dict=True)
+
+#         # Loop through the sales invoice items and update the Item Family Serial No List
+#         for record in sales_invoice_item:
+#             sales_order = record['sales_order']
+#             parent = record['parent']
+#             print(f"Sales Order: {sales_order}, Parent: {parent}")
+
+#             frappe.db.sql("""UPDATE `tabItem Family Serial No List` 
+#             SET custom_sales_invoice=%s WHERE custom_sales_order=%s;""", 
+#             (parent, sales_order), as_dict=True)
+
+#         frappe.db.commit()
+#         print(f"sales_invoice_item: {sales_invoice_item}")
+#         return {"message": "success"}
+#     except Exception as e:
+#         print(str(e))
+#         frappe.log_error(f"Error in updateItemFamilySerialNoList: {str(e)}")
+#         return {"message": "failed", "error": str(e)}
+
+
 @frappe.whitelist(allow_guest=True)
 def updateItemFamilySerialNoList(doc, method):
     try:
         frappe.clear_cache()
 
         # Fetch sales order and parent from Sales Invoice Item table
-        sales_invoice_item = frappe.db.sql("""
+        sales_invoice_items = frappe.db.sql("""
         SELECT DISTINCT sales_order, parent 
         FROM `tabSales Invoice Item`
         WHERE sales_order IS NOT NULL;""", as_dict=True)
 
         # Loop through the sales invoice items and update the Item Family Serial No List
-        for record in sales_invoice_item:
+        for record in sales_invoice_items:
             sales_order = record['sales_order']
             parent = record['parent']
-            print(f"Sales Order: {sales_order}, Parent: {parent}")
+            logger.info(f"Sales Order: {sales_order}, Parent: {parent}")
 
-            frappe.db.sql("""UPDATE `tabItem Family Serial No List` 
-            SET custom_sales_invoice=%s WHERE custom_sales_order=%s;""", 
-            (parent, sales_order), as_dict=True)
+            # Update the Item Family Serial No List
+            try:
+                frappe.db.sql("""UPDATE `tabItem Family Serial No List` 
+                SET custom_sales_invoice=%s WHERE custom_sales_order=%s;""", 
+                (parent, sales_order))
+            except Exception as update_error:
+                logger.error(f"Failed to update for Sales Order: {sales_order}. Error: {str(update_error)}")
 
         frappe.db.commit()
-        print(f"sales_invoice_item: {sales_invoice_item}")
+        logger.info(f"Updated sales invoice items: {sales_invoice_items}")
         return {"message": "success"}
     except Exception as e:
-        print(str(e))
-        frappe.log_error(f"Error in updateItemFamilySerialNoList: {str(e)}")
+        logger.error(f"Error in updateItemFamilySerialNoList: {str(e)}")
         return {"message": "failed", "error": str(e)}
-
-
