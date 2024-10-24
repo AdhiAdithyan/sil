@@ -14,8 +14,16 @@ frappe.ui.form.on('Receipt Information', {
           let is_main_doc_valid = true;
         
           // Example validations for main document fields
-          if (!frm.doc.account) {
-              frappe.msgprint(__('Account is required.'));
+          if (!frm.doc.amount) {
+              frappe.msgprint(__('Amount is required.'));
+              is_main_doc_valid = false;
+          }
+          if(frm.doc.unallocated_amount>0){
+            frappe.msgprint(__('Unallocated Amount is greater than zero.'));
+              is_main_doc_valid = false;
+          }
+          if(frm.doc.unallocated_amount<0){
+            frappe.msgprint(__('Unallocated Amount is less than zero.'));
               is_main_doc_valid = false;
           }
          
@@ -34,15 +42,15 @@ frappe.ui.form.on('Receipt Information', {
         //       is_main_doc_valid = false;
         //   }
           
-        //   if (!frm.doc.mode_of_payment) {
-        //       frappe.msgprint(__('Mode of payment is required.'));
-        //       is_main_doc_valid = false;
-        //   }
+          if (!frm.doc.mode_of_payment) {
+              frappe.msgprint(__('Mode of payment is required.'));
+              is_main_doc_valid = false;
+          }
           
-        //   if (!frm.doc.date) {
-        //       frappe.msgprint(__('Date is required.'));
-        //       is_main_doc_valid = false;
-        //   }
+          if (!frm.doc.date) {
+              frappe.msgprint(__('Date is required.'));
+              is_main_doc_valid = false;
+          }
           
           if (!frm.doc.amount || parseFloat(frm.doc.amount) <= 0) {
               frappe.msgprint(__('Amount should be greater than zero.'));
@@ -60,11 +68,13 @@ frappe.ui.form.on('Receipt Information', {
             frappe.msgprint(__('Please add at least one entry before proceeding'));
             return;
         }
+
         // Check if entries table has at least one item
         if (!frm.doc.entries || frm.doc.entries.length === 0) {
             frappe.msgprint(__('Please add at least one outstanding entry before proceeding'));
             return;
         }
+
         // Validate each row in the customer table
         let is_cust_valid = true;
         let seen = new Set(); // To track seen combinations of customer and type
@@ -146,7 +156,8 @@ frappe.ui.form.on('Receipt Information', {
                 entries: frm.doc.entries  // child table name
             }
         }
-        console.log("Custom button clicked123456789");
+
+        console.log("Custom button clicked");
 
           // Show the progress dialog
           frappe.msgprint({
@@ -154,6 +165,7 @@ frappe.ui.form.on('Receipt Information', {
             indicator: 'blue',
             title: __("Processing")
         });
+        
 // If all entries are valid, proceed with the frappe.call
 if (is_cust_valid && is_entry_valid) {
         frappe.call({

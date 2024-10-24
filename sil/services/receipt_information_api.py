@@ -132,3 +132,105 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
         # Log the error and return it as a message
         frappe.log_error(frappe.get_traceback(), 'Error in get_item_details')
         return {"status": "error", "message": str(e)}
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfo():
+    recp_info = frappe.get_all("Receipt Information", fields=["name"])
+
+    if not recp_info:
+        recp_info = []
+
+    return recp_info
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfoByExecutiveAndReceiptNo(executive,receipt_number):
+    if executive and executive != 'All':
+        recp_info = frappe.get_all("Receipt Information",filters={"executive":executive,"name": receipt_number},  fields=["*"]) 
+    if executive and executive == 'All':
+        recp_info = frappe.get_all("Receipt Information",filters={"name": receipt_number},  fields=["*"])     
+
+    if not recp_info:
+        recp_info = []
+
+    # Add receipt entries to each receipt information record
+    for recp in recp_info:
+        recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
+        recp["receipt_entries"] = recp_entries    
+
+    return recp_info    
+ 
+    
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfoDetails():
+    recp_info = frappe.get_all("Receipt Information", fields=["*"])
+
+    if not recp_info:
+        recp_info = []
+
+    # Add receipt entries to each receipt information record
+    for recp in recp_info:
+        recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
+        recp["receipt_entries"] = recp_entries
+
+    return { 
+        "receipt_information": recp_info
+    }
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
+    recp_info = frappe.get_all("Receipt Information",filters={"name": receipt_number}, fields=["*"])
+
+    if not recp_info:
+        recp_info = []
+
+    # Add receipt entries to each receipt information record
+    for recp in recp_info:
+        recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
+        recp["receipt_entries"] = recp_entries
+
+    return { 
+        "receipt_information": recp_info
+    }
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfoDetailsByExecutive(executive):
+    # Initialize filters
+    filters = {}
+    
+    # Check if executive is provided and is not 'All'
+    if executive and executive != 'All':
+        filters["executive"] = executive
+
+    # Fetch receipt entries based on filters
+    receipt_entries = frappe.get_all("Receipt Information", filters=filters, fields=["name"])
+    print(f"getAllReceiptInfoDetailsByExecutive receipt_entries: {receipt_entries}")
+    return receipt_entries
+
+   
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptEntryDetails():
+    recp_entry = frappe.get_all("Receipt Entry", fields=["*"])
+    if not recp_entry:
+        recp_entry=[]
+
+    return { 
+        "receipt_entry" : recp_entry
+    }  
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllExecutivesAndReceipts():
+    recp_info = frappe.get_all("Receipt Information", fields=["name","executive"])
+
+    if not recp_info:
+        recp_info = []
+
+    return recp_info    
