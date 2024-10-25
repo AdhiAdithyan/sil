@@ -136,7 +136,7 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
 
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptInfo():
-    recp_info = frappe.get_all("Receipt Information", fields=["name"])
+    recp_info = frappe.get_all("Receipt Information", fields=["*"])
 
     if not recp_info:
         recp_info = []
@@ -215,7 +215,7 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
 def getAllReceiptInfoDetailsByExecutive(executive):
     try:
         filters = {"executive": executive} if executive and executive != 'All' else {}
-        receipt_entries = frappe.get_all("Receipt Information", filters=filters, fields=["name"]) or []
+        receipt_entries = frappe.get_all("Receipt Information", filters=filters, fields=["name","date","amount"]) or []
         return receipt_entries
 
     except Exception as e:
@@ -223,8 +223,6 @@ def getAllReceiptInfoDetailsByExecutive(executive):
         return {"status": "error", "message": str(e)}
 
    
-
-
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptEntryDetails():
     recp_entry = frappe.get_all("Receipt Entry", fields=["*"])

@@ -7,7 +7,11 @@
 // 	},
 // });
 frappe.ui.form.on('SIL Payment Entry', {
+    validate(frm) {
+        // Validate main document fields
+        let is_main_doc_valid = true;
 
+        
 
-
+    }
 });    
