@@ -2486,7 +2486,7 @@
   "doctype": "Workflow",
   "document_type": "Sales Order",
   "is_active": 0,
-  "modified": "2024-10-23 14:25:41.688560",
+  "modified": "2024-10-25 10:14:44.131547",
   "name": "Sales Order Workflow Final",
   "override_status": 0,
   "send_email_alert": 1,
@@ -2522,6 +2522,21 @@
     "workflow_builder_id": null
    },
    {
+    "allow_edit": "AK RM",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from  AK RM",
+    "update_field": "custom_approval_status",
+    "update_value": "RM Pending",
+    "workflow_builder_id": null
+   },
+   {
     "allow_edit": "RB1 RM",
     "avoid_status_override": 0,
     "doc_status": "0",
@@ -2547,6 +2562,36 @@
     "parentfield": "states",
     "parenttype": "Workflow",
     "state": "Pending Approval from RC1",
+    "update_field": "custom_approval_status",
+    "update_value": "RM Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Managment",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from RD1",
+    "update_field": "custom_approval_status",
+    "update_value": "RM Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Managment",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from RE1",
     "update_field": "custom_approval_status",
     "update_value": "RM Pending",
     "workflow_builder_id": null
@@ -2637,6 +2682,21 @@
     "parentfield": "states",
     "parenttype": "Workflow",
     "state": "Pending Approval from RC1",
+    "update_field": "custom_approval_status",
+    "update_value": "RM Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Managment",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from  AK RM",
     "update_field": "custom_approval_status",
     "update_value": "RM Pending",
     "workflow_builder_id": null
@@ -2912,6 +2972,21 @@
     "workflow_builder_id": null
    },
    {
+    "allow_edit": "Acc Manager3",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from Acc Manager 4",
+    "update_field": "custom_approval_status",
+    "update_value": "RM Approved",
+    "workflow_builder_id": null
+   },
+   {
     "allow_edit": "Managment",
     "avoid_status_override": 0,
     "doc_status": "0",
@@ -3177,6 +3252,21 @@
     "parentfield": "states",
     "parenttype": "Workflow",
     "state": "Pending Approval from Customer Support3",
+    "update_field": "custom_approval_status",
+    "update_value": "Account Manager Approved",
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "AK RM",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from Customer Support4",
     "update_field": "custom_approval_status",
     "update_value": "Account Manager Approved",
     "workflow_builder_id": null
@@ -3523,6 +3613,30 @@
     "workflow_builder_id": null
    },
    {
+    "action": "Proceed For Approval",
+    "allow_self_approval": 1,
+    "allowed": "Order Creator",
+    "condition": "doc.custom_cluster in [\"CD1A\"]",
+    "next_state": "Pending Approval from RD1",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Draft",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed For Approval",
+    "allow_self_approval": 1,
+    "allowed": "Order Creator",
+    "condition": "doc.custom_cluster in [\"CE1A\"]\r\n",
+    "next_state": "Pending Approval from RE1",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Draft",
+    "workflow_builder_id": null
+   },
+   {
     "action": "Submit",
     "allow_self_approval": 1,
     "allowed": "Order Creator",
@@ -3540,6 +3654,18 @@
     "allowed": "Order Creator",
     "condition": "doc.custom_cluster in [\"CC1A\", \"CC1B\", \"CC1C\", \"CC1D\", \"CC1E\", \"CC1F\"]",
     "next_state": "Pending Approval from RC1",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Draft",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed For Approval",
+    "allow_self_approval": 1,
+    "allowed": "Order Creator",
+    "condition": "doc.custom_cluster in [\"CF1A\"]",
+    "next_state": "Pending Approval from  AK RM",
     "parent": "Sales Order Workflow Final",
     "parentfield": "transitions",
     "parenttype": "Workflow",
@@ -3580,6 +3706,42 @@
     "parentfield": "transitions",
     "parenttype": "Workflow",
     "state": "Pending Approval from RC1",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed to Accounts",
+    "allow_self_approval": 1,
+    "allowed": "AK RM",
+    "condition": null,
+    "next_state": "Pending Approval from Acc Manager 4",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from  AK RM",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed to Accounts",
+    "allow_self_approval": 1,
+    "allowed": "Managment",
+    "condition": null,
+    "next_state": "Pending Approval from Acc Manager3",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from RD1",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed to Accounts",
+    "allow_self_approval": 1,
+    "allowed": "Managment",
+    "condition": null,
+    "next_state": "Pending Approval from Acc Manager3",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from RE1",
     "workflow_builder_id": null
    },
    {
@@ -3873,6 +4035,18 @@
    {
     "action": "Proceed to Customer Support",
     "allow_self_approval": 1,
+    "allowed": "Acc Manager3",
+    "condition": null,
+    "next_state": "Pending Approval from Customer Support4",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from Acc Manager 4",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed to Customer Support",
+    "allow_self_approval": 1,
     "allowed": "Managment",
     "condition": null,
     "next_state": "Pending Approval from Customer Support1",
@@ -4000,6 +4174,18 @@
     "parentfield": "transitions",
     "parenttype": "Workflow",
     "state": "Pending Approval from Customer Support2",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Proceed to Production",
+    "allow_self_approval": 1,
+    "allowed": "AK RM",
+    "condition": null,
+    "next_state": "Pending Approval from Production Manager",
+    "parent": "Sales Order Workflow Final",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "state": "Pending Approval from Customer Support4",
     "workflow_builder_id": null
    },
    {
