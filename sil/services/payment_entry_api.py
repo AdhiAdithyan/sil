@@ -13,6 +13,31 @@ def getAllPaymentEntryDetails():
 
 
 @frappe.whitelist(allow_guest=True)
-def AddNewPaymentEntry():
+def AddNewPaymentEntry(payment_entry_no):
     frappe.clear_cache()
-        
+    filters = {
+                "parent": payment_entry_no
+                }
+
+    return frappe.get_all("Payment Entry",filters=filters , fields=["*"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
