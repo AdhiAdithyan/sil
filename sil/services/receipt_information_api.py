@@ -146,19 +146,29 @@ def getAllReceiptInfo():
 
 
 @frappe.whitelist(allow_guest=True)
-def getAllReceiptInfoByExecutiveAndReceiptNo(executive=None, receipt_number=None):
+def getAllReceiptInfoByExecutiveAndReceiptNo(executive=None, receipt_number=None,selected_date=None,selected_amount=None):
     # Validate input parameters
     if not receipt_number:
         frappe.throw(_("Receipt number is required."))
     if executive is None:
         frappe.throw(_("Executive is required."))
+    if selected_date is None:
+        frappe.throw(_("selected_date is required.")) 
+    if selected_amount is None:
+        selected_amount = 0
 
     try:
         # Filter by executive and receipt number based on executive input
         if executive and executive != 'All':
-            recp_info = frappe.get_all("Receipt Information", filters={"executive": executive, "name": receipt_number}, fields=["*"])
+            if selected_amount != 0:
+                recp_info = frappe.get_all("Receipt Information", filters={"executive": executive, "name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
+            else:
+                recp_info = frappe.get_all("Receipt Information", filters={"executive": executive, "name": receipt_number,"date":selected_date}, fields=["*"])    
         else:
-            recp_info = frappe.get_all("Receipt Information", filters={"name": receipt_number}, fields=["*"])
+            if selected_amount != 0:
+                recp_info = frappe.get_all("Receipt Information", filters={"name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
+            else:
+                recp_info = frappe.get_all("Receipt Information", filters={"name": receipt_number,"date":selected_date}, fields=["*"])    
 
         # If no records found, initialize as an empty list
         if not recp_info:
@@ -212,9 +222,18 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
 
 
 @frappe.whitelist(allow_guest=True)
-def getAllReceiptInfoDetailsByExecutive(executive):
+def getAllReceiptInfoDetailsByExecutive(executive,amount=None,date=None):
     try:
-        filters = {"executive": executive} if executive and executive != 'All' else {}
+        if executive and executive != 'All' and float(amount)>0 and date !='':
+            filters = {"executive": executive,"amount":amount,"date":date}
+        elif executive and executive != 'All' and float(amount)>0 and date =='':
+            filters = {"executive": executive,"amount":amount}
+        elif executive and executive != 'All' and float(amount==0) and date =='':
+            filters = {"executive": executive}         
+        else:
+            filters = {}    
+
+
         receipt_entries = frappe.get_all("Receipt Information", filters=filters, fields=["name","date","amount"]) or []
         return receipt_entries
 
