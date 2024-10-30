@@ -1,6 +1,23 @@
 import frappe
 from packaging import version
 
+
+def check_app_versions():
+    app_versions = {
+        "chat": "0.0.1",
+        "erpnext": "15.38.2",
+        "frappe": "15.44.1",
+        "hrms": "16.0.0-dev",
+        "india_compliance": "15.13.4",
+        "payments": "0.0.1"
+    }
+
+    for app, req_version in app_versions.items():
+        if app in frappe.get_installed_apps():
+            installed_version = frappe.get_app_version(app)
+            if version.parse(installed_version) < version.parse(req_version):
+                frappe.throw(f"{app} version must be >= {req_version}. Installed: {installed_version}")
+
 app_name = "sil"
 app_title = "sil"
 app_publisher = "Softland"
@@ -302,18 +319,3 @@ fixtures = [
 
 
 
-def check_app_versions():
-    app_versions = {
-        "chat": "0.0.1",
-        "erpnext": "15.38.2",
-        "frappe": "15.44.1",
-        "hrms": "16.0.0-dev",
-        "india_compliance": "15.13.4",
-        "payments": "0.0.1"
-    }
-
-    for app, req_version in app_versions.items():
-        if app in frappe.get_installed_apps():
-            installed_version = frappe.get_app_version(app)
-            if version.parse(installed_version) < version.parse(req_version):
-                frappe.throw(f"{app} version must be >= {req_version}. Installed: {installed_version}")
