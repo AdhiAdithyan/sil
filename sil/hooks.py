@@ -1,9 +1,14 @@
+import frappe
+from packaging import version
+
 app_name = "sil"
 app_title = "sil"
 app_publisher = "Softland"
 app_description = "Billing Solution"
 app_email = "admin@softlandindia.co.in"
 app_license = "mit"
+
+required_apps = ["chat","frappe","erpnext","hrms","payments","india_compliance"]  # Add more apps as needed
 # required_apps = []
 
 # Includes in <head>
@@ -258,6 +263,8 @@ doc_events = {
 #     }
 # }
 
+# Trigger this function after installation
+after_install = check_app_versions
 
 fixtures = [
     "Client Script",
@@ -291,3 +298,22 @@ fixtures = [
     {"dt": "Dashboard Chart"},
     {"dt": "User Permission"}
 ]
+
+
+
+
+def check_app_versions():
+    app_versions = {
+        "chat": "0.0.1",
+        "erpnext": "15.38.2",
+        "frappe": "15.44.1",
+        "hrms": "16.0.0-dev",
+        "india_compliance": "15.13.4",
+        "payments": "0.0.1"
+    }
+
+    for app, req_version in app_versions.items():
+        if app in frappe.get_installed_apps():
+            installed_version = frappe.get_app_version(app)
+            if version.parse(installed_version) < version.parse(req_version):
+                frappe.throw(f"{app} version must be >= {req_version}. Installed: {installed_version}")
