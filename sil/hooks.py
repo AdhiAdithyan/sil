@@ -8,7 +8,6 @@ def check_app_versions():
         "erpnext": "15.38.2",
         "frappe": "15.44.1",
         "hrms": "16.0.0-dev",
-        "india_compliance": "15.13.4",
         "payments": "0.0.1"
     }
 
@@ -25,7 +24,7 @@ app_description = "Billing Solution"
 app_email = "admin@softlandindia.co.in"
 app_license = "mit"
 
-required_apps = ["chat","frappe","erpnext","hrms","payments","india_compliance"]  # Add more apps as needed
+required_apps = ["chat","frappe","erpnext","hrms","payments"]  # Add more apps as needed
 # required_apps = []
 
 # Includes in <head>
