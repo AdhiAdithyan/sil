@@ -280,7 +280,7 @@ doc_events = {
 # }
 
 # Trigger this function after installation
-after_install = check_app_versions
+# after_install = check_app_versions
 
 fixtures = [
     "Client Script",
