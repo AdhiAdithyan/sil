@@ -44,3 +44,21 @@ def getAccountDetailsByJournalNo():
         frappe.log_error(frappe.get_traceback(), 'Error in getAccountDetailsByJournalNo')
         return {'status': 'error', 'message': str(e)}    
    
+
+
+def create_journal_entry(posting_date, voucher_type, accounts, remarks=None):
+    # Create a new Journal Entry document
+    journal_entry = frappe.get_doc({
+        "doctype": "Journal Entry",
+        "posting_date": posting_date,
+        "voucher_type": voucher_type,  # "Bank Entry", "Cash Entry", "Journal Entry", etc.
+        "accounts": accounts,
+        "user_remark": remarks or "Journal Entry created programmatically"
+    })
+
+    # Insert and submit the Journal Entry
+    journal_entry.insert()
+    journal_entry.submit()
+
+    # Return the name of the created Journal Entry
+    return journal_entry.name   

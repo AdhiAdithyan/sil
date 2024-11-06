@@ -21,29 +21,31 @@ def validate_filters(filters):
 def get_columns():
     # Define columns with field names and labels
     return [
-        {"label": "Sr", "fieldname": "sr", "fieldtype": "Int", "width": 50, "align": "left"},
-        {"label": "ID", "fieldname": "name", "fieldtype": "Link", "options": "Sales Invoice", "width": 120, "align": "left"},
-        {"label": "Docstatus", "fieldname": "docstatus", "fieldtype": "Int", "width": 80, "align": "left"},
-        {"label": "Sales Type", "fieldname": "sales_type", "fieldtype": "Data", "width": 120, "align": "left"},
-        {"label": "Currency", "fieldname": "currency", "fieldtype": "Link", "options": "Currency", "width": 80, "align": "left"},
-        {"label": "Customer Name", "fieldname": "customer_name", "fieldtype": "Data", "width": 200, "align": "left"},
-        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Cluster Manager", "fieldname": "cluster_manager", "fieldtype": "Data", "width": 150, "align": "left"},
-        {"label": "Cluster", "fieldname": "cluster", "fieldtype": "Data", "width": 100, "align": "left"},
-        {"label": "Date", "fieldname": "posting_date", "fieldtype": "Date", "width": 100, "align": "left"},
-        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left"},
-        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left"},
-        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left"},
-        {"label": "Alias Name", "fieldname": "alias_name", "fieldtype": "Data", "width": 200, "align": "left"},
-        {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Currency", "width": 180, "align": "right"},
-        {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left"},
+        {"label": "Sr", "fieldname": "sr", "fieldtype": "Int", "width": 50, "align": "left", "style": "font-weight: bold;"},
+        {"label": "ID", "fieldname": "name", "fieldtype": "Link", "options": "Sales Invoice", "width": 120, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Docstatus", "fieldname": "docstatus", "fieldtype": "Int", "width": 80, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Sales Type", "fieldname": "sales_type", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Currency", "fieldname": "currency", "fieldtype": "Link", "options": "Currency", "width": 80, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Customer Name", "fieldname": "customer_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Cluster Manager", "fieldname": "cluster_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Cluster", "fieldname": "cluster", "fieldtype": "Data", "width": 100, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Date", "fieldname": "posting_date", "fieldtype": "Date", "width": 100, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total Advance Amount (Company Currency)", "fieldname": "total_advance", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Outstanding Amount (Company Currency)", "fieldname": "outstanding_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Alias Name", "fieldname": "alias_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
     ]
 
 def get_data(filters):
@@ -52,33 +54,53 @@ def get_data(filters):
         data = []
         
         conditions = []
-        # if filters.custom_zonal_manager:
-        #     conditions.append(f"si.custom_zonal_manager = '{filters.custom_zonal_manager}'")
-        # if filters.custom_regional_manager:
-        #     conditions.append(f"si.custom_regional_manager = '{filters.custom_regional_manager}'")
-        # if filters.custom_cluster:
-        #     conditions.append(f"si.custom_cluster = '{filters.custom_cluster}'")
-        # if filters.custom_cluster_manager:
-        #     conditions.append(f"si.custom_cluster_manager = '{filters.custom_cluster_manager}'")
-        # if filters.customer_name:
-        #     conditions.append(f"si.customer = '{filters.customer_name}'")
+        if filters.custom_zonal_manager:
+            conditions.append(f"si.custom_zone = '{filters.custom_zonal_manager}'")
+        if filters.custom_regional_manager:
+            conditions.append(f"si.custom_regional_manager = '{filters.custom_regional_manager}'")
+        if filters.custom_cluster:
+            conditions.append(f"si.custom_cluster = '{filters.custom_cluster}'")
+        if filters.custom_cluster_manager:
+            conditions.append(f"si.custom_cluster = '{filters.custom_cluster_manager}'")
+        if filters.customer_name:
+            conditions.append(f"si.customer = '{filters.customer_name}'")
         if filters.starting_posting_date and filters.ending_posting_date:
             conditions.append(f"si.posting_date BETWEEN '{filters.starting_posting_date}' AND '{filters.ending_posting_date}'")
         
         where_clause = " AND ".join(conditions) if conditions else "1=1"
         
         print(f"get_data:{filters}")
+        print(f"get_data where_clause:{where_clause}")
+
+        # invoices = frappe.db.sql(f"""
+        #                 SELECT
+        #                     si.name, si.docstatus, si.currency, si.customer_name, si.grand_total, 
+        #                     si.total_taxes_and_charges, si.posting_date, si.net_total, 
+        #                     si.paid_amount,si.outstanding_amount, si.total FROM
+        #                     `tabSales Invoice` si
+        #                 WHERE {where_clause}
+        #                 ORDER BY si.posting_date DESC
+        #             """, as_dict=True)
 
         invoices = frappe.db.sql(f"""
                         SELECT
-                            si.name, si.docstatus, si.currency, si.customer_name, si.grand_total, 
-                            si.total_taxes_and_charges, si.posting_date, si.net_total, 
-                            si.paid_amount, si.total FROM
+                            si.name,
+                            si.docstatus,
+                            si.currency,
+                            si.customer_name,
+                            si.grand_total,
+                            si.total_taxes_and_charges,
+                            si.posting_date,
+                            si.net_total,
+                            si.paid_amount,
+                            si.total_advance,
+                            COALESCE(si.outstanding_amount, 0.0) AS outstanding_amount,
+                            si.total
+                        FROM
                             `tabSales Invoice` si
                         WHERE {where_clause}
                         ORDER BY si.posting_date DESC
                     """, as_dict=True)
-
         
         if not invoices:
             frappe.throw(_("No Sales Invoices found for the given filters."))
@@ -115,6 +137,8 @@ def get_data(filters):
                         "total": "{:.2f}".format(inv.total),
                         "zonal_manager": get_zonal_manager(inv.name),
                         "amount": "{:.2f}".format(item.amount),
+                        "total_advance":"{:.2f}".format(inv.total_advance),
+                        "outstanding_amount":"{:.2f}".format(inv.outstanding_amount),
                         "item_name": item.item_name,
                         "alias_name": get_alias_name(item.item_name),
                         "qty": item.qty,
