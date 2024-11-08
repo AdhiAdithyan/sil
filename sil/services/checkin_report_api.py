@@ -96,7 +96,7 @@ def get_combined_checkin_report_to_hr(employee_name=None, from_date=None, to_dat
             'Employee Checkin',
             filters=filters,
             fields=['employee', 'time', 'log_type'],
-            order_by='creation desc'
+            order_by='creation asc'
         )
 
         if not checkins:
