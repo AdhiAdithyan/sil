@@ -49,7 +49,7 @@ def get_columns():
     ]
 
 def get_data(filters):
-    print(f"filters :{filters}")
+    # print(f"filters :{filters}")
     try:
         data = []
         
@@ -69,8 +69,8 @@ def get_data(filters):
         
         where_clause = " AND ".join(conditions) if conditions else "1=1"
         
-        print(f"get_data:{filters}")
-        print(f"get_data where_clause:{where_clause}")
+        # print(f"get_data:{filters}")
+        # print(f"get_data where_clause:{where_clause}")
 
         # invoices = frappe.db.sql(f"""
         #                 SELECT
@@ -94,14 +94,24 @@ def get_data(filters):
                             si.net_total,
                             si.paid_amount,
                             si.total_advance,
+                            si.custom_zone,
+                            si.custom_zonal_manager,
+                            si.custom_region,
+                            si.custom_regional_manager,
+                            si.custom_cluster,
+                            si.custom_cluster_manager,
+                            c.customer_type,		
                             COALESCE(si.outstanding_amount, 0.0) AS outstanding_amount,
-                            si.total
+                            si.total 
                         FROM
-                            `tabSales Invoice` si
-                        WHERE {where_clause}
+                            `tabSales Invoice` si 
+                            left join `tabCustomer` c on c.name=si.customer_name 
+                        WHERE {where_clause} 
                         ORDER BY si.posting_date DESC
                     """, as_dict=True)
         
+        print(f"get_data invoices :{invoices}")
+
         if not invoices:
             frappe.throw(_("No Sales Invoices found for the given filters."))
 
@@ -123,19 +133,19 @@ def get_data(filters):
                         "sr": idx,
                         "name": inv.name,
                         "docstatus": inv.docstatus,
-                        "sales_type": get_sales_type(inv.name),
+                        "sales_type": inv.customer_type,#get_sales_type(inv.name),
                         "currency": inv.currency,
                         "customer_name": inv.customer_name,
                         "grand_total": "{:.2f}".format(inv.grand_total),
                         "total_taxes_and_charges": "{:.2f}".format(inv.total_taxes_and_charges),
-                        "cluster_manager": get_cluster_manager(inv.name),
-                        "cluster": get_cluster(inv.name),
+                        "cluster_manager":inv.custom_cluster_manager, #get_cluster_manager(inv.name),
+                        "cluster": inv.custom_cluster, #get_cluster(inv.name),
                         "posting_date": inv.posting_date,
                         "net_total": "{:.2f}".format(inv.net_total),
                         "paid_amount": "{:.2f}".format(inv.paid_amount),
-                        "regional_manager": get_regional_manager(inv.name),
+                        "regional_manager": inv.custom_regional_manager,#get_regional_manager(inv.name),
                         "total": "{:.2f}".format(inv.total),
-                        "zonal_manager": get_zonal_manager(inv.name),
+                        "zonal_manager": inv.custom_zonal_manager,#get_zonal_manager(inv.name),
                         "amount": "{:.2f}".format(item.amount),
                         "total_advance":"{:.2f}".format(inv.total_advance),
                         "outstanding_amount":"{:.2f}".format(inv.outstanding_amount),
@@ -260,7 +270,7 @@ def get_alias_name(item_name):
 @frappe.whitelist(allow_guest=True)
 def generate_and_download_sales_invoice_report(filters=None):
     try:
-        print(f"generate_and_download_sales_invoice_report filters :{filters}")
+        # print(f"generate_and_download_sales_invoice_report filters :{filters}")
 
         if filters is not None:
             try:
@@ -268,19 +278,21 @@ def generate_and_download_sales_invoice_report(filters=None):
                 # filters = frappe._dict(filters)
                 validate_filters(filters)
             except Exception as e:
+                frappe.log_error(frappe.get_traceback(), _("Error fetching : {0}").format(str(e)))
                 return {'error': str(e)}
     
         
         # Get columns and data
         columns = get_columns()
 
-        print(f"columns :{columns}")
+        # print(f"columns :{columns}")
 
         data = get_data(filters)
-        print(f"data :{data}")
+        # print(f"data :{data}")
 
         
         if not data:
+            frappe.log_error(frappe.get_traceback(), _("No data found for the given filters"))
             frappe.throw(_("No data found for the given filters."))
 
 

@@ -8,7 +8,7 @@ from frappe.utils import (
     get_files_path,
 )
 from frappe.utils.file_manager import save_file
-from datetime import datetime
+from datetime import datetime,timedelta
 from frappe.exceptions import ValidationError, DoesNotExistError
 
 def convertDateStringToDateTime(dateString):
@@ -36,20 +36,63 @@ def convert_hours_to_hms(decimal_hours):
         frappe.log_error(f"Error converting hours to HMS: {str(e)}", "Convert Hours Error")
         return "00:00:00"
 
+
 def calculate_daily_working_hours(logs):
     """Calculate total working hours for a single day based on check-in and check-out logs."""
     total_hours = 0
     checkin_time = None
+    # print("calculate_daily_working_hours:")
+    # print(logs)
     try:
         for log in logs:
-            if log.get('log_type') == 'IN':
-                checkin_time = log['time']
-            elif log.get('log_type') == 'OUT' and checkin_time:
-                total_hours += time_diff_in_hours(log['time'], checkin_time)
+            if log.get('Log Type') == 'IN':
+                checkin_time = log['Time']
+            elif log.get('Log Type') == 'OUT' and checkin_time:
+                # print("checkin_time")
+                # print(checkin_time)
+                # print("log['time']")
+                # print(log['Time'])
+                total_hours += time_diff_in_hours(log['Time'], checkin_time)
                 checkin_time = None
     except Exception as e:
         frappe.log_error(f"Error calculating daily working hours: {str(e)}", "Working Hours Calculation Error")
     return total_hours
+
+
+# def calculate_daily_working_hours(logs):
+#     """
+#     Calculate total working hours for a single day based on check-in and check-out logs.
+    
+#     :param logs: List of log entries containing 'time' and 'log_type'.
+#     :return: Total working hours as a float.
+#     """
+#     total_working_time = timedelta()  # Store total working time as a timedelta object
+#     checkin_time = None  # To track the last check-in time
+#     print("calculate_daily_working_hours:")
+#     print(logs)
+#     try:
+#         # Iterate through each log entry
+#         for log in logs:
+#             log_time = datetime.strptime(log['time'], '%H:%M:%S')  # Convert string to datetime object
+#             print("calculate_daily_working_hours: log: log_time")
+#             print(log_time)
+
+#             if log.get('log_type') == 'IN':
+#                 # Update check-in time
+#                 checkin_time = log_time
+#             elif log.get('log_type') == 'OUT' and checkin_time:
+#                 # Calculate the time difference if there is a valid check-in
+#                 working_time = log_time - checkin_time
+#                 total_working_time += working_time
+#                 checkin_time = None  # Reset check-in time after processing the pair
+
+#     except Exception as e:
+#         frappe.log_error(f"Error calculating daily working hours: {str(e)}", "Working Hours Calculation Error")
+
+#     # Return total working hours as a float (in hours)
+#     return total_working_time.total_seconds() / 3600
+
+
 
 def fetch_employee_details(employee_name):
     """Fetch employee details including department and email."""
@@ -96,7 +139,7 @@ def get_combined_checkin_report_to_hr(employee_name=None, from_date=None, to_dat
             'Employee Checkin',
             filters=filters,
             fields=['employee', 'time', 'log_type'],
-            order_by='creation asc'
+            order_by='time asc'
         )
 
         if not checkins:
@@ -209,7 +252,12 @@ def generate_excel_report(checkins):
                 # Use a set to track unique logs based on Time and Log Type
                 unique_logs = []
                 seen_logs = set()
-
+                time_diff=calculate_daily_working_hours(logs)
+                print(f"Total Working Hours: {time_diff:.2f}")
+                print("Time Difference:")
+                print(time_diff)
+                # time_diff=convert_hours_to_hms(time_diff)
+                # print(time_diff)
                 for log in logs:
                     log_identifier = (log['Time'], log['Log Type'])  # Create a unique identifier
 
@@ -217,10 +265,17 @@ def generate_excel_report(checkins):
                         seen_logs.add(log_identifier)
                         unique_logs.append(log)  # Keep the unique log
 
+                print("unique_logs:")
+                print(unique_logs)
                 # Process unique logs
                 first_checkin = unique_logs[0]['Time'] if unique_logs else ""
                 last_checkout = unique_logs[-1]['Time'] if unique_logs else ""
-                daily_hours = time_diff_in_hours(last_checkout, first_checkin) if len(unique_logs) >= 2 else 0
+                # for i in unique_logs:
+                #     print(f"unique_logs : {i['Time']}")
+
+                # daily_hours = time_diff_in_hours(last_checkout, first_checkin) if len(unique_logs) >= 2 else 0
+                # total_hours += daily_hours
+                daily_hours = time_diff
                 total_hours += daily_hours
 
                 html_content += f"""

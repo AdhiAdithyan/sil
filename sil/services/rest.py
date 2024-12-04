@@ -72,6 +72,12 @@ def getAllE_BillDetails():
     return invoice_api.getAllE_BillDetails()
 
 
+#for getting all the e-invoice details
+@frappe.whitelist(allow_guest=True)
+def getAllBillDetails():
+    return invoice_api.getAllBillDetails()    
+
+
 #for getting all the e-invoice details with invoice number
 @frappe.whitelist(allow_guest=True)
 def getAllE_BillDetailsByBillNumber(data):
