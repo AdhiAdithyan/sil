@@ -18,6 +18,8 @@ def validate_filters(filters):
     if getdate(filters.starting_posting_date) > getdate(filters.ending_posting_date):
         frappe.throw(_("From Date cannot be after To Date."))
 
+
+
 def get_columns():
     # Define columns with field names and labels
     return [
@@ -37,7 +39,6 @@ def get_columns():
         {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
         {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Total Advance Amount (Company Currency)", "fieldname": "total_advance", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Outstanding Amount (Company Currency)", "fieldname": "outstanding_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
@@ -45,7 +46,8 @@ def get_columns():
         {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
+        # {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
     ]
 
 def get_data(filters):
@@ -68,19 +70,6 @@ def get_data(filters):
             conditions.append(f"si.posting_date BETWEEN '{filters.starting_posting_date}' AND '{filters.ending_posting_date}'")
         
         where_clause = " AND ".join(conditions) if conditions else "1=1"
-        
-        # print(f"get_data:{filters}")
-        # print(f"get_data where_clause:{where_clause}")
-
-        # invoices = frappe.db.sql(f"""
-        #                 SELECT
-        #                     si.name, si.docstatus, si.currency, si.customer_name, si.grand_total, 
-        #                     si.total_taxes_and_charges, si.posting_date, si.net_total, 
-        #                     si.paid_amount,si.outstanding_amount, si.total FROM
-        #                     `tabSales Invoice` si
-        #                 WHERE {where_clause}
-        #                 ORDER BY si.posting_date DESC
-        #             """, as_dict=True)
 
         invoices = frappe.db.sql(f"""
                         SELECT
@@ -110,7 +99,7 @@ def get_data(filters):
                         ORDER BY si.posting_date DESC
                     """, as_dict=True)
         
-        print(f"get_data invoices :{invoices}")
+        # print(f"get_data invoices :{invoices}")
 
         if not invoices:
             frappe.throw(_("No Sales Invoices found for the given filters."))
@@ -123,49 +112,39 @@ def get_data(filters):
             )
             
             if not items:
+                frappe.log_error(frappe.get_traceback(), _("No items found for Sales Invoice: {0}").format(str(e)))
                 frappe.throw(_("No items found for Sales Invoice {0}").format(inv.name))
-            
-            count = 0
-            for item in items:
-                if count == 0:
-                    count=1
-                    row = {
-                        "sr": idx,
-                        "name": inv.name,
-                        "docstatus": inv.docstatus,
-                        "sales_type": inv.customer_type,#get_sales_type(inv.name),
-                        "currency": inv.currency,
-                        "customer_name": inv.customer_name,
-                        "grand_total": "{:.2f}".format(inv.grand_total),
-                        "total_taxes_and_charges": "{:.2f}".format(inv.total_taxes_and_charges),
-                        "cluster_manager":inv.custom_cluster_manager, #get_cluster_manager(inv.name),
-                        "cluster": inv.custom_cluster, #get_cluster(inv.name),
-                        "posting_date": inv.posting_date,
-                        "net_total": "{:.2f}".format(inv.net_total),
-                        "paid_amount": "{:.2f}".format(inv.paid_amount),
-                        "regional_manager": inv.custom_regional_manager,#get_regional_manager(inv.name),
-                        "total": "{:.2f}".format(inv.total),
-                        "zonal_manager": inv.custom_zonal_manager,#get_zonal_manager(inv.name),
-                        "amount": "{:.2f}".format(item.amount),
-                        "total_advance":"{:.2f}".format(inv.total_advance),
-                        "outstanding_amount":"{:.2f}".format(inv.outstanding_amount),
-                        "item_name": item.item_name,
-                        "alias_name": get_alias_name(item.item_name),
-                        "qty": item.qty,
-                        "unit_rate": "{:.2f}".format(item.rate),
-                        "net_amount": "{:.2f}".format(item.net_amount),
-                        "item_id": item.item_id,
-                    }
-                else:
-                    row={
-                        "amount": "{:.2f}".format(item.amount),
-                        "item_name": item.item_name,
-                        "alias_name": get_alias_name(item.item_name),
-                        "qty": item.qty,
-                        "unit_rate": "{:.2f}".format(item.rate),
-                        "net_amount": "{:.2f}".format(item.net_amount),
-                        "item_id": item.item_id,
-                    }      
+
+            for item_idx, item in enumerate(items):
+                # Include common details only in the first row for the invoice
+                row = {
+                    "sr": idx if item_idx == 0 else "",
+                    "name": inv.name if item_idx == 0 else "",
+                    "docstatus": inv.docstatus if item_idx == 0 else "",
+                    "sales_type": inv.customer_type if item_idx == 0 else "",
+                    "currency": inv.currency if item_idx == 0 else "",
+                    "customer_name": inv.customer_name if item_idx == 0 else "",
+                    "grand_total": "{:.2f}".format(inv.grand_total) if item_idx == 0 else "",
+                    "total_taxes_and_charges": "{:.2f}".format(inv.total_taxes_and_charges) if item_idx == 0 else "",
+                    "cluster_manager": inv.custom_cluster_manager if item_idx == 0 else "",
+                    "cluster": inv.custom_cluster if item_idx == 0 else "",
+                    "posting_date": inv.posting_date if item_idx == 0 else "",
+                    "net_total": "{:.2f}".format(inv.net_total) if item_idx == 0 else "",
+                    "paid_amount": "{:.2f}".format(inv.paid_amount) if item_idx == 0 else "",
+                    "regional_manager": inv.custom_regional_manager if item_idx == 0 else "",
+                    "total": "{:.2f}".format(inv.total) if item_idx == 0 else "",
+                    "zonal_manager": inv.custom_zonal_manager if item_idx == 0 else "",
+                    "total_advance": "{:.2f}".format(inv.total_advance) if item_idx == 0 else "",
+                    "outstanding_amount": "{:.2f}".format(inv.outstanding_amount) if item_idx == 0 else "",
+                    # Item-specific details
+                    "item_name": item.item_name,
+                    "alias_name": get_alias_name(item.item_name),
+                    "qty": item.qty,
+                    "unit_rate": "{:.2f}".format(item.rate),
+                    "net_amount": "{:.2f}".format(item.net_amount),
+                    # "item_id": item.item_id,
+                    "amount": "{:.2f}".format(item.amount),
+                }
                 data.append(row)
         
         total_row = calculate_totals(data)
@@ -174,18 +153,22 @@ def get_data(filters):
         return data
 
     except Exception as e:
-        print(f"Error retrieving data: {e}")
+        frappe.log_error(frappe.get_traceback(), _("Error retrieving data: {0}").format(str(e)))
         frappe.throw(_("Error retrieving data: {0}").format(str(e)))
 
 def calculate_totals(data):
-    total_grand_total = sum(float(d.get("grand_total", 0)) for d in data)
-    total_paid_amount = sum(float(d.get("paid_amount", 0)) for d in data)
-    total_net_total = sum(float(d.get("net_total", 0)) for d in data)
+    total_grand_total = sum(float(d.get("grand_total", 0)) for d in data if d.get("grand_total"))
+    total_paid_amount = sum(float(d.get("paid_amount", 0)) for d in data if d.get("paid_amount"))
+    total_net_total = sum(float(d.get("net_total", 0)) for d in data if d.get("net_total"))
+    total_advance_amt = sum(float(d.get("total_advance", 0)) for d in data if d.get("total_advance"))
+    total_outstanding_amt = sum(float(d.get("outstanding_amount", 0)) for d in data if d.get("outstanding_amount"))
     return {
         "sr": "",
         "name": "Total",
         "grand_total": "{:.2f}".format(total_grand_total),
         "paid_amount": "{:.2f}".format(total_paid_amount),
+        "total_advance": "{:.2f}".format(total_advance_amt),
+        "outstanding_amount": "{:.2f}".format(total_outstanding_amt),
         "net_total": "{:.2f}".format(total_net_total)
     }
 
