@@ -24,30 +24,31 @@ def get_columns():
     # Define columns with field names and labels
     return [
         {"label": "Sr", "fieldname": "sr", "fieldtype": "Int", "width": 50, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Date", "fieldname": "posting_date", "fieldtype": "Date", "width": 100, "align": "left", "style": "font-weight: bold;"},
         {"label": "ID", "fieldname": "name", "fieldtype": "Link", "options": "Sales Invoice", "width": 120, "align": "left", "style": "font-weight: bold;"},
         {"label": "Docstatus", "fieldname": "docstatus", "fieldtype": "Int", "width": 80, "align": "left", "style": "font-weight: bold;"},
         {"label": "Sales Type", "fieldname": "sales_type", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
         {"label": "Currency", "fieldname": "currency", "fieldtype": "Link", "options": "Currency", "width": 80, "align": "left", "style": "font-weight: bold;"},
         {"label": "Customer Name", "fieldname": "customer_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Customer Category", "fieldname": "customer_category", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Cluster Manager", "fieldname": "cluster_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
         {"label": "Cluster", "fieldname": "cluster", "fieldtype": "Data", "width": 100, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Date", "fieldname": "posting_date", "fieldtype": "Date", "width": 100, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Total Advance Amount (Company Currency)", "fieldname": "total_advance", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Outstanding Amount (Company Currency)", "fieldname": "outstanding_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total Advance Amount (Company Currency)", "fieldname": "total_advance", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Outstanding Amount (Company Currency)", "fieldname": "outstanding_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
         {"label": "Alias Name", "fieldname": "alias_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Item Quantity", "fieldname": "qty", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Unit Rate (Company Currency)", "fieldname": "unit_rate", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Net Amount (Company Currency)", "fieldname": "net_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         # {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Currency", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
     ]
 
 def get_data(filters):
@@ -63,7 +64,7 @@ def get_data(filters):
         if filters.custom_cluster:
             conditions.append(f"si.custom_cluster = '{filters.custom_cluster}'")
         if filters.custom_cluster_manager:
-            conditions.append(f"si.custom_cluster = '{filters.custom_cluster_manager}'")
+            conditions.append(f"si.custom_cluster_manager = '{filters.custom_cluster_manager}'")
         if filters.customer_name:
             conditions.append(f"si.customer = '{filters.customer_name}'")
         if filters.starting_posting_date and filters.ending_posting_date:
@@ -89,7 +90,12 @@ def get_data(filters):
                             si.custom_regional_manager,
                             si.custom_cluster,
                             si.custom_cluster_manager,
-                            c.customer_type,		
+                            c.customer_type,
+                            c.customer_group,	
+                            c.custom_customer_category,
+                            c.custom_state,
+                            c.tax_category,
+                            c.default_currency,				
                             COALESCE(si.outstanding_amount, 0.0) AS outstanding_amount,
                             si.total 
                         FROM
@@ -124,6 +130,7 @@ def get_data(filters):
                     "sales_type": inv.customer_type if item_idx == 0 else "",
                     "currency": inv.currency if item_idx == 0 else "",
                     "customer_name": inv.customer_name if item_idx == 0 else "",
+                    "customer_category":inv.customer_category if item_idx == 0 else "",
                     "grand_total": "{:.2f}".format(inv.grand_total) if item_idx == 0 else "",
                     "total_taxes_and_charges": "{:.2f}".format(inv.total_taxes_and_charges) if item_idx == 0 else "",
                     "cluster_manager": inv.custom_cluster_manager if item_idx == 0 else "",

@@ -321,6 +321,32 @@ def getInvoiceDetails(data):
         return{"success":False,"message":f"An Error occurred while processing the request.{str(e)}"}       
          
      
+@frappe.whitelist()
+def get_distinct_sales_invoice_filters():
+    
+    query = """
+        SELECT DISTINCT 
+            custom_cluster, 
+            custom_cluster_manager, 
+            custom_zonal_manager, 
+            custom_regional_manager
+        FROM `tabSales Invoice`
+        WHERE 
+            docstatus = 1 
+            AND custom_cluster IS NOT NULL 
+            AND custom_cluster_manager IS NOT NULL 
+            AND custom_zonal_manager IS NOT NULL 
+            AND custom_regional_manager IS NOT NULL
+    """
+    try:
+        # Execute query and fetch results
+        results = frappe.db.sql(query, as_dict=True)
+        return results
+    except Exception as e:
+        # Return a user-friendly error message
+        frappe.throw(_("Error fetching distinct filters: {0}").format(str(e)))
+
+
 
 if __name__=="__main__":
     #Define our DocType and column details

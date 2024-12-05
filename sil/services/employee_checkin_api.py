@@ -76,12 +76,12 @@ def AddCheckInStatus(data):
         if not employee:
             frappe.throw(_("No Employee found for the given name: {}".format(name)))
         
-        print(f"Employee checkin name:{name}")
-        print(f"Employee checkin date_time_str:{date_time_str}")
+        # print(f"Employee checkin name:{name}")
+        # print(f"Employee checkin date_time_str:{date_time_str}")
 
         resp= minLoginTimeCalc(name,date_time_str)
         
-        print(f"Employee checkin response:{str(resp)}")
+        # print(f"Employee checkin response:{str(resp)}")
         # return {"success": False, "message": "Error adding Employee Check-in",
         # "Resp":f"{str(resp)}"}
 
