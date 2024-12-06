@@ -257,3 +257,49 @@ def minLoginTimeCalc(name, date_time_str):
         ORDER BY TA.time DESC
         LIMIT 1
     """, (date_time_str, date_time_str, name), as_dict=True)
+
+
+#convert to pdf and send through mail.
+def convert_and_send_excel_as_pdf(file_path, recipient_email, subject, message):
+    try:
+        # Ensure the .xlsx file exists
+        if not os.path.exists(file_path):
+            frappe.throw(f"The file {file_path} does not exist.")
+
+        # Convert .xlsx to .pdf
+        pdf_file_path = file_path.replace(".xlsx", ".pdf")
+        converter = Xlsx2Pdf(file_path, pdf_file_path)
+        converter.convert()
+
+        # Save the .pdf file in Frappe's File system
+        with open(pdf_file_path, "rb") as pdf_file:
+            pdf_content = pdf_file.read()
+            pdf_file_doc = save_file(
+                os.path.basename(pdf_file_path),
+                pdf_content,
+                doctype="File",
+                is_private=1
+            )
+
+        # Send email with the PDF attachment
+        attachments = [{
+            "fname": pdf_file_doc.file_name,
+            "fcontent": pdf_content
+        }]
+
+        frappe.sendmail(
+            recipients=[recipient_email],
+            subject=subject,
+            message=message,
+            attachments=attachments
+        )
+
+        frappe.msgprint(f"PDF sent successfully to {recipient_email}")
+
+        # Clean up temporary files
+        os.remove(file_path)
+        os.remove(pdf_file_path)
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Error in Convert and Send Excel as PDF")
+        frappe.throw(f"An error occurred: {str(e)}")

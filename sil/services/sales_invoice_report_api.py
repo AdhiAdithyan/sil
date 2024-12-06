@@ -5,6 +5,8 @@ from frappe import _
 from frappe import ValidationError
 from frappe.utils.file_manager import save_file
 from frappe.utils import getdate
+import os
+from frappe.core.doctype.communication.email import make
 
 
 def validate_filters(filters):
@@ -30,16 +32,18 @@ def get_columns():
         {"label": "Sales Type", "fieldname": "sales_type", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
         {"label": "Currency", "fieldname": "currency", "fieldtype": "Link", "options": "Currency", "width": 80, "align": "left", "style": "font-weight: bold;"},
         {"label": "Customer Name", "fieldname": "customer_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Customer State", "fieldname": "custom_state", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
         {"label": "Customer Category", "fieldname": "customer_category", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Cluster Manager", "fieldname": "cluster_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
         {"label": "Cluster", "fieldname": "cluster", "fieldtype": "Data", "width": 100, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
-        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Regional Manager", "fieldname": "regional_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
-        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Zonal Manager", "fieldname": "zonal_manager", "fieldtype": "Data", "width": 150, "align": "left", "style": "font-weight: bold;"},
+        {"label": "Tax Category (Company Currency)", "fieldname": "tax_category", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total Taxes and Charges (Company Currency)", "fieldname": "total_taxes_and_charges", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Net Total (Company Currency)", "fieldname": "net_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Grand Total (Company Currency)", "fieldname": "grand_total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Paid Amount (Company Currency)", "fieldname": "paid_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
+        {"label": "Total (Company Currency)", "fieldname": "total", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Total Advance Amount (Company Currency)", "fieldname": "total_advance", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Outstanding Amount (Company Currency)", "fieldname": "outstanding_amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
         {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 200, "align": "left", "style": "font-weight: bold;"},
@@ -50,6 +54,7 @@ def get_columns():
         # {"label": "Item ID", "fieldname": "item_id", "fieldtype": "Data", "width": 120, "align": "left", "style": "font-weight: bold;"},
         {"label": "Amount (Company Currency)", "fieldname": "amount", "fieldtype": "Float", "width": 180, "align": "right", "style": "font-weight: bold;"},
     ]
+
 
 def get_data(filters):
     # print(f"filters :{filters}")
@@ -130,8 +135,10 @@ def get_data(filters):
                     "sales_type": inv.customer_type if item_idx == 0 else "",
                     "currency": inv.currency if item_idx == 0 else "",
                     "customer_name": inv.customer_name if item_idx == 0 else "",
-                    "customer_category":inv.customer_category if item_idx == 0 else "",
+                    "custom_state":inv.custom_state if item_idx == 0 else "",
+                    "customer_category":inv.custom_customer_category if item_idx == 0 else "",
                     "grand_total":float( "{:.2f}".format(float(inv.grand_total))) if item_idx == 0 else "",
+                    "tax_category":inv.tax_category if item_idx == 0 else "",
                     "total_taxes_and_charges": float("{:.2f}".format(float(inv.total_taxes_and_charges))) if item_idx == 0 else "",
                     "cluster_manager": inv.custom_cluster_manager if item_idx == 0 else "",
                     "cluster": inv.custom_cluster if item_idx == 0 else "",
@@ -169,14 +176,16 @@ def calculate_totals(data):
     total_net_total = sum(float(d.get("net_total", 0)) for d in data if d.get("net_total"))
     total_advance_amt = sum(float(d.get("total_advance", 0)) for d in data if d.get("total_advance"))
     total_outstanding_amt = sum(float(d.get("outstanding_amount", 0)) for d in data if d.get("outstanding_amount"))
+    total_taxes_and_charges = sum(float(d.get("total_taxes_and_charges", 0)) for d in data if d.get("total_taxes_and_charges"))
     return {
         "sr": "",
         "name": "Total",
-        "grand_total": "{:.2f}".format(total_grand_total),
-        "paid_amount": "{:.2f}".format(total_paid_amount),
-        "total_advance": "{:.2f}".format(total_advance_amt),
-        "outstanding_amount": "{:.2f}".format(total_outstanding_amt),
-        "net_total": "{:.2f}".format(total_net_total)
+        "grand_total": float("{:.2f}".format(total_grand_total)),
+        "paid_amount": float("{:.2f}".format(total_paid_amount)),
+        "total_advance": float("{:.2f}".format(total_advance_amt)),
+        "outstanding_amount": float("{:.2f}".format(total_outstanding_amt)),
+        "total_taxes_and_charges":float("{:.2f}".format(total_taxes_and_charges)),
+        "net_total": float("{:.2f}".format(total_net_total))
     }
 
 def generate_excel(columns, data):
@@ -304,6 +313,23 @@ def generate_and_download_sales_invoice_report(filters=None):
         file_doc.insert(ignore_permissions=True)
         frappe.db.commit()
 
+
+        file_path = file_doc.file_url
+        recipient_email = "adithyans@windrolinx.com"
+        subject = "Sales Invoice  Report"
+        message = "Please find the attached report."
+
+        frappe.sendmail(
+            recipients=[recipient_email],
+            subject=subject,
+            message=message,
+            # attachments=[file_doc.file_url]
+             attachments=[{
+                "fname": file_doc.file_name,
+                "fcontent": file_data  # Use the file data here
+            }]
+        )
+
         # Return file URL
         # return {"file_url": file_doc.file_url}
         return {
@@ -314,3 +340,37 @@ def generate_and_download_sales_invoice_report(filters=None):
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), _("Failed to generate report"))
         return {"error": _("An error occurred: {0}").format(str(e))}    
+
+
+def convert_html_to_pdf(html_file, output_pdf):
+    try:
+        # Read the HTML file and convert to PDF
+        HTML(html_file).write_pdf(output_pdf)
+        print(f"Converted {html_file} to {output_pdf}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+def attach_pdf_to_email(pdf_path, recipient_email):
+    try:
+        with open(pdf_path, "rb") as pdf_file:
+            pdf_content = pdf_file.read()
+            file_doc = save_file(
+                os.path.basename(pdf_path),
+                pdf_content,
+                doctype="File",
+                is_private=1
+            )
+            frappe.sendmail(
+                recipients=[recipient_email],
+                subject="Your PDF Report",
+                message="Please find the attached PDF report.",
+                attachments=[{
+                    "fname": file_doc.file_name,
+                    "fcontent": pdf_content
+                }]
+            )
+        frappe.msgprint(f"Email sent to {recipient_email}")
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Error in Sending Email")
+        frappe.throw(f"An error occurred: {str(e)}")
