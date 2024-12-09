@@ -5,6 +5,5 @@
 from frappe.model.document import Document
 
 
-class SILPaymentEntry(Document):
+class PaymentInfo(Document):
 	pass
-

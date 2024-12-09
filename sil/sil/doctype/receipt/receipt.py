@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ReceiptInformation(Document):
+class Receipt(Document):
 	pass

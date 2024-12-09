@@ -10,7 +10,6 @@
   "executive",
   "branch",
   "column_break_aljo",
-  "bank_account",
   "mode_of_payment",
   "date",
   "section_break_unpa",
@@ -54,7 +53,8 @@
   {
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "Deposit Date",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_aljo",
@@ -72,12 +72,6 @@
    "label": "Branch"
   },
   {
-   "fieldname": "bank_account",
-   "fieldtype": "Link",
-   "label": "Bank Account",
-   "options": "Bank Account"
-  },
-  {
    "fieldname": "account_paid_to",
    "fieldtype": "Link",
    "label": "Account Paid To",
@@ -92,7 +86,7 @@
    "fieldname": "receipt_entry",
    "fieldtype": "Table",
    "label": "Receipt Entry",
-   "options": "Receipt Entry"
+   "options": "Receipt"
   },
   {
    "fieldname": "section_break_cdcc",
@@ -168,10 +162,10 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-22 16:26:49.034811",
+ "modified": "2024-12-09 10:24:52.228060",
  "modified_by": "Administrator",
  "module": "sil",
- "name": "Receipt Information",
+ "name": "Payment Info",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

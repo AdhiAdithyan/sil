@@ -52,7 +52,7 @@
  "modified": "2024-10-23 14:10:16.706317",
  "modified_by": "Administrator",
  "module": "sil",
- "name": "Receipt Entry",
+ "name": "Receipt",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

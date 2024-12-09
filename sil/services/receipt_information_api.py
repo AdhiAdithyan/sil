@@ -161,14 +161,14 @@ def getAllReceiptInfoByExecutiveAndReceiptNo(executive=None, receipt_number=None
         # Filter by executive and receipt number based on executive input
         if executive and executive != 'All':
             if selected_amount != 0:
-                recp_info = frappe.get_all("Receipt Information", filters={"executive": executive, "name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
+                recp_info = frappe.get_all("Payment Info", filters={"executive": executive, "name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
             else:
-                recp_info = frappe.get_all("Receipt Information", filters={"executive": executive, "name": receipt_number,"date":selected_date}, fields=["*"])    
+                recp_info = frappe.get_all("Payment Info", filters={"executive": executive, "name": receipt_number,"date":selected_date}, fields=["*"])    
         else:
             if selected_amount != 0:
-                recp_info = frappe.get_all("Receipt Information", filters={"name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
+                recp_info = frappe.get_all("Payment Info", filters={"name": receipt_number,"date":selected_date,"amount":selected_amount}, fields=["*"])
             else:
-                recp_info = frappe.get_all("Receipt Information", filters={"name": receipt_number,"date":selected_date}, fields=["*"])    
+                recp_info = frappe.get_all("Payment Info", filters={"name": receipt_number,"date":selected_date}, fields=["*"])    
 
         # If no records found, initialize as an empty list
         if not recp_info:
@@ -189,7 +189,7 @@ def getAllReceiptInfoByExecutiveAndReceiptNo(executive=None, receipt_number=None
 
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptInfoDetails():
-    recp_info = frappe.get_all("Receipt Information", fields=["*"])
+    recp_info = frappe.get_all("Payment Info", fields=["*"])
 
     if not recp_info:
         recp_info = []
@@ -206,7 +206,7 @@ def getAllReceiptInfoDetails():
 
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
-    recp_info = frappe.get_all("Receipt Information",filters={"name": receipt_number}, fields=["*"])
+    recp_info = frappe.get_all("Payment Info",filters={"name": receipt_number}, fields=["*"])
 
     if not recp_info:
         recp_info = []
@@ -234,7 +234,7 @@ def getAllReceiptInfoDetailsByExecutive(executive,amount=None,date=None):
             filters = {}    
 
 
-        receipt_entries = frappe.get_all("Receipt Information", filters=filters, fields=["name","date","amount"]) or []
+        receipt_entries = frappe.get_all("Payment Info", filters=filters, fields=["name","date","amount","mode_of_payment","chequereference_number","executive"]) or []
         return receipt_entries
 
     except Exception as e:
@@ -255,9 +255,102 @@ def getAllReceiptEntryDetails():
 
 @frappe.whitelist(allow_guest=True)
 def getAllExecutivesAndReceipts():
-    recp_info = frappe.get_all("Receipt Information", fields=["name","executive"])
+    recp_info = frappe.get_all("Payment Info", fields=["name","executive"])
 
     if not recp_info:
         recp_info = []
 
     return recp_info    
+
+
+# @frappe.whitelist(allow_guest=True)
+# def get_filter_options(all=0,executive=None,deposit_date=None,deposit_amount=None):
+#     try:
+#         # # If `all` is checked, fetch all unique values
+#         # if int(all):  # Convert `all` to integer for boolean logic
+#         #     executives = frappe.db.sql_list("SELECT DISTINCT(executive) FROM `tabPayment Info` WHERE executive IS NOT NULL ORDER BY date ASC")
+#         #     dates = frappe.db.sql_list("SELECT DISTINCT(date) FROM `tabPayment Info` WHERE date IS NOT NULL ORDER BY date ASC")
+#         #     amounts = frappe.db.sql_list("SELECT DISTINCT(amount) FROM `tabPayment Info` WHERE amount >0 ORDER BY amount ASC")
+#         # else:
+#         #     # If `all` is unchecked, fetch only the required subset (add any specific logic here)
+#         #     executives = frappe.db.sql_list("SELECT DISTINCT(executive) FROM `tabPayment Info` WHERE executive IS NOT NULL ORDER BY date ASC")
+#         #     dates = frappe.db.sql_list("SELECT DISTINCT(date) FROM `tabPayment Info` WHERE date >= CURDATE() ORDER BY date ASC")
+#         #     amounts = frappe.db.sql_list("SELECT DISTINCT(amount) FROM `tabPayment Info` WHERE amount > 0 ORDER BY amount ASC")
+
+#         if not int(all):
+#             if executive:
+#                 filters['executive'] = executive
+
+#         if deposit_date:
+#             filters['date'] = deposit_date
+#         if deposit_amount:
+#             filters['amount'] = deposit_amount
+
+
+#         executives = frappe.get_all('Payment Info', filters=filters, pluck='executive')
+#         dates = frappe.get_all('Payment Info', filters=filters, pluck='deposit_date')
+#         amounts = frappe.get_all('Payment Info', filters=filters, pluck='deposit_amount')            
+#         return {
+#             "executives": executives,
+#             "dates": dates,
+#             "amounts": amounts
+#         }
+#     except Exception as e:
+#         frappe.log_error(message=frappe.get_traceback(), title="Error fetching filter options")
+#         return {"error": str(e)}
+
+
+@frappe.whitelist(allow_guest=True)
+def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=None):
+    try:
+        filters = []  # Initialize the filters list for SQL query
+
+        # Apply filters conditionally
+        if not int(all) and executive:  # Use 'and' instead of 'AND'
+            filters.append("executive = %s" % frappe.db.escape(executive))
+        if deposit_date:
+            filters.append("date = %s" % frappe.db.escape(deposit_date))
+        if deposit_amount:
+            filters.append("amount = %s" % frappe.db.escape(deposit_amount))
+
+        # Construct the WHERE clause
+        where_clause = "WHERE " + " AND ".join(filters) if filters else ""
+
+        # Fetch unique values using SQL query
+        executives = frappe.db.sql(f"""
+            SELECT executive FROM `tabPayment Info`
+            {where_clause}
+        """, as_dict=True)
+
+        dates = frappe.db.sql(f"""
+            SELECT date FROM `tabPayment Info`
+            {where_clause}
+        """, as_dict=True)
+
+        amounts = frappe.db.sql(f"""
+            SELECT amount FROM `tabPayment Info`
+            {where_clause}
+        """, as_dict=True)
+
+        print("executives:")
+        print(executives)
+        print("dates:")
+        print(dates)
+        print("amounts:")
+        print(amounts)
+        # Extract the values from the result set and sort them
+        unique_executives = sorted([e['executive'] for e in executives])
+        unique_dates = sorted([d['date'] for d in dates])
+        unique_amounts = sorted([a['amount'] for a in amounts])
+
+        return {
+            "executives": unique_executives,
+            "dates": unique_dates,
+            "amounts": unique_amounts
+        }
+
+    except Exception as e:
+        frappe.log_error(message=frappe.get_traceback(), title="Error fetching filter options")
+        return {"error": str(e)}
+
+

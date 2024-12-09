@@ -38,7 +38,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "SIL Payment Entry",
+   "options": "Payment Receipt",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
@@ -69,7 +69,7 @@
   {
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Posting Date"
+   "label": "Deposit Date"
   },
   {
    "fieldname": "executive",
@@ -111,14 +111,12 @@
   {
    "fieldname": "reference_number",
    "fieldtype": "Data",
-   "label": "Cheque/Reference Number",
-   "reqd": 0
+   "label": "Cheque/Reference Number"
   },
   {
    "fieldname": "chequereference_date",
    "fieldtype": "Date",
-   "label": "Cheque/Reference Date",
-   "reqd": 0
+   "label": "Cheque/Reference Date"
   },
   {
    "fieldname": "amount_paid",
@@ -148,10 +146,10 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-25 15:09:59.694004",
+ "modified": "2024-12-09 10:26:24.168830",
  "modified_by": "Administrator",
  "module": "sil",
- "name": "SIL Payment Entry",
+ "name": "Payment Receipt",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

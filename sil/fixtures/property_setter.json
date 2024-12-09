@@ -3969,7 +3969,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -3985,7 +3985,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4001,7 +4001,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4017,7 +4017,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4033,7 +4033,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4049,7 +4049,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4065,7 +4065,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4081,7 +4081,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4097,7 +4097,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4113,7 +4113,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4129,7 +4129,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocType",
@@ -4161,7 +4161,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4177,7 +4177,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "SIL Payment Entry",
+  "doc_type": "Payment Receipt",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4225,7 +4225,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocType",
@@ -4241,7 +4241,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4257,7 +4257,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4273,7 +4273,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Receipt Information",
+  "doc_type": "Payment Info",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",

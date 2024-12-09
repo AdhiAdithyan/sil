@@ -209,43 +209,6 @@ def generate_excel(columns, data):
     return excel_file
 
 
-def get_sales_type(invoice_name):
-    try:
-        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
-        customer = frappe.get_doc("Customer", sales_invoice.customer)
-        return customer.customer_type
-    except Exception as e:
-        frappe.throw(_("Error fetching sales type: {0}").format(str(e)))
-
-
-def get_cluster_manager(invoice_name):
-    try:
-        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
-        return sales_invoice.custom_cluster_manager or "Not Assigned"
-    except Exception as e:
-        frappe.throw(_("Error fetching cluster manager: {0}").format(str(e)))
-
-def get_cluster(invoice_name):
-    try:
-        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
-        return sales_invoice.custom_cluster or "Not Assigned"
-    except Exception as e:
-        frappe.throw(_("Error fetching cluster: {0}").format(str(e)))
-
-def get_regional_manager(invoice_name):
-    try:
-        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
-        return sales_invoice.custom_regional_manager or "Not Assigned"
-    except Exception as e:
-        frappe.throw(_("Error fetching regional manager: {0}").format(str(e)))
-
-def get_zonal_manager(invoice_name):
-    try:
-        sales_invoice = frappe.get_doc("Sales Invoice", invoice_name)
-        return sales_invoice.custom_zonal_manager or "Not Assigned"
-    except Exception as e:
-        frappe.throw(_("Error fetching zonal manager: {0}").format(str(e)))
-
 
 def get_alias_name(item_name):
     try:
@@ -374,3 +337,57 @@ def attach_pdf_to_email(pdf_path, recipient_email):
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Error in Sending Email")
         frappe.throw(f"An error occurred: {str(e)}")
+
+
+@frappe.whitelist(allow_guest=True)
+def getInvoiceDetailsToRegionalManager():
+     query = """
+        SELECT DISTINCT 
+            si.custom_regional_manager,
+            e.personal_email,
+            e.company_email,
+            e.prefered_email,
+            e.prefered_contact_email
+        FROM `tabSales Invoice` si 
+        left join `tabEmployee` e on e.employee=si.custom_regional_manager
+        WHERE 
+            docstatus = 1  
+            AND custom_regional_manager IS NOT NULL
+    """ 
+    results = frappe.db.sql(query, as_dict=True)
+
+
+@frappe.whitelist(allow_guest=True)
+def getInvoiceDetailsToZonalManager():
+     query = """
+        SELECT DISTINCT 
+            si.custom_zonal_manager,
+            e.personal_email,
+            e.company_email,
+            e.prefered_email,
+            e.prefered_contact_email
+        FROM `tabSales Invoice` si 
+        left join `tabEmployee` e on e.employee=si.custom_zonal_manager
+        WHERE 
+            docstatus = 1 
+            AND custom_zonal_manager IS NOT NULL 
+    """   
+    results = frappe.db.sql(query, as_dict=True)
+
+
+@frappe.whitelist(allow_guest=True)
+def getInvoiceDetailsToClusterManager():
+     query = """
+        SELECT DISTINCT  
+            si.custom_cluster_manager,
+            e.personal_email,
+            e.company_email,
+            e.prefered_email,
+            e.prefered_contact_email
+        FROM `tabSales Invoice` si 
+        left join `tabEmployee` e on e.employee=si.custom_cluster_manager
+        WHERE 
+            docstatus = 1 
+            AND custom_cluster_manager IS NOT NULL 
+    """               
+    results = frappe.db.sql(query, as_dict=True)  
