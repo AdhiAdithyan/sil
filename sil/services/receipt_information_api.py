@@ -234,7 +234,7 @@ def getAllReceiptInfoDetailsByExecutive(executive,amount=None,date=None):
             filters = {}    
 
 
-        receipt_entries = frappe.get_all("Payment Info", filters=filters, fields=["name","date","amount","mode_of_payment","chequereference_number","executive"]) or []
+        receipt_entries = frappe.get_all("Payment Info", filters=filters, fields=["name","date","amount","mode_of_payment","chequereference_number","executive","custom_customer","custom_deposited_by_customer"]) or []
         return receipt_entries
 
     except Exception as e:
@@ -244,7 +244,7 @@ def getAllReceiptInfoDetailsByExecutive(executive,amount=None,date=None):
    
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptEntryDetails():
-    recp_entry = frappe.get_all("Receipt Entry", fields=["*"])
+    recp_entry = frappe.get_all("Payment Info", fields=["*"])
     if not recp_entry:
         recp_entry=[]
 
@@ -303,54 +303,46 @@ def getAllExecutivesAndReceipts():
 @frappe.whitelist(allow_guest=True)
 def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=None):
     try:
-        filters = []  # Initialize the filters list for SQL query
-
+        # Initialize the base SQL query
+        filters = []
+        
         # Apply filters conditionally
-        if not int(all) and executive:  # Use 'and' instead of 'AND'
-            filters.append("executive = %s" % frappe.db.escape(executive))
+        if not int(all) and executive:
+            filters.append(f"executive = {frappe.db.escape(executive)}")
         if deposit_date:
-            filters.append("date = %s" % frappe.db.escape(deposit_date))
+            filters.append(f"date = {frappe.db.escape(deposit_date)}")
         if deposit_amount:
-            filters.append("amount = %s" % frappe.db.escape(deposit_amount))
-
+            filters.append(f"amount = {frappe.db.escape(deposit_amount)}")
+        
         # Construct the WHERE clause
         where_clause = "WHERE " + " AND ".join(filters) if filters else ""
 
-        # Fetch unique values using SQL query
-        executives = frappe.db.sql(f"""
-            SELECT executive FROM `tabPayment Info`
-            {where_clause}
-        """, as_dict=True)
+        # Fetch all relevant data in one query
+        query = f"""
+            SELECT DISTINCT executive, date, amount,mode_of_payment	,custom_customer
+            FROM `tabPayment Info`
+           
+        """
+        results = frappe.db.sql(query, as_dict=True)
 
-        dates = frappe.db.sql(f"""
-            SELECT date FROM `tabPayment Info`
-            {where_clause}
-        """, as_dict=True)
-
-        amounts = frappe.db.sql(f"""
-            SELECT amount FROM `tabPayment Info`
-            {where_clause}
-        """, as_dict=True)
-
-        print("executives:")
-        print(executives)
-        print("dates:")
-        print(dates)
-        print("amounts:")
-        print(amounts)
-        # Extract the values from the result set and sort them
-        unique_executives = sorted([e['executive'] for e in executives])
-        unique_dates = sorted([d['date'] for d in dates])
-        unique_amounts = sorted([a['amount'] for a in amounts])
+        # Process the results to extract unique executives, dates, and amounts
+        unique_executives = sorted(set([row['executive'] for row in results if row['executive']])) or ['N/A']
+        unique_dates = sorted(set([row['date'] for row in results if row['date']])) or ['N/A']
+        unique_amounts = sorted(set([row['amount'] for row in results if row['amount']])) or ['N/A']
+        unique_payment_mode = sorted(set([row['mode_of_payment'] for row in results if row['mode_of_payment']])) or ['N/A']
+        unique_custom_customer = sorted(set([row['custom_customer'] for row in results if row['custom_customer']])) or ['N/A']
 
         return {
             "executives": unique_executives,
             "dates": unique_dates,
+            "payment_mode": unique_payment_mode,
+            "customer": unique_custom_customer,
             "amounts": unique_amounts
         }
 
     except Exception as e:
+        # Log the error with traceback for debugging
         frappe.log_error(message=frappe.get_traceback(), title="Error fetching filter options")
-        return {"error": str(e)}
+        return {"error": "An error occurred while fetching filter options. Please try again later."}
 
 
