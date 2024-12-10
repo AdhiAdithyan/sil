@@ -213,7 +213,7 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
 
     # Add receipt entries to each receipt information record
     for recp in recp_info:
-        recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
+        recp_entries = frappe.get_all("Receipt", filters={"parent": recp['name']}, fields=["*"])
         recp["receipt_entries"] = recp_entries
 
     return { 
@@ -222,20 +222,45 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
 
 
 @frappe.whitelist(allow_guest=True)
-def getAllReceiptInfoDetailsByExecutive(executive,amount=None,date=None):
+def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, customer=None):
     try:
-        if executive and executive != 'All' and float(amount)>0 and date !='':
-            filters = {"executive": executive,"amount":amount,"date":date}
-        elif executive and executive != 'All' and float(amount)>0 and date =='':
-            filters = {"executive": executive,"amount":amount}
-        elif executive and executive != 'All' and float(amount==0) and date =='':
-            filters = {"executive": executive}         
-        else:
-            filters = {}    
+        filters = {}
+        if executive and executive != 'All':
+            filters["executive"] = executive
+            if amount is not None:
+                if float(amount) > 0:
+                    filters["amount"] = amount
+                elif float(amount) == 0:
+                    pass  # No need to add amount filter if it's zero
+            if date:
+                filters["date"] = date
+            if customer and customer != 'N/A':
+                filters["custom_customer"] = customer
 
+        # Construct the WHERE clause
+        where_clause = "WHERE " + " AND ".join([f"{key}=%s" for key in filters.keys()]) if filters else ""
 
-        receipt_entries = frappe.get_all("Payment Info", filters=filters, fields=["name","date","amount","mode_of_payment","chequereference_number","executive","custom_customer","custom_deposited_by_customer"]) or []
-        return receipt_entries
+        # Fetch all relevant data in one query
+        query = f"""
+            SELECT DISTINCT *
+            FROM `tabPayment Info`
+            {where_clause}
+        """
+        recp_info = frappe.db.sql(query, tuple(filters.values()), as_dict=True)
+        if not recp_info:
+            recp_info = []
+
+        # Add receipt entries to each receipt information record
+        for recp in recp_info:
+            query = f"""
+            SELECT DISTINCT *
+            FROM `tabReceipt`
+            WHERE parent=%s
+            """
+            recp_entries = frappe.db.sql(query, (recp['name'],), as_dict=True)
+            recp["receipt_entries"] = recp_entries    
+
+        return recp_info
 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), 'Error in getAllReceiptInfoDetailsByExecutive')
