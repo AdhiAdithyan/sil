@@ -6,12 +6,12 @@
 
 // 	},
 // });
-frappe.ui.form.on('Payment Receipt', {
-    validate(frm) {
-        // Validate main document fields
-        let is_main_doc_valid = true;
+// frappe.ui.form.on('Payment Receipt', {
+//     validate(frm) {
+//         // Validate main document fields
+//         let is_main_doc_valid = true;
 
         
 
-    }
-});    
+//     }
+// });    

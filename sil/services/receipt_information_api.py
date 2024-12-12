@@ -136,7 +136,7 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
 
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptInfo():
-    recp_info = frappe.get_all("Receipt Information", fields=["*"])
+    recp_info = frappe.get_all("Payment Info", fields=["*"])
 
     if not recp_info:
         recp_info = []
@@ -176,7 +176,7 @@ def getAllReceiptInfoByExecutiveAndReceiptNo(executive=None, receipt_number=None
 
         # Add receipt entries to each receipt information record
         for recp in recp_info:
-            recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
+            recp_entries = frappe.get_all("Receipt", filters={"parent": recp['name']}, fields=["*"])
             recp["receipt_entries"] = recp_entries
 
         return recp_info
@@ -196,23 +196,6 @@ def getAllReceiptInfoDetails():
 
     # Add receipt entries to each receipt information record
     for recp in recp_info:
-        recp_entries = frappe.get_all("Receipt Entry", filters={"parent": recp['name']}, fields=["*"])
-        recp["receipt_entries"] = recp_entries
-
-    return { 
-        "receipt_information": recp_info
-    }
-
-
-@frappe.whitelist(allow_guest=True)
-def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
-    recp_info = frappe.get_all("Payment Info",filters={"name": receipt_number}, fields=["*"])
-
-    if not recp_info:
-        recp_info = []
-
-    # Add receipt entries to each receipt information record
-    for recp in recp_info:
         recp_entries = frappe.get_all("Receipt", filters={"parent": recp['name']}, fields=["*"])
         recp["receipt_entries"] = recp_entries
 
@@ -222,24 +205,60 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
 
 
 @frappe.whitelist(allow_guest=True)
-def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, customer=None):
+def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
     try:
-        filters = {}
+        recp_info = frappe.get_all("Payment Info",filters={"name": receipt_number}, fields=["*"])
+
+        if not recp_info:
+            recp_info = []
+
+        # Add receipt entries to each receipt information record
+        for recp in recp_info:
+            try:
+                recp_entries = frappe.get_all("Receipt", filters={"parent": recp['name']}, fields=["*"])
+                recp["receipt_entries"] = recp_entries
+            except Exception as e:
+                frappe.log_error(frappe.get_traceback(), 'Error in getAllReceiptInfoDetailsByReceiptNo')
+
+        print("receipt_information:123")
+        print(recp_info)
+
+        return { 
+            "receipt_information": recp_info
+        }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), 'Error in getAllReceiptInfoDetailsByReceiptNo')
+        return {"status": "error", "message": str(e)} 
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, deposited_by=None,mode_of_payment=None):
+    try:
+        filters={}
         if executive and executive != 'All':
             filters["executive"] = executive
-            if amount is not None:
-                if float(amount) > 0:
-                    filters["amount"] = amount
-                elif float(amount) == 0:
-                    pass  # No need to add amount filter if it's zero
-            if date:
-                filters["date"] = date
-            if customer and customer != 'N/A':
-                filters["custom_customer"] = customer
+        
+        if amount is not None:
+            if float(amount) > 0:
+                filters["amount"] = str(amount)
+            elif float(amount) == 0:
+                pass  # No need to add amount filter if it's zero
+        if date:
+            filters["date"] = date
+        if mode_of_payment:
+            filters["mode_of_payment"] = mode_of_payment    
+        if deposited_by and deposited_by != 'N/A':
+            filters["custom_customer"] = deposited_by
 
+        filters["custom_status"] = 'Draft'
+
+        print("filters:::")
+        print(filters)
         # Construct the WHERE clause
         where_clause = "WHERE " + " AND ".join([f"{key}=%s" for key in filters.keys()]) if filters else ""
 
+        print("where_clause:::")
+        print(where_clause)
         # Fetch all relevant data in one query
         query = f"""
             SELECT DISTINCT *

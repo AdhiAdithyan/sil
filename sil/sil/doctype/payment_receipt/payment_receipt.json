@@ -10,6 +10,8 @@
   "amended_from",
   "naming_series",
   "payment_type",
+  "customer_name",
+  "receipt_number",
   "column_break_annm",
   "mode_of_payment",
   "date",
@@ -141,12 +143,23 @@
    "fieldtype": "Table",
    "label": "Payment Entry Details",
    "options": "SIL Payment Details"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "receipt_number",
+   "fieldtype": "Data",
+   "label": "Receipt Number"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-09 10:26:24.168830",
+ "modified": "2024-12-11 10:25:51.763970",
  "modified_by": "Administrator",
  "module": "sil",
  "name": "Payment Receipt",

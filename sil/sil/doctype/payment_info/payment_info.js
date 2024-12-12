@@ -7,9 +7,11 @@
 // 	},
 // });
 frappe.ui.form.on('Payment Info', {
+
     
     validate(frm) {
 
+        
           // Validate main document fields
           let is_main_doc_valid = true;
         
@@ -201,3 +203,4 @@ if (is_cust_valid && is_entry_valid) {
     }
     }
 });
+

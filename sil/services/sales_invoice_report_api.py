@@ -21,6 +21,13 @@ def validate_filters(filters):
         frappe.throw(_("From Date cannot be after To Date."))
 
 
+def format_posting_date(posting_date):
+    # Function parameter is local to this function
+    # if isinstance(posting_date, str):
+    #     posting_date = datetime.strptime(posting_date, '%Y-%m-%d %H:%M:%S')
+    
+    return posting_date.strftime('%d-%m-%Y')
+
 
 def get_columns():
     # Define columns with field names and labels
@@ -127,6 +134,8 @@ def get_data(filters):
                 frappe.throw(_("No items found for Sales Invoice {0}").format(inv.name))
 
             for item_idx, item in enumerate(items):
+                # Posting date conversion
+                formatted_date = format_posting_date(inv['posting_date'])
                 # Include common details only in the first row for the invoice
                 row = {
                     "sr": idx if item_idx == 0 else "",
@@ -142,7 +151,7 @@ def get_data(filters):
                     "total_taxes_and_charges": float("{:.2f}".format(float(inv.total_taxes_and_charges))) if item_idx == 0 else "",
                     "cluster_manager": inv.custom_cluster_manager if item_idx == 0 else "",
                     "cluster": inv.custom_cluster if item_idx == 0 else "",
-                    "posting_date": inv.posting_date if item_idx == 0 else "",
+                    "posting_date": formatted_date if item_idx == 0 else "",
                     "net_total": float("{:.2f}".format(float(inv.net_total))) if item_idx == 0 else "",
                     "paid_amount": float("{:.2f}".format(float(inv.paid_amount))) if item_idx == 0 else "",
                     "regional_manager": inv.custom_regional_manager if item_idx == 0 else "",
@@ -339,55 +348,55 @@ def attach_pdf_to_email(pdf_path, recipient_email):
         frappe.throw(f"An error occurred: {str(e)}")
 
 
-@frappe.whitelist(allow_guest=True)
-def getInvoiceDetailsToRegionalManager():
-     query = """
-        SELECT DISTINCT 
-            si.custom_regional_manager,
-            e.personal_email,
-            e.company_email,
-            e.prefered_email,
-            e.prefered_contact_email
-        FROM `tabSales Invoice` si 
-        left join `tabEmployee` e on e.employee=si.custom_regional_manager
-        WHERE 
-            docstatus = 1  
-            AND custom_regional_manager IS NOT NULL
-    """ 
-    results = frappe.db.sql(query, as_dict=True)
+# @frappe.whitelist(allow_guest=True)
+# def getInvoiceDetailsToRegionalManager():
+#      query = """
+#         SELECT DISTINCT 
+#             si.custom_regional_manager,
+#             e.personal_email,
+#             e.company_email,
+#             e.prefered_email,
+#             e.prefered_contact_email
+#         FROM `tabSales Invoice` si 
+#         left join `tabEmployee` e on e.employee=si.custom_regional_manager
+#         WHERE 
+#             docstatus = 1  
+#             AND custom_regional_manager IS NOT NULL
+#     """ 
+#     results = frappe.db.sql(query, as_dict=True)
 
 
-@frappe.whitelist(allow_guest=True)
-def getInvoiceDetailsToZonalManager():
-     query = """
-        SELECT DISTINCT 
-            si.custom_zonal_manager,
-            e.personal_email,
-            e.company_email,
-            e.prefered_email,
-            e.prefered_contact_email
-        FROM `tabSales Invoice` si 
-        left join `tabEmployee` e on e.employee=si.custom_zonal_manager
-        WHERE 
-            docstatus = 1 
-            AND custom_zonal_manager IS NOT NULL 
-    """   
-    results = frappe.db.sql(query, as_dict=True)
+# @frappe.whitelist(allow_guest=True)
+# def getInvoiceDetailsToZonalManager():
+#      query = """
+#         SELECT DISTINCT 
+#             si.custom_zonal_manager,
+#             e.personal_email,
+#             e.company_email,
+#             e.prefered_email,
+#             e.prefered_contact_email
+#         FROM `tabSales Invoice` si 
+#         left join `tabEmployee` e on e.employee=si.custom_zonal_manager
+#         WHERE 
+#             docstatus = 1 
+#             AND custom_zonal_manager IS NOT NULL 
+#     """   
+#     results = frappe.db.sql(query, as_dict=True)
 
 
-@frappe.whitelist(allow_guest=True)
-def getInvoiceDetailsToClusterManager():
-     query = """
-        SELECT DISTINCT  
-            si.custom_cluster_manager,
-            e.personal_email,
-            e.company_email,
-            e.prefered_email,
-            e.prefered_contact_email
-        FROM `tabSales Invoice` si 
-        left join `tabEmployee` e on e.employee=si.custom_cluster_manager
-        WHERE 
-            docstatus = 1 
-            AND custom_cluster_manager IS NOT NULL 
-    """               
-    results = frappe.db.sql(query, as_dict=True)  
+# @frappe.whitelist(allow_guest=True)
+# def getInvoiceDetailsToClusterManager():
+#      query = """
+#         SELECT DISTINCT  
+#             si.custom_cluster_manager,
+#             e.personal_email,
+#             e.company_email,
+#             e.prefered_email,
+#             e.prefered_contact_email
+#         FROM `tabSales Invoice` si 
+#         left join `tabEmployee` e on e.employee=si.custom_cluster_manager
+#         WHERE 
+#             docstatus = 1 
+#             AND custom_cluster_manager IS NOT NULL 
+#     """               
+#     results = frappe.db.sql(query, as_dict=True)  
