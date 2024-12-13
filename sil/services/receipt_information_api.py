@@ -13,7 +13,7 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
         # Logic for handling different reference types
         if reference_type == "Sales Invoice":
             # Fetch the required fields from Sales Invoice
-            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer}, fields=["name"])
+            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer,"docstatus":1}, fields=["name"])
             if invoice:
                 response['reference_name'] = invoice
                 response['outstanding_amount'] = 0.0
@@ -25,7 +25,7 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
 
         elif reference_type == "Sales Order":
             # Fetch the required fields from Sales Order
-            order = frappe.get_all("Sales Order", filters={"customer": customer}, fields=["name"])
+            order = frappe.get_all("Sales Order", filters={"customer": customer,"docstatus":1}, fields=["name"])
             if order:
                 response['reference_name'] = order
                 response['outstanding_amount'] = 0.0
@@ -37,7 +37,7 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
 
         elif reference_type == "Slip No":
             # Fetch the required fields from Issue Sales (Slip No equivalent)
-            slip = frappe.get_all("Issue", filters={"customer": customer}, fields=["name"])
+            slip = frappe.get_all("Issue", filters={"customer": customer,"docstatus":1}, fields=["name"])
             if slip:
                 response['reference_name'] = slip
                 response['outstanding_amount'] = 0.0

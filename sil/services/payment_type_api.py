@@ -80,10 +80,10 @@ def getAccountByPaymentType(payment_type=None):
         # print(f"Selected Company: {payment_type}")
 
         payment_accounts = frappe.db.sql("""
-            SELECT DISTINCT ta.* FROM  `tabAccount` ta
+         SELECT ta.name FROM  `tabAccount` ta
             INNER JOIN `tabMode of Payment` tmop
             ON ta.account_type = tmop.type
-            WHERE ta.company = %s AND tmop.mode_of_payment=%s AND a.is_group = 0 
+            WHERE ta.company = %s AND tmop.name=%s AND ta.is_group = 0 
         """, (logged_emp[0]["company"], payment_type,), as_dict=True)
 
         print(f"Selected payment_accounts: {payment_accounts}")

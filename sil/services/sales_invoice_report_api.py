@@ -287,7 +287,11 @@ def generate_and_download_sales_invoice_report(filters=None):
 
 
         file_path = file_doc.file_url
-        recipient_email = "adithyans@windrolinx.com"
+        if frappe.local.conf.developer_mode:  # For testing purposes
+            recipient_email = "adithyans@windrolinx.com"
+        else:
+            recipient_email = "vinod@softlandindia.co.in"
+
         subject = "Sales Invoice  Report"
         message = "Please find the attached report."
 
