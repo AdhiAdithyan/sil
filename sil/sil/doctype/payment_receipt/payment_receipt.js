@@ -7,19 +7,24 @@
 // 	},
 // });
 frappe.ui.form.on('Payment Receipt', {
-    on_submit(frm) {
+    on_submit: function(frm) {
         // Validate main document fields
-        // let is_main_doc_valid = true;
-        let {payment_type,mode_of_payment}=frm.doc
-        frappe.call({
-            method:"sil.services.",
-            args:{
-                "payment_type":payment_type,
-                "mode_of_payment":mode_of_payment
-            }
-
-        });
-        
-
+        let { payment_type, mode_of_payment } = frm.doc;
+        if (payment_type && mode_of_payment) {
+            frappe.call({
+                method: "sil.services.payment_receipt_api.validate_payment",
+                args: {
+                    "payment_type": payment_type,
+                    "mode_of_payment": mode_of_payment
+                },
+                callback: function(r) {
+                    if (r.message) {
+                        // Handle validation result
+                    }
+                }
+            });
+        } else {
+            frappe.msgprint("Please select payment type and mode of payment");
+        }
     }
-});    
+});

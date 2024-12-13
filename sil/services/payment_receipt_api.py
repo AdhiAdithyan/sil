@@ -65,6 +65,9 @@ def get_payment_details():
         for receipt in payment_receipts:
             receipt['payment_details'] = details_by_parent.get(receipt['name'], [])
 
+        # Filter out internal transfers
+        payment_receipts = [receipt for receipt in payment_receipts if receipt.get('payment_type') != 'Internal Transfer']
+
         return payment_receipts
 
     except Exception as e:
@@ -79,6 +82,10 @@ for inserting the payment details from the 'Payment Receipt' doctype
 @frappe.whitelist(allow_guest=True)
 def create_entries_payment(customer, paid_amount, payment_date, mode_of_payment, references):
     try:
+        # Validate inputs
+        if not all([customer, paid_amount > 0, payment_date, mode_of_payment, references]):
+            raise ValueError("Invalid input parameters")
+
         # Create a new Payment Entry document
         payment_entry = frappe.get_doc({
             'doctype': 'Payment Entry',
@@ -93,6 +100,10 @@ def create_entries_payment(customer, paid_amount, payment_date, mode_of_payment,
 
         # Loop through the references to add multiple entries to the Payment Entry
         for ref in references:
+            # Validate reference details
+            if not all([ref.get('reference_doctype'), ref.get('reference_name'), ref.get('total_amount'), ref.get('outstanding_amount'), ref.get('allocated_amount')]):
+                raise ValueError("Invalid reference details")
+
             # Add Payment Entry References (e.g., linking to invoices or sales orders)
             payment_entry.append('references', {
                 'reference_doctype': ref['reference_doctype'],  # Invoice or Sales Order
@@ -111,10 +122,13 @@ def create_entries_payment(customer, paid_amount, payment_date, mode_of_payment,
         # Return a success message with the Payment Entry name
         return {'status': 'success', 'message': 'Payment Entry created successfully with multiple references', 'payment_entry_name': payment_entry.name}
 
+    except ValueError as e:
+        frappe.log_error(frappe.get_traceback(), f"Payment Entry Error for Customer: {customer}")
+        return {'status': 'error', 'message': str(e)}
+
     except Exception as e:
-        # Log any errors encountered
-        frappe.log_error(message=str(e), title="Error in Creating Payment Entry with Multiple References")
-        return {'status': 'error', 'message': f'Failed to create Payment Entry: {str(e)}'}
+        frappe.log_error(frappe.get_traceback(), f"Payment Entry Error for Customer: {customer}")
+        return {'status': 'error', 'message': str(e)}
 
 
 """
@@ -123,6 +137,10 @@ for inserting the payment details from the 'Payment Receipt' doctype
 @frappe.whitelist(allow_guest=True)
 def create_advance_payment(customer, paid_amount, payment_date, mode_of_payment, reference_name=None):
     try:
+        # Validate inputs
+        if not all([customer, paid_amount > 0, payment_date, mode_of_payment]):
+            raise ValueError("Invalid input parameters")
+
         # Create a new Payment Entry document
         payment_entry = frappe.get_doc({
             'doctype': 'Payment Entry',
@@ -132,12 +150,14 @@ def create_advance_payment(customer, paid_amount, payment_date, mode_of_payment,
             'paid_amount': paid_amount, # Amount paid in advance
             'payment_date': payment_date, # Date of payment
             'mode_of_payment': mode_of_payment,  # e.g., Cash, Bank Transfer, etc.
-            'reference_no': reference_name,  # Optional: Reference No
-            'reference_date': payment_date, # Optional: Reference Date
-            'remarks': 'Advance payment for order',  # Optional remarks
-            'party_balance': paid_amount,  # Balance after the payment
             'posting_date': payment_date  # Posting Date
         })
+
+        # Add reference details if provided
+        if reference_name:
+            payment_entry.reference_no = reference_name
+            payment_entry.reference_date = payment_date
+            payment_entry.remarks = 'Advance payment for order'
 
         # Insert the document to save it to the database
         payment_entry.insert()
@@ -162,22 +182,29 @@ def create_advance_payment(customer, paid_amount, payment_date, mode_of_payment,
         # Return a success message with the Payment Entry name
         return {'status': 'success', 'message': 'Advance Payment Entry created successfully', 'payment_entry_name': payment_entry.name}
 
+    except ValueError as e:
+        frappe.log_error(frappe.get_traceback(), f"Advance Payment Entry Error for Customer: {customer}")
+        return {'status': 'error', 'message': str(e)}
+
     except Exception as e:
-        # Log any errors encountered
-        frappe.log_error(message=str(e), title="Error in Creating Advance Payment Entry")
-        return {'status': 'error', 'message': f'Failed to create Advance Payment Entry: {str(e)}'}        
+        frappe.log_error(frappe.get_traceback(), f"Advance Payment Entry Error for Customer: {customer}")
+        return {'status': 'error', 'message': str(e)}      
 
 
 @frappe.whitelist(allow_guest=True)
 def updatePaymentReceiptDetailsToPaymentEntry():
-    
-    data = get_payment_details()
-    # Iterate over the JSON data
-    for payment in data["message"]:
-        if payment["payment_type"] is not "Internal Transfer":
-            updateDetailsWithChildDetails(payment)
+    try:
+        data = get_payment_details()
+        if data:
+            for payment in data:
+                if payment.get("payment_type") != "Internal Transfer":
+                    updateDetailsWithChildDetails(payment)
+                else:
+                    updateDetailsWithOutChildDetails(payment)
         else:
-            updateDetailsWithOutChildDetails(payment)    
+            frappe.log_error(message="No payment details found", title="Error in updatePaymentReceiptDetailsToPaymentEntry")
+    except Exception as e:
+        frappe.log_error(message=str(e), title="Error in updatePaymentReceiptDetailsToPaymentEntry")  
         
 
 
@@ -214,7 +241,7 @@ def updateDetailsWithChildDetails(payment):
     print(f"Payment Type: {payment['payment_type']}")
     print(f"Date: {payment['date']}")
     print(f"Bank Account: {payment['bank_account']}")
-    print(f"Mode of Payment: {payment['mode_of_payment']}")
+    print(f"Mode of = "or" Payment: {payment['mode_of_payment']}")
     print(f"Executive: {payment['executive']}")
     print(f"Amount Received: {payment['amount_received']}")
     print("Payment Details:")
@@ -239,63 +266,42 @@ def updateDetailsWithOutChildDetails(payment):
 
 
 
-def create_payment_for_sales_invoice(payment_type,customer, invoice_name, payment_amount, payment_account):
-
+def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payment_amount, payment_account):
     try:
-
         # Validate inputs
-
-        if not customer or not invoice_name or payment_amount <= 0 or not payment_account or not payment_type:
-
+        if not all([customer, invoice_name, payment_amount > 0, payment_account, payment_type]):
             raise ValueError("Invalid input parameters")
 
-
         # Create a new Payment Entry
-
         payment_entry = frappe.get_doc({
-
             "doctype": "Payment Entry",
-
             "payment_type": "Receive",
-
             "party_type": "Customer",
-
             "party": customer,
-
             "paid_amount": payment_amount,
-
             "received_amount": payment_amount,
-
             "paid_to": payment_account,
-
             "references": [
-
                 {
-
                     "reference_doctype": "Sales Invoice",
-
                     "reference_name": invoice_name,
-
                     "allocated_amount": payment_amount
-
                 }
-
             ],
-
             "reference_no": frappe.get_doc("Naming Series", "Payment Entry").get_next_name(),
-
             "reference_date": frappe.utils.nowdate()
-
         })
 
+        # Insert and submit the Payment Entry
         payment_entry.insert()
-
         payment_entry.submit()
 
         return {"status": "success", "message": f"Payment Entry created successfully: {payment_entry.name}"}
 
-    except Exception as e:
-
+    except ValueError as e:
         frappe.log_error(frappe.get_traceback(), f"Payment Entry Error for Customer: {customer}, Invoice: {invoice_name}")
+        return {"status": "error", "message": str(e)}
 
-        return {"status": "error", "message": str(e)    
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), f"Payment Entry Error for Customer: {customer}, Invoice: {invoice_name}")
+        return {"status": "error", "message": str(e)}
