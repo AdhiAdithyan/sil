@@ -4,15 +4,9 @@ from frappe.model.document import Document
 from datetime import datetime
 import json
 import traceback
+import sil.services.sales_invoice_api as sales_invoice_api
+import sil.services.sales_order_api as sales_order_api
 
-
-def payment_info_before_save(doc, method):
-    # Check and add child table entries programmatically
-    if not doc.payment_entry_details:
-        doc.append("payment_entry_details", {
-            "fieldname1": "Value 1",
-            "fieldname2": "Value 2"
-        })
 
 @frappe.whitelist(allow_guest=True)
 def getAllPaymentReceiptDetails():
@@ -187,32 +181,32 @@ def updatePaymentReceiptDetailsToPaymentEntry():
         
 
 
-    payment_entry = frappe.get_doc({
-        'doctype': 'Payment Entry',
-        'payment_type': 'Receipt',  # Advance payment from customer
-        'party_type': 'Customer',   # Payment is from a customer
-        'party': customer,          # Customer name
-        'paid_amount': paid_amount, # Amount paid in advance
-        'payment_date': payment_date, # Date of payment
-        'mode_of_payment': mode_of_payment,  # e.g., Cash, Bank Transfer, etc.
-        'reference_no': reference_name,  # Optional: Reference No
-        'reference_date': payment_date, # Optional: Reference Date
-        'remarks': 'Advance payment for order',  # Optional remarks
-        'party_balance': paid_amount,  # Balance after the payment
-        'posting_date': payment_date  # Posting Date
-    })
+    # payment_entry = frappe.get_doc({
+    #     'doctype': 'Payment Entry',
+    #     'payment_type': 'Receipt',  # Advance payment from customer
+    #     'party_type': 'Customer',   # Payment is from a customer
+    #     'party': customer,          # Customer name
+    #     'paid_amount': paid_amount, # Amount paid in advance
+    #     'payment_date': payment_date, # Date of payment
+    #     'mode_of_payment': mode_of_payment,  # e.g., Cash, Bank Transfer, etc.
+    #     'reference_no': reference_name,  # Optional: Reference No
+    #     'reference_date': payment_date, # Optional: Reference Date
+    #     'remarks': 'Advance payment for order',  # Optional remarks
+    #     'party_balance': paid_amount,  # Balance after the payment
+    #     'posting_date': payment_date  # Posting Date
+    # })
 
-    response = create_multiple_entries_payment(
-        customer='Customer Name',  # The customer making the payment
-        paid_amount=1000.00,        # Total amount paid
-        payment_date='2024-12-11',  # Date of payment
-        mode_of_payment='Bank Transfer',  # Mode of payment (e.g., Cash, Bank Transfer)
-        references=[
-            {'reference_doctype': 'Sales Invoice', 'reference_name': 'INV-001', 'total_amount': 500.00, 'outstanding_amount': 500.00, 'allocated_amount': 500.00},
-            {'reference_doctype': 'Sales Order', 'reference_name': 'SO-001', 'total_amount': 500.00, 'outstanding_amount': 500.00, 'allocated_amount': 500.00}
-                ]
-            )
-    print(response)
+    # response = create_entries_payment(
+    #     customer='Customer Name',  # The customer making the payment
+    #     paid_amount=1000.00,        # Total amount paid
+    #     payment_date='2024-12-11',  # Date of payment
+    #     mode_of_payment='Bank Transfer',  # Mode of payment (e.g., Cash, Bank Transfer)
+    #     references=[
+    #         {'reference_doctype': 'Sales Invoice', 'reference_name': 'INV-001', 'total_amount': 500.00, 'outstanding_amount': 500.00, 'allocated_amount': 500.00},
+    #         {'reference_doctype': 'Sales Order', 'reference_name': 'SO-001', 'total_amount': 500.00, 'outstanding_amount': 500.00, 'allocated_amount': 500.00}
+    #             ]
+    #         )
+    # print(response)
         
 
 def updateDetailsWithChildDetails(payment):     
@@ -242,3 +236,66 @@ def updateDetailsWithOutChildDetails(payment):
     print(f"Mode of Payment: {payment['mode_of_payment']}")
     print(f"Executive: {payment['executive']}")
     print(f"Amount Received: {payment['amount_received']}")       
+
+
+
+def create_payment_for_sales_invoice(payment_type,customer, invoice_name, payment_amount, payment_account):
+
+    try:
+
+        # Validate inputs
+
+        if not customer or not invoice_name or payment_amount <= 0 or not payment_account or not payment_type:
+
+            raise ValueError("Invalid input parameters")
+
+
+        # Create a new Payment Entry
+
+        payment_entry = frappe.get_doc({
+
+            "doctype": "Payment Entry",
+
+            "payment_type": "Receive",
+
+            "party_type": "Customer",
+
+            "party": customer,
+
+            "paid_amount": payment_amount,
+
+            "received_amount": payment_amount,
+
+            "paid_to": payment_account,
+
+            "references": [
+
+                {
+
+                    "reference_doctype": "Sales Invoice",
+
+                    "reference_name": invoice_name,
+
+                    "allocated_amount": payment_amount
+
+                }
+
+            ],
+
+            "reference_no": frappe.get_doc("Naming Series", "Payment Entry").get_next_name(),
+
+            "reference_date": frappe.utils.nowdate()
+
+        })
+
+        payment_entry.insert()
+
+        payment_entry.submit()
+
+        return {"status": "success", "message": f"Payment Entry created successfully: {payment_entry.name}"}
+
+    except Exception as e:
+
+        frappe.log_error(frappe.get_traceback(), f"Payment Entry Error for Customer: {customer}, Invoice: {invoice_name}")
+
+        return {"status": "error", "message": str(e)    

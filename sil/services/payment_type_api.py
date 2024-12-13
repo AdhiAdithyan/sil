@@ -76,29 +76,14 @@ def getAccountByPaymentType(payment_type=None):
 
         # Handle multiple companies (if necessary)
         company = logged_emp[0]["company"]  # Assuming the first company is used
-        print(f"Selected Company: {company}")
-        print(f"Selected Company: {payment_type}")
-
-        # Fetch payment accounts
-        # payment_accounts = frappe.db.sql("""
-        #     SELECT DISTINCT
-        #         pma.company,
-        #         pma.default_account,
-        #         a.account_type,
-        #         pm.type AS payment_mode_type
-        #     FROM `tabMode of Payment Account` pma
-        #     LEFT JOIN `tabMode of Payment` pm ON pm.name = pma.parent
-        #     LEFT JOIN `tabAccount` a ON a.account_type = pm.type
-        #     WHERE pma.company = %s AND a.is_group = 0 AND pm.type = %s
-        # """, (logged_emp[0]["company"],payment_type, ), as_dict=True)
+        # print(f"Selected Company: {company}")
+        # print(f"Selected Company: {payment_type}")
 
         payment_accounts = frappe.db.sql("""
-            SELECT DISTINCT
-                pma.default_account
-            FROM `tabMode of Payment Account` pma
-            LEFT JOIN `tabMode of Payment` pm ON pm.name = pma.parent
-            LEFT JOIN `tabAccount` a ON a.account_type = pm.type
-            WHERE pma.company = %s AND pm.mode_of_payment=%s AND a.is_group = 0 
+            SELECT DISTINCT ta.* FROM  `tabAccount` ta
+            INNER JOIN `tabMode of Payment` tmop
+            ON ta.account_type = tmop.type
+            WHERE ta.company = %s AND tmop.mode_of_payment=%s AND a.is_group = 0 
         """, (logged_emp[0]["company"], payment_type,), as_dict=True)
 
         print(f"Selected payment_accounts: {payment_accounts}")

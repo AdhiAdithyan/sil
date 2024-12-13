@@ -406,3 +406,21 @@ def updateItemFamilySerialNoList(doc, method):
     except Exception as e:
         logger.error(f"Error in updateItemFamilySerialNoList: {str(e)}")
         return {"message": "failed", "error": str(e)}
+
+
+@frappe.whitelist(allow_guest=True)
+def getGrandTotalByOrderNumber(order_number):
+    try:
+        query = """
+            SELECT DISTINCT 
+                grand_total
+            FROM `tabSales Order`
+            WHERE 
+                name=%s
+        """
+        # Pass the parameter to the query
+        results = frappe.db.sql(query, (order_number,), as_dict=True)
+        return results
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Error in getGrandTotalByOrderNumber")
+        return {"error": str(e)}        

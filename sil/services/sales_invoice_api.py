@@ -347,6 +347,25 @@ def get_distinct_sales_invoice_filters():
         frappe.throw(_("Error fetching distinct filters: {0}").format(str(e)))
 
 
+@frappe.whitelist(allow_guest=True)
+def getGrandTotalByInvoiceNumber(invoice_number):
+    try:
+        query = """
+            SELECT DISTINCT 
+                grand_total
+            FROM `tabSales Invoice`
+            WHERE 
+                name=%s
+        """
+        # Pass the parameter to the query
+        results = frappe.db.sql(query, (invoice_number,), as_dict=True)
+        return results
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Error in getGrandTotalByInvoiceNumber")
+        return {"error": str(e)}
+    
+
+
 
 if __name__=="__main__":
     #Define our DocType and column details

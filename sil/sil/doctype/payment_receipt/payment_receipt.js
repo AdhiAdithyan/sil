@@ -6,12 +6,20 @@
 
 // 	},
 // });
-// frappe.ui.form.on('Payment Receipt', {
-//     validate(frm) {
-//         // Validate main document fields
-//         let is_main_doc_valid = true;
+frappe.ui.form.on('Payment Receipt', {
+    on_submit(frm) {
+        // Validate main document fields
+        // let is_main_doc_valid = true;
+        let {payment_type,mode_of_payment}=frm.doc
+        frappe.call({
+            method:"sil.services.",
+            args:{
+                "payment_type":payment_type,
+                "mode_of_payment":mode_of_payment
+            }
 
+        });
         
 
-//     }
-// });    
+    }
+});    
