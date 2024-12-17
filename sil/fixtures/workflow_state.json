@@ -3,6 +3,528 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
+  "modified": "2024-11-22 09:26:32.581680",
+  "name": "Entering Details",
+  "style": "",
+  "workflow_state_name": "Entering Details"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.692549",
+  "name": "Pending Approval from  RB1",
+  "style": "",
+  "workflow_state_name": "Pending Approval from  RB1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.718795",
+  "name": "Pending Approval from  RA1",
+  "style": "",
+  "workflow_state_name": "Pending Approval from  RA1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.732744",
+  "name": "Rejected by ZM2",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by ZM2"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.753740",
+  "name": "Rejected by RM2",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by RM2"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.808030",
+  "name": "Rejected by RM3",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by RM3"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.853779",
+  "name": "Pending Approval from RM3",
+  "style": "",
+  "workflow_state_name": "Pending Approval from RM3"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.869028",
+  "name": "Pending Approval from RM2",
+  "style": "",
+  "workflow_state_name": "Pending Approval from RM2"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.948081",
+  "name": "Pending Approval from CM15",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM15"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.966934",
+  "name": "Pending Approval from CM14",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM14"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:32.985604",
+  "name": "Pending Approval from CM13",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM13"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.004426",
+  "name": "Pending Approval from CM12",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM12"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.022378",
+  "name": "Pending Approval from CM11",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM11"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.042599",
+  "name": "Pending Approval from CM10",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM10"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.057087",
+  "name": "Pending Approval from CM9",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM9"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.071927",
+  "name": "Pending Approval from CM8",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM8"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.087230",
+  "name": "Pending Approval from CM7",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM7"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.103583",
+  "name": "Pending Approval from CM6",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM6"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.117653",
+  "name": "Pending Approval from CM5",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM5"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.134571",
+  "name": "Pending Approval from CM4",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM4"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.149020",
+  "name": "Pending Approval from CM3",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM3"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.164671",
+  "name": "Pending Approval from CM2",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM2"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.182626",
+  "name": "Rejected by ZM1",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by ZM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.198483",
+  "name": "Rejected by RM1",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by RM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.211540",
+  "name": "Rejected by CM1",
+  "style": "Warning",
+  "workflow_state_name": "Rejected by CM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.229452",
+  "name": "Pending Approval from CM",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.246400",
+  "name": "Pending Approval from CM1",
+  "style": "",
+  "workflow_state_name": "Pending Approval from CM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.263889",
+  "name": "Pending Approval from RM1",
+  "style": "",
+  "workflow_state_name": "Pending Approval from RM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.281560",
+  "name": "Pending Approval from ZM1",
+  "style": "",
+  "workflow_state_name": "Pending Approval from ZM1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.302637",
+  "name": "ZM1 Approved",
+  "style": "Success",
+  "workflow_state_name": "ZM1 Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.322188",
+  "name": "ZM2 Approved",
+  "style": "Success",
+  "workflow_state_name": "ZM2 Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.342319",
+  "name": "RM1 Approved",
+  "style": "Success",
+  "workflow_state_name": "RM1 Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.361706",
+  "name": "CM1 Approved",
+  "style": "Success",
+  "workflow_state_name": "CM1 Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.376307",
+  "name": "CM Approved",
+  "style": "Success",
+  "workflow_state_name": "CM Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.389913",
+  "name": "ZM Approved",
+  "style": "Success",
+  "workflow_state_name": "ZM Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.405743",
+  "name": "RM Approved",
+  "style": "Success",
+  "workflow_state_name": "RM Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.419611",
+  "name": "Registered",
+  "style": "",
+  "workflow_state_name": "Registered"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.437032",
+  "name": "Acc APproval",
+  "style": "",
+  "workflow_state_name": "Acc APproval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.497844",
+  "name": "Approved by Hod Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by Hod Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.516886",
+  "name": "Approved by Hr Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by Hr Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.536080",
+  "name": "Approved by Reception Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by Reception Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.566398",
+  "name": "Approved by P2 Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by P2 Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.597264",
+  "name": "Approved by P1 Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by P1 Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.616777",
+  "name": "Approved by AA Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by AA Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.810885",
+  "name": "To Hod Recommender",
+  "style": "",
+  "workflow_state_name": "To Hod Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.831615",
+  "name": "To Hr Recommender",
+  "style": "",
+  "workflow_state_name": "To Hr Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.854758",
+  "name": "To Reception Recommender",
+  "style": "",
+  "workflow_state_name": "To Reception Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.884774",
+  "name": "To P2 Recommender",
+  "style": "",
+  "workflow_state_name": "To P2 Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.899559",
+  "name": "To P1 Recommender",
+  "style": "",
+  "workflow_state_name": "To P1 Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.917108",
+  "name": "To AA Recommender",
+  "style": "",
+  "workflow_state_name": "To AA Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.936635",
+  "name": "To  HE Recommender",
+  "style": "",
+  "workflow_state_name": "To  HE Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.956763",
+  "name": "To  CD Recommender",
+  "style": "",
+  "workflow_state_name": "To  CD Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:33.982309",
+  "name": "To  PN KRNTK Recommender",
+  "style": "",
+  "workflow_state_name": "To  PN KRNTK Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:34.078020",
+  "name": "Approved by Recommender",
+  "style": "Success",
+  "workflow_state_name": "Approved by Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:34.092070",
+  "name": "To Recommender",
+  "style": "",
+  "workflow_state_name": "To Recommender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:34.126646",
+  "name": "Save",
+  "style": "",
+  "workflow_state_name": "Save"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:34.149120",
+  "name": "Approved  By Approver",
+  "style": "Success",
+  "workflow_state_name": "Approved  By Approver"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-11-22 09:26:34.163520",
+  "name": "Approved by Recomender",
+  "style": "Success",
+  "workflow_state_name": "Approved by Recomender"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
   "modified": "2024-10-11 14:55:06.614191",
   "name": "Details Entered",
   "style": "",

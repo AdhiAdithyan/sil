@@ -1,1 +1,37 @@
-[]
+[
+ {
+  "breadcrumbs": null,
+  "content_type": "HTML",
+  "context_script": null,
+  "css": null,
+  "docstatus": 0,
+  "doctype": "Web Page",
+  "dynamic_route": 0,
+  "dynamic_template": 0,
+  "enable_comments": 0,
+  "end_date": null,
+  "full_width": 1,
+  "header": null,
+  "insert_style": 0,
+  "javascript": null,
+  "main_section": null,
+  "main_section_html": "\n\n\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Sample Check-in Table</title>\n    <style>\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin: 20px auto;\n            font-family: Arial, sans-serif;\n        }\n        th, td {\n            border: 1px solid #ddd;\n            padding: 10px;\n            text-align: center;\n        }\n        th {\n            background-color: #f2f2f2;\n            font-weight: bold;\n        }\n        tr:nth-child(even) {\n            background-color: #f9f9f9;\n        }\n        tr:hover {\n            background-color: #f1f1f1;\n        }\n    </style>\n\n\n    <h2 style=\"text-align: center;\">Employee Check-in Report</h2>\n    <table>\n        <thead>\n            <tr>\n                <th>Date</th>\n                <th>Employee Name</th>\n                <th>First Check-in</th>\n                <th>Last Check-out</th>\n                <th>Total Working Hours</th>\n                <th>Check-in Detail 1</th>\n                <th>Check-in Detail 2</th>\n                <th>Check-in Detail 3</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td>2024-06-12</td>\n                <td>John Doe</td>\n                <td>08:00:00</td>\n                <td>17:30:00</td>\n                <td>09:30:00</td>\n                <td>08:00:00 (IN)</td>\n                <td>12:30:00 (OUT)</td>\n                <td>17:30:00 (IN)</td>\n            </tr>\n            <tr>\n                <td>2024-06-12</td>\n                <td>Jane Smith</td>\n                <td>09:15:00</td>\n                <td>18:00:00</td>\n                <td>08:45:00</td>\n                <td>09:15:00 (IN)</td>\n                <td>13:00:00 (OUT)</td>\n                <td>18:00:00 (IN)</td>\n            </tr>\n            <tr>\n                <td>2024-06-12</td>\n                <td>Alex Johnson</td>\n                <td>07:45:00</td>\n                <td>16:30:00</td>\n                <td>08:45:00</td>\n                <td>07:45:00 (IN)</td>\n                <td>11:45:00 (OUT)</td>\n                <td>16:30:00 (IN)</td>\n            </tr>\n            <tr>\n                <td>2024-06-13</td>\n                <td>John Doe</td>\n                <td>08:05:00</td>\n                <td>17:20:00</td>\n                <td>09:15:00</td>\n                <td>08:05:00 (IN)</td>\n                <td>12:45:00 (OUT)</td>\n                <td>17:20:00 (IN)</td>\n            </tr>\n        </tbody>\n    </table>\n\n\n",
+  "main_section_md": null,
+  "meta_description": null,
+  "meta_image": null,
+  "meta_title": null,
+  "modified": "2024-12-17 12:07:34.995001",
+  "module": null,
+  "name": "attendance",
+  "page_blocks": [],
+  "published": 1,
+  "route": "attendance",
+  "show_sidebar": 0,
+  "show_title": 0,
+  "slideshow": null,
+  "start_date": null,
+  "text_align": "Left",
+  "title": "Attendance",
+  "website_sidebar": null
+ }
+]

@@ -2,6 +2,93 @@
  {
   "docstatus": 0,
   "doctype": "Custom Role",
+  "modified": "2024-11-16 14:36:56.124575",
+  "name": "7a1vrd12h7",
+  "page": null,
+  "ref_doctype": "Salary Slip",
+  "report": "Professional Tax Deductions",
+  "roles": [
+   {
+    "parent": "7a1vrd12h7",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR User"
+   },
+   {
+    "parent": "7a1vrd12h7",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR Manager"
+   },
+   {
+    "parent": "7a1vrd12h7",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "Employee"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Role",
+  "modified": "2024-11-16 14:36:56.187594",
+  "name": "pm1k479eeu",
+  "page": null,
+  "ref_doctype": "Salary Slip",
+  "report": "Provident Fund Deductions",
+  "roles": [
+   {
+    "parent": "pm1k479eeu",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR User"
+   },
+   {
+    "parent": "pm1k479eeu",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR Manager"
+   },
+   {
+    "parent": "pm1k479eeu",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "Employee"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Role",
+  "modified": "2024-11-16 14:36:56.203188",
+  "name": "n8iivmnlpc",
+  "page": null,
+  "ref_doctype": "Salary Slip",
+  "report": "Income Tax Deductions",
+  "roles": [
+   {
+    "parent": "n8iivmnlpc",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR User"
+   },
+   {
+    "parent": "n8iivmnlpc",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "HR Manager"
+   },
+   {
+    "parent": "n8iivmnlpc",
+    "parentfield": "roles",
+    "parenttype": "Custom Role",
+    "role": "Employee"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Role",
   "modified": "2024-07-10 10:37:02.168682",
   "name": "ppcv1ce2hv",
   "page": null,

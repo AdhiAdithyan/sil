@@ -352,9 +352,9 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
         
         # Apply filters conditionally
         if not int(all) and executive:
-            filters.append(f"executive = {frappe.db.escape(executive)}")
+            filters.append(f"executive = '{frappe.db.escape(executive)}'")
         if deposit_date:
-            filters.append(f"date = {frappe.db.escape(deposit_date)}")
+            filters.append(f"date = '{frappe.db.escape(deposit_date)}'")
         if deposit_amount:
             filters.append(f"amount = {frappe.db.escape(deposit_amount)}")
         
@@ -363,9 +363,9 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
 
         # Fetch all relevant data in one query
         query = f"""
-            SELECT DISTINCT executive, date, amount,mode_of_payment	,custom_customer
+            SELECT DISTINCT executive, date, amount,mode_of_payment,custom_customer
             FROM `tabPayment Info`
-           
+            {where_clause}
         """
         results = frappe.db.sql(query, as_dict=True)
 
