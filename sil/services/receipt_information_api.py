@@ -13,7 +13,7 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
         # Logic for handling different reference types
         if reference_type == "Sales Invoice":
             # Fetch the required fields from Sales Invoice
-            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer,"docstatus":1}, fields=["name"])
+            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer,"docstatus":1,"outstanding_amount": [">", 0] }, fields=["name"])
             if invoice:
                 response['reference_name'] = invoice
                 response['outstanding_amount'] = 0.0
@@ -80,9 +80,17 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
         # Logic for handling different reference types
         if reference_type == "Sales Invoice":
             # Fetch the required fields from Sales Invoice
-            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer,"name":reference_name}, fields=["name", "total", "due_date"])
+            invoice = frappe.get_all(
+                                    "Sales Invoice",
+                                    filters={
+                                        "customer": customer,
+                                        "name": reference_name,
+                                        "outstanding_amount": [">", 0]  # Add condition for outstanding_amount > 0
+                                    },
+                                    fields=["name", "outstanding_amount", "due_date"]
+                                )
             if invoice:
-                response['outstanding_amount'] = invoice[0].get('total')
+                response['outstanding_amount'] = invoice[0].get('outstanding_amount')
                 response['allocated_amount'] = 0.0
             else:
                 response['outstanding_amount'] = 0.0

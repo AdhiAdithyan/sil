@@ -359,6 +359,8 @@ def getGrandTotalByInvoiceNumber(invoice_number):
         """
         # Pass the parameter to the query
         results = frappe.db.sql(query, (invoice_number,), as_dict=True)
+        print("getGrandTotalByInvoiceNumber:")
+        print(results)
         return results
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Error in getGrandTotalByInvoiceNumber")

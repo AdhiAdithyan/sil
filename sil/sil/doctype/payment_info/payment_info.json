@@ -102,13 +102,15 @@
    "fieldname": "reference_no",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Cheque/Reference Date"
+   "label": "Cheque/Reference Date",
+   "reqd": 1
   },
   {
    "fieldname": "chequereference_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Cheque/Reference Number"
+   "label": "Cheque/Reference Number",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_unpa",
@@ -162,7 +164,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-09 10:24:52.228060",
+ "modified": "2024-12-18 17:41:07.450055",
  "modified_by": "Administrator",
  "module": "sil",
  "name": "Payment Info",

@@ -162,11 +162,11 @@ frappe.ui.form.on('Payment Info', {
         console.log("Custom button clicked");
 
           // Show the progress dialog
-          frappe.msgprint({
-            message: __("Processing... Please wait."),
-            indicator: 'blue',
-            title: __("Processing")
-        });
+        //   frappe.msgprint({
+        //     message: __("Processing... Please wait."),
+        //     indicator: 'blue',
+        //     title: __("Processing")
+        // });
         
 // If all entries are valid, proceed with the frappe.call
 if (is_cust_valid && is_entry_valid) {

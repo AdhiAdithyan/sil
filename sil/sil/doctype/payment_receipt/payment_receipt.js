@@ -42,8 +42,8 @@ frappe.ui.form.on('Payment Receipt', {
                 custom_deposited_by_customer: frm.doc.custom_deposited_by_customer || '', // Default to empty string if not set
                 amount_received: frm.doc.amount || 0, // Default to 0 if not set
                 amount_paid:frm.doc.amount || 0,
-                reference_number:frm.doc.chequereference_number || '',
-                chequereference_date:frm.doc.reference_no || ''
+                reference_number:frm.doc.reference_number || '',
+                chequereference_date:frm.doc.chequereference_date || ''
             },
             callback: function(r) {
                 if (r.message) {
