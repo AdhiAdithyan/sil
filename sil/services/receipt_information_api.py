@@ -258,7 +258,7 @@ def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, depos
         if deposited_by and deposited_by != 'N/A':
             filters["custom_customer"] = deposited_by
 
-        filters["custom_status"] = 'Draft'
+        filters["custom_status"] = 'Pending'
 
         print("filters:::")
         print(filters)

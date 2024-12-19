@@ -180,7 +180,7 @@ if (is_cust_valid && is_entry_valid) {
                 // Handle the response here
                 console.log(response.message);
                 // Hide the progress dialog
-                frappe.hide_msgprint();
+                // frappe.hide_msgprint();
                 if (response.message) {
                     // Handle successful response
                     console.log("Received from server:", response.message.message);
@@ -191,7 +191,7 @@ if (is_cust_valid && is_entry_valid) {
             } ,
             error: function(error) {
                 // Hide the progress dialog in case of error
-                frappe.hide_msgprint();
+                // frappe.hide_msgprint();
                 
                 // Handle the error
                 console.error("An error occurred:", error);

@@ -15,6 +15,12 @@ class PaymentEntryError(Exception):
     pass
 
 
+def get_cost_centers_by_company(company_name):
+    cost_centers = frappe.get_all("Cost Center", filters={"company": company_name}, fields=["name", "cost_center_name"])
+
+    return cost_centers
+
+
 @frappe.whitelist(allow_guest=True)
 def getAllPaymentReceiptDetails():
     try:
@@ -205,8 +211,8 @@ def add_payment_references(payment_entry, invoice_name, payment_amount):
 
 
 def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payment_amount,
-                                     payment_account, mode_of_payment, reference_number, 
-                                     custom_deposited_by_customer, cheque_reference_date,outstanding_amount,
+                                     payment_account, mode_of_payment, reference_number=None, 
+                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
                                      receipt_number=None):
     try:
         print("create_payment_for_sales_invoice:")
@@ -280,8 +286,8 @@ def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payme
 
 
 def create_payment_for_sales_order(payment_type, customer, invoice_name, payment_amount,
-                                     payment_account, mode_of_payment, reference_number, 
-                                     custom_deposited_by_customer, cheque_reference_date,outstanding_amount,
+                                     payment_account, mode_of_payment, reference_number=None, 
+                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
                                      receipt_number=None):
     try:
         # Validate inputs
@@ -350,8 +356,8 @@ for inserting the payment details from the 'Payment Receipt' doctype
 """
 @frappe.whitelist(allow_guest=True)
 def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
-                                     payment_account, mode_of_payment, reference_number, 
-                                     custom_deposited_by_customer, cheque_reference_date,outstanding_amount,
+                                     payment_account, mode_of_payment, reference_number=None, 
+                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
                                      receipt_number=None):
     try:
         # Fetch the currency for the "Paid To" account
@@ -397,9 +403,9 @@ def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
 
 
 @frappe.whitelist()
-def create_payment_for_InternalTransfer(payment_type, customer, invoice_name, payment_amount,
-                                     payment_account, mode_of_payment, reference_number, 
-                                     custom_deposited_by_customer, cheque_reference_date,outstanding_amount,
+def create_payment_for_InternalTransfer(payment_type,
+                                     payment_account, mode_of_payment, reference_number=None, 
+                                     custom_deposited_by_customer, cheque_reference_date=None,amount_received,
                                      receipt_number=None):
     try:
         # Fetch the currency for the "Paid To" account
@@ -417,9 +423,9 @@ def create_payment_for_InternalTransfer(payment_type, customer, invoice_name, pa
         payment_entry.posting_date = nowdate()
         payment_entry.company = frappe.defaults.get_global_default("company")
         payment_entry.party_type = "Customer"  # Can also be "Supplier"
-        payment_entry.party = customer
-        payment_entry.paid_amount = float(payment_amount) # Amount paid
-        payment_entry.received_amount = float(payment_amount)  # Amount received (same as paid_amount if no deductions)
+        payment_entry.party = ''
+        payment_entry.paid_amount = float(amount_received) # Amount paid
+        payment_entry.received_amount = float(amount_received)  # Amount received (same as paid_amount if no deductions)
         payment_entry.paid_to = payment_account  # Bank account or cash ledger
         payment_entry.reference_no=reference_number if reference_number else ""
         payment_entry.reference_date=cheque_reference_date if cheque_reference_date else ""
@@ -428,9 +434,6 @@ def create_payment_for_InternalTransfer(payment_type, customer, invoice_name, pa
         payment_entry.submit()
         
         frappe.db.commit()  # Commit the changes to the database
-
-        if receipt_number:
-            update_status_in_payment_info(receipt_number,'Paid')
 
         return {"status": "success", "message": f"Payment Entry created successfully: "}
 
@@ -502,6 +505,7 @@ def insertInternalTransferDetails(payment_entry_details,receipt_number=None):
                     payment_entry_details['reference_number'],
                     payment_entry_details['custom_deposited_by_customer'],
                     payment_entry_details['chequereference_date'],
+                    payment_entry_details['amount_received'],
                     receipt_number
                 )
     except Exception as e:
@@ -529,12 +533,17 @@ def insertAdvanceDetails(payment_entry_details, payment_entry,receipt_number=Non
         frappe.log_error(frappe.get_traceback(), "Payment Entry Error for insertSalesOrderDetails")
         frappe.throw(_("An error occurred while processing Payment Entry: {0}").format(str(e)))
 
+@frappe.whitelist()
+def createJournelEntryForSuspense():
+    pass 
+
 
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, executive=None,
                                 bank_account=None, account_paid_to=None, receipt_number=None,
                                 custom_deposited_by_customer=None, amount_received=None, mode_of_payment=None,
-                                amount_paid=None, reference_number=None, chequereference_date=None):
+                                amount_paid=None, reference_number=None, chequereference_date=None,
+                                account_paid_from=None,custom_is_suspense_entry):
     """
     This method validates the passed details and processes the Payment Receipt.
     """
@@ -553,6 +562,8 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
             "account_paid_to": account_paid_to,
             "amount_paid": amount_paid,
             "reference_number": reference_number,
+            "custom_is_suspense_entry":custom_is_suspense_entry,
+            "account_paid_from":account_paid_from,
             "chequereference_date": chequereference_date
         }
 
@@ -572,9 +583,17 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
         except json.JSONDecodeError:
             frappe.throw(_("Invalid payment_entry_details format. Unable to parse."))
 
+        if payment_type=="Receive" and custom_is_suspense_entry==True:
+            if not account_paid_from or not amount_paid:
+                frappe.throw(_("Please enter account paid from and amount paid for suspense entry"))
+            else:
+                createJournelEntryForSuspense()
+
+        if payment_type="Internal Transfer" and custom_is_suspense_entry==True:     
+            insertInternalTransferDetails(required_fields,receipt_number)        
 
         # Process payment type logic
-        if payment_type in ["Receive", "Pay"]:
+        elif payment_type in ["Receive", "Pay"]:
             # Iterate through each entry in payment_entry_details
             for entry in payment_entry_details:
                 if isinstance(entry, dict):  # Ensure that each entry is a dictionary
@@ -601,11 +620,10 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
                         frappe.throw(_("Unknown reference type in payment details."))
                 else:
                     frappe.throw(_("Each entry in payment_entry_details must be a dictionary, found {0}.").format(type(entry)))
-        else:
+        # else:
             # Handle internal transfer or other payment types
-            # return insertInternalTransferDetails(required_fields,receipt_number)
-            pass
-
+            # insertInternalTransferDetails(required_fields,receipt_number)
+            
         # Success response
         return {
             "status": "Success",

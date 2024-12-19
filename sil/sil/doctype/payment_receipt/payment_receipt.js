@@ -40,10 +40,12 @@ frappe.ui.form.on('Payment Receipt', {
                 account_paid_to: frm.doc.account_paid_to || '', // Default to empty string if not set
                 receipt_number: frm.doc.receipt_number || '', // Default to empty string if not set
                 custom_deposited_by_customer: frm.doc.custom_deposited_by_customer || '', // Default to empty string if not set
-                amount_received: frm.doc.amount || 0, // Default to 0 if not set
-                amount_paid:frm.doc.amount || 0,
+                amount_received: frm.doc.amount_received || 0, // Default to 0 if not set
+                amount_paid:frm.doc.amount_paid || 0,
                 reference_number:frm.doc.reference_number || '',
-                chequereference_date:frm.doc.chequereference_date || ''
+                chequereference_date:frm.doc.chequereference_date || '',
+                account_paid_from:frm.doc.account_paid_from || '',
+                custom_is_suspense_entry:frm.doc.custom_is_suspense_entry || false
             },
             callback: function(r) {
                 if (r.message) {
