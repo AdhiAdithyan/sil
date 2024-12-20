@@ -212,7 +212,7 @@ def add_payment_references(payment_entry, invoice_name, payment_amount):
 
 def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payment_amount,
                                      payment_account, mode_of_payment, reference_number=None, 
-                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
+                                     custom_deposited_by_customer=None, cheque_reference_date=None,outstanding_amount=None,
                                      receipt_number=None):
     try:
         print("create_payment_for_sales_invoice:")
@@ -287,7 +287,7 @@ def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payme
 
 def create_payment_for_sales_order(payment_type, customer, invoice_name, payment_amount,
                                      payment_account, mode_of_payment, reference_number=None, 
-                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
+                                     custom_deposited_by_customer=None, cheque_reference_date=None,outstanding_amount=None,
                                      receipt_number=None):
     try:
         # Validate inputs
@@ -357,7 +357,7 @@ for inserting the payment details from the 'Payment Receipt' doctype
 @frappe.whitelist(allow_guest=True)
 def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
                                      payment_account, mode_of_payment, reference_number=None, 
-                                     custom_deposited_by_customer, cheque_reference_date=None,outstanding_amount,
+                                     custom_deposited_by_customer=None, cheque_reference_date=None,outstanding_amount=None,
                                      receipt_number=None):
     try:
         # Fetch the currency for the "Paid To" account
@@ -405,7 +405,7 @@ def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
 @frappe.whitelist()
 def create_payment_for_InternalTransfer(payment_type,
                                      payment_account, mode_of_payment, reference_number=None, 
-                                     custom_deposited_by_customer, cheque_reference_date=None,amount_received,
+                                     custom_deposited_by_customer=None, cheque_reference_date=None,amount_received=None,
                                      receipt_number=None):
     try:
         # Fetch the currency for the "Paid To" account
@@ -543,7 +543,7 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
                                 bank_account=None, account_paid_to=None, receipt_number=None,
                                 custom_deposited_by_customer=None, amount_received=None, mode_of_payment=None,
                                 amount_paid=None, reference_number=None, chequereference_date=None,
-                                account_paid_from=None,custom_is_suspense_entry):
+                                account_paid_from=None,custom_is_suspense_entry=None):
     """
     This method validates the passed details and processes the Payment Receipt.
     """
@@ -583,15 +583,18 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
         except json.JSONDecodeError:
             frappe.throw(_("Invalid payment_entry_details format. Unable to parse."))
 
-        if payment_type=="Receive" and custom_is_suspense_entry==True:
-            if not account_paid_from or not amount_paid:
-                frappe.throw(_("Please enter account paid from and amount paid for suspense entry"))
-            else:
-                createJournelEntryForSuspense()
+        # if payment_type=="Receive" and custom_is_suspense_entry==True:
+        #     if not account_paid_from or not amount_paid:
+        #         frappe.throw(_("Please enter account paid from and amount paid for suspense entry"))
+        #     else:
+        #         createJournelEntryForSuspense()
 
-        if payment_type="Internal Transfer" and custom_is_suspense_entry==True:     
-            insertInternalTransferDetails(required_fields,receipt_number)        
+        print("payment_type : ")
+        print(payment_type)
 
+
+        if payment_type in ["Internal Transfer"] and custom_is_suspense_entry==True:     
+           return insertInternalTransferDetails(required_fields,receipt_number)        
         # Process payment type logic
         elif payment_type in ["Receive", "Pay"]:
             # Iterate through each entry in payment_entry_details

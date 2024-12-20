@@ -353,7 +353,7 @@ def getAllExecutivesAndReceipts():
 
 
 @frappe.whitelist(allow_guest=True)
-def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=None):
+def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=None,payment_mode=None,customer=None):
     try:
         # Initialize the base SQL query
         filters = []
@@ -365,6 +365,10 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
             filters.append(f"date = '{frappe.db.escape(deposit_date)}'")
         if deposit_amount:
             filters.append(f"amount = {frappe.db.escape(deposit_amount)}")
+        if payment_mode:
+            filters.append(f"mode_of_payment = {frappe.db.escape(payment_mode)}") 
+        if payment_mode:
+            filters.append(f"custom_customer = {frappe.db.escape(customer)}")        
         
         # Construct the WHERE clause
         where_clause = "WHERE " + " AND ".join(filters) if filters else ""
@@ -385,11 +389,11 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
         unique_custom_customer = sorted(set([row['custom_customer'] for row in results if row['custom_customer']])) or ['N/A']
 
         return {
-            "executives": unique_executives,
-            "dates": unique_dates,
-            "payment_mode": unique_payment_mode,
-            "customer": unique_custom_customer,
-            "amounts": unique_amounts
+            "executives": ['']+unique_executives,
+            "dates": ['']+unique_dates,
+            "payment_mode": ['']+unique_payment_mode,
+            "customer": ['']+unique_custom_customer,
+            "amounts": ['']+unique_amounts
         }
 
     except Exception as e:
