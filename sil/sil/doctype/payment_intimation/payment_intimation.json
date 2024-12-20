@@ -167,7 +167,7 @@
  "modified": "2024-12-18 17:41:07.450055",
  "modified_by": "Administrator",
  "module": "sil",
- "name": "Payment Info",
+ "name": "Payment Intimation",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

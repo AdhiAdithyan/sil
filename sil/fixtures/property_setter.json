@@ -4177,7 +4177,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4241,7 +4241,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4257,7 +4257,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4337,7 +4337,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4353,7 +4353,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4369,7 +4369,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4385,7 +4385,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4401,7 +4401,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4417,7 +4417,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4449,7 +4449,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4465,7 +4465,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4561,7 +4561,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4577,7 +4577,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4593,7 +4593,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4609,7 +4609,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4625,7 +4625,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4641,7 +4641,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4657,7 +4657,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4673,7 +4673,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4689,7 +4689,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4705,7 +4705,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4721,7 +4721,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4737,7 +4737,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4753,7 +4753,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4769,7 +4769,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4785,7 +4785,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4801,7 +4801,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4817,7 +4817,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4833,7 +4833,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4849,7 +4849,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4865,7 +4865,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -4993,23 +4993,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "is_system_generated": 0,
-  "modified": "2024-12-19 14:13:32.580022",
-  "module": null,
-  "name": "Payment Info-main-field_order",
-  "property": "field_order",
-  "property_type": "Data",
-  "row_name": null,
-  "value": "[\"naming_series\", \"custom_deposited_by_customer\", \"executive\", \"custom_customer\", \"column_break_aljo\", \"mode_of_payment\", \"date\", \"branch\", \"section_break_unpa\", \"reference_column\", \"chequereference_number\", \"reference_image\", \"column_break_zcku\", \"reference_no\", \"custom_status\", \"custom_receipt_status\", \"section_break_vgyn\", \"amount\", \"column_break_xxrm\", \"account_paid_to\", \"section_break_xexp\", \"receipt_entry\", \"section_break_asdj\", \"unallocated_amount\", \"section_break_boto\", \"remark_column\", \"remark\", \"section_break_cdcc\", \"issue_payment\"]"
- },
- {
-  "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -5041,7 +5025,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -5057,7 +5041,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -5073,7 +5057,7 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Info",
+  "doc_type": "Payment Intimation",
   "docstatus": 0,
   "doctype": "Property Setter",
   "doctype_or_field": "DocField",
@@ -5134,5 +5118,117 @@
   "property_type": "Data",
   "row_name": null,
   "value": "eval:doc.mode_of_payment == \"Cash\""
+ },
+ {
+  "default_value": null,
+  "doc_type": "Payment Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "amount_received",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:13:46.761713",
+  "module": null,
+  "name": "Payment Receipt-amount_received-read_only",
+  "property": "read_only",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Payment Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "amount_received",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:14:33.370615",
+  "module": null,
+  "name": "Payment Receipt-amount_received-fetch_from",
+  "property": "fetch_from",
+  "property_type": "Small Text",
+  "row_name": null,
+  "value": "amended_from.amount_paid"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "reference_name",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:19:34.189933",
+  "module": null,
+  "name": "Receipt-reference_name-read_only_depends_on",
+  "property": "read_only_depends_on",
+  "property_type": "Data",
+  "row_name": null,
+  "value": "eval:doc.reference_type==\"Advance\""
+ },
+ {
+  "default_value": null,
+  "doc_type": "Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "reference_name",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:19:34.226756",
+  "module": null,
+  "name": "Receipt-reference_name-depends_on",
+  "property": "depends_on",
+  "property_type": "Data",
+  "row_name": null,
+  "value": ""
+ },
+ {
+  "default_value": null,
+  "doc_type": "Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "outstanding_amount",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:21:09.768638",
+  "module": null,
+  "name": "Receipt-outstanding_amount-read_only_depends_on",
+  "property": "read_only_depends_on",
+  "property_type": "Data",
+  "row_name": null,
+  "value": "eval:doc.reference_type==\"Advance\""
+ },
+ {
+  "default_value": null,
+  "doc_type": "Receipt",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "outstanding_amount",
+  "is_system_generated": 0,
+  "modified": "2024-12-20 10:21:18.596913",
+  "module": null,
+  "name": "Receipt-outstanding_amount-depends_on",
+  "property": "depends_on",
+  "property_type": "Data",
+  "row_name": null,
+  "value": ""
+ },
+ {
+  "default_value": null,
+  "doc_type": "Payment Intimation",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocType",
+  "field_name": null,
+  "is_system_generated": 0,
+  "modified": "2024-12-20 11:22:21.081015",
+  "module": null,
+  "name": "Payment Info-main-field_order",
+  "property": "field_order",
+  "property_type": "Data",
+  "row_name": null,
+  "value": "[\"naming_series\", \"custom_deposited_by_customer\", \"executive\", \"custom_customer\", \"column_break_aljo\", \"mode_of_payment\", \"date\", \"branch\", \"section_break_unpa\", \"reference_column\", \"chequereference_number\", \"reference_image\", \"column_break_zcku\", \"reference_no\", \"custom_status\", \"custom_receipt_status\", \"section_break_vgyn\", \"amount\", \"column_break_xxrm\", \"account_paid_to\", \"section_break_xexp\", \"receipt_entry\", \"section_break_asdj\", \"unallocated_amount\", \"section_break_boto\", \"remark_column\", \"remark\", \"custom_rejected_remarks\", \"section_break_cdcc\", \"issue_payment\"]"
  }
 ]

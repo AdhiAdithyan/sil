@@ -24,6 +24,7 @@
   "section_break_tnyw",
   "amount_paid",
   "reference_number",
+  "reference_image",
   "column_break_xtbx",
   "amount_received",
   "chequereference_date",
@@ -154,12 +155,17 @@
    "fieldname": "receipt_number",
    "fieldtype": "Data",
    "label": "Receipt Number"
+  },
+  {
+   "fieldname": "reference_image",
+   "fieldtype": "Attach Image",
+   "label": "Reference Image"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-11 10:25:51.763970",
+ "modified": "2024-12-20 14:33:01.046272",
  "modified_by": "Administrator",
  "module": "sil",
  "name": "Payment Receipt",

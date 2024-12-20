@@ -157,7 +157,7 @@ def update_status_in_payment_info(doc_name, new_value):
     """
     try:
         # Fetch the document
-        doc = frappe.get_doc('Payment Info', doc_name)
+        doc = frappe.get_doc('Payment Intimation', doc_name)
         
         # Update the field value
         if hasattr(doc, 'custom_status'):

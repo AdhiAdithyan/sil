@@ -1,12 +1,12 @@
 // Copyright (c) 2024, Softland and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Payment Info", {
+// frappe.ui.form.on("Payment Intimation", {
 // 	refresh(frm) {
 
 // 	},
 // });
-frappe.ui.form.on('Payment Info', {
+frappe.ui.form.on('Payment Intimation', {
 
     
     validate(frm) {

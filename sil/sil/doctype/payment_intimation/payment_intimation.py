@@ -5,7 +5,7 @@
 from frappe.model.document import Document
 
 
-class PaymentInfo(Document):
+class PaymentIntimation(Document):
 	def validate(self):
         # Example validation logic
 		if self.mode_of_payment or self.mode_of_payment == "Cash":
