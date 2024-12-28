@@ -26,9 +26,9 @@ def getSuspenseDetailsForApportion(receipt_1):
             SELECT
                 *
             FROM
-                `tabPayment Receipt` 
+                `tabPayment Receipt` where name=%s 
 
-            """, as_dict=True) 
+            """, (receipt_1,),as_dict=True) 
         return {
             "table1_data": table1_data
         }     
@@ -39,17 +39,19 @@ def getSuspenseDetailsForApportion(receipt_1):
 @frappe.whitelist()
 def getPaymentInfoForApportion(receipt_2):
     try:
+
         query = """
             SELECT
                 *
             FROM
-                `tabPayment Intimation` 
+                `tabReceipt` 
             WHERE 
-                name = %s
+                parent = %s
         """
-        table1_data = frappe.db.sql(query, (receipt_2,), as_dict=True) 
+        table2_data = frappe.db.sql(query,(receipt_2,), as_dict=True) 
+
         return {
-            "table2_data": table1_data
+            "table2_data": table2_data
         }     
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), 'Error in getPaymentInfoForApportion')
@@ -109,6 +111,10 @@ def getDetailsForSelectedReceipts(receipt_1=None, receipt_2=None):
         receipt_1 = json.loads(receipt_1)
         receipt_2 = json.loads(receipt_2)
 
+
+        print(receipt_1)
+        print(receipt_2)
+
         # Validate input parameters
         if not receipt_1 or not receipt_2:
             frappe.throw(_("Both receipts are required."))
@@ -119,8 +125,8 @@ def getDetailsForSelectedReceipts(receipt_1=None, receipt_2=None):
             frappe.throw(_("Amounts of both selected receipts must be equal."))
 
         # Fetch additional details for the receipts
-        receipt_1_details = getSuspenseDetailsForApportion(receipt_1)
-        receipt_2_details = getPaymentInfoForApportion(receipt_2)
+        receipt_1_details = getSuspenseDetailsForApportion(receipt_1["receipt_id"])
+        receipt_2_details = getPaymentInfoForApportion(receipt_2["receipt_id"])
 
         # Combine the data in a nested structure
         receipt_1 = {**receipt_1, **receipt_1_details}
@@ -325,3 +331,13 @@ def getSuspenseAndReceiptDetailsForJournalEntry(suspanse_id, receipt_id):
             'payment_receipt_details': None,
             'error': str(e)
         }
+
+
+
+#call when submit button is pressed in journal entry
+@frappe.whitelist(allow_guest=True)
+def getDetailsFromJournalEntry():
+    try:
+        pass 
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), 'Error in getDetailsFromJournalEntry')    

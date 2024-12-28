@@ -6,15 +6,16 @@ from frappe.model.document import Document
 
 
 class PaymentIntimation(Document):
-	def validate(self):
-        # Example validation logic
-		if self.mode_of_payment or self.mode_of_payment == "Cash":
-			self.chequereference_number
-			self.reference_no
+    pass
+	# def validate(self):
+    #     # Example validation logic
+	# 	if self.mode_of_payment or self.mode_of_payment == "Cash":
+	# 		self.chequereference_number
+	# 		self.reference_no
             # frappe.log_error(_("Amount must be greater than 0"))
 			
         
-	pass
+	
 
 
 

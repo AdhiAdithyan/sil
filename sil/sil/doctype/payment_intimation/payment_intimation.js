@@ -1,84 +1,65 @@
-// Copyright (c) 2024, Softland and contributors
-// For license information, please see license.txt
-
-// frappe.ui.form.on("Payment Intimation", {
-// 	refresh(frm) {
-
-// 	},
-// });
 frappe.ui.form.on('Payment Intimation', {
-
-    
     validate(frm) {
+        let is_main_doc_valid = true;
+        let is_cust_valid = true;
+        let is_entry_valid = true;
 
-        
-          // Validate main document fields
-          let is_main_doc_valid = true;
-        
-          // Example validations for main document fields
-          if (!frm.doc.amount) {
-              frappe.msgprint(__('Amount is required.'));
-              is_main_doc_valid = false;
-          }
-          if(frm.doc.unallocated_amount>0){
-            frappe.msgprint(__('Unallocated Amount is greater than zero.'));
-              is_main_doc_valid = false;
-          }
-          if(frm.doc.unallocated_amount<0){
-            frappe.msgprint(__('Unallocated Amount is less than zero.'));
-              is_main_doc_valid = false;
-          }
-         
-        //   if (!frm.doc.custom_company) {
-        //     frappe.msgprint(__('Company is required.'));
-        //     is_main_doc_valid = false;
-        // }
-        //   currently not required
-        //   if (!frm.doc.executive) {
-        //       frappe.msgprint(__('Executive is required.'));
-        //       is_main_doc_valid = false;
-        //   }
-          
-        //   if (!frm.doc.bank_account) {
-        //       frappe.msgprint(__('Bank account is required.'));
-        //       is_main_doc_valid = false;
-        //   }
-          
-          if (!frm.doc.mode_of_payment) {
-              frappe.msgprint(__('Mode of payment is required.'));
-              is_main_doc_valid = false;
-          }
-          
-          if (!frm.doc.date) {
-              frappe.msgprint(__('Date is required.'));
-              is_main_doc_valid = false;
-          }
-          
-          if (!frm.doc.amount || parseFloat(frm.doc.amount) <= 0) {
-              frappe.msgprint(__('Amount should be greater than zero.'));
-              is_main_doc_valid = false;
-          }
-  
-          // If main document validation fails, prevent saving the form
-          if (!is_main_doc_valid) {
-              frappe.validated = false;
-              return;
-          }
-          
-        // Check if customer table has at least one item
-        if (!frm.doc.customer || frm.doc.customer.length === 0) {
-            frappe.msgprint(__('Please add at least one entry before proceeding'));
+        // Validate mode of payment
+        if (frm.doc.mode_of_payment !== 'Cash') {
+            if (!frm.doc.chequereference_number) {
+                frappe.msgprint(__('Please fill the Cheque Reference Number'));
+                frappe.validated = false;
+            }
+            if (!frm.doc.reference_no) {
+                frappe.msgprint(__('Please fill the Reference No'));
+                frappe.validated = false;
+            }
+        } 
+        if (frm.doc.mode_of_payment === 'Cash')  {
+            frm.set_value('chequereference_number', '');
+            frm.set_value('reference_no', '');
+            frm.set_df_property('chequereference_number', 'reqd', 0);
+            frm.set_df_property('reference_no', 'reqd', 0);
+            if (!frm.doc.chequereference_number || !frm.doc.reference_no) {
+                frappe.validated = true;
+                }
+        }
+
+        // Validate main document fields
+        if (!frm.doc.amount || parseFloat(frm.doc.amount) <= 0) {
+            frappe.msgprint(__('Amount is required and should be greater than zero.'));
+            is_main_doc_valid = false;
+        }
+        if (frm.doc.unallocated_amount !== 0) {
+            frappe.msgprint(__('Unallocated Amount should be zero.'));
+            is_main_doc_valid = false;
+        }
+        if (!frm.doc.mode_of_payment) {
+            frappe.msgprint(__('Mode of payment is required.'));
+            is_main_doc_valid = false;
+        }
+        if (!frm.doc.date) {
+            frappe.msgprint(__('Date is required.'));
+            is_main_doc_valid = false;
+        }
+
+        // If main document validation fails, prevent saving the form
+        if (!is_main_doc_valid) {
+            frappe.validated = false;
             return;
         }
 
-        // Check if entries table has at least one item
+        // Validate customer and entries tables
+        // if (frm.doc.custom_deposited_by_customer && (!frm.doc.customer || frm.doc.customer.length === 0)) {
+        //     frappe.msgprint(__('Please add at least one entry before proceeding'));
+        //     return;
+        // }
         if (!frm.doc.entries || frm.doc.entries.length === 0) {
             frappe.msgprint(__('Please add at least one outstanding entry before proceeding'));
             return;
         }
 
         // Validate each row in the customer table
-        let is_cust_valid = true;
         let seen = new Set(); // To track seen combinations of customer and type
         frm.doc.customer.forEach(row => {
             if (!row.customer || !row.type) {
@@ -101,57 +82,43 @@ frappe.ui.form.on('Payment Intimation', {
         }
 
         // Iterate over entries and validate the amount
-        let is_entry_valid = true;
+        let total_amount = 0;
         frm.doc.entries.forEach(entry => {
-            if (parseFloat(entry.amount) <= 0) {
+            let entry_amount = parseFloat(entry.amount);
+            if (entry_amount <= 0) {
                 is_entry_valid = false;
                 frappe.msgprint({
                     title: __('Validation Error'),
                     indicator: 'red',
-                    message: __('Entry {0} has an amount of {1}, which is not greater than zero.', [entry.name, entry.amount])
+                    message: __('Entry {0} has an amount of {1} for the given {2}, which is not greater than zero.', [entry.customer, entry.amount, entry.type])
                 });
             }
+            total_amount += entry_amount;
         });
 
-          // Iterate over entries and validate the amount
-          let total_amount = 0;
-  
-          frm.doc.entries.forEach(entry => {
-              let entry_amount = parseFloat(entry.amount);
-              if (entry_amount <= 0) {
-                  is_entry_valid = false;
-                  frappe.msgprint({
-                      title: __('Validation Error'),
-                      indicator: 'red',
-                      message: __('Entry {0} has an amount of {1} for the given {2}, which is not greater than zero.', [entry.customer, entry.amount,enrty.type])
-                  });
-              }
-              total_amount += entry_amount;
-          });
-  
-          // Check if the sum of entry amounts equals the main document amount
-          if (total_amount !== parseFloat(frm.doc.amount)) {
-              frappe.msgprint({
-                  title: __('Validation Error'),
-                  indicator: 'red',
-                  message: __('The total amount of entries ({0}) does not equal the main document amount ({1}).', [total_amount, frm.doc.amount])
-              });
-              frappe.validated = false;
-              return;
-          }
+        // Check if the sum of entry amounts equals the main document amount
+        if (total_amount !== parseFloat(frm.doc.amount)) {
+            frappe.msgprint({
+                title: __('Validation Error'),
+                indicator: 'red',
+                message: __('The total amount of entries ({0}) does not equal the main document amount ({1}).', [total_amount, frm.doc.amount])
+            });
+            frappe.validated = false;
+            return;
+        }
 
         let formData = {
             main_document: {
-                    doctype: frm.doc.doctype,
-                    status: frm.doc.status,
-                    naming_series: frm.doc.naming_series,
-                    company:frm.doc.custom_company,
-                    account: frm.doc.account,
-                    executive: frm.doc.executive,
-                    bank_account: frm.doc.bank_account,
-                    mode_of_payment: frm.doc.mode_of_payment,
-                    date: frm.doc.date,
-                    amount: frm.doc.amount
+                doctype: frm.doc.doctype,
+                status: frm.doc.status,
+                naming_series: frm.doc.naming_series,
+                company: frm.doc.custom_company,
+                account: frm.doc.account,
+                executive: frm.doc.executive,
+                bank_account: frm.doc.bank_account,
+                mode_of_payment: frm.doc.mode_of_payment,
+                date: frm.doc.date,
+                amount: frm.doc.amount
             },
             child_tables: {
                 customer: frm.doc.customer,  // child table name
@@ -161,46 +128,33 @@ frappe.ui.form.on('Payment Intimation', {
 
         console.log("Custom button clicked");
 
-          // Show the progress dialog
-        //   frappe.msgprint({
-        //     message: __("Processing... Please wait."),
-        //     indicator: 'blue',
-        //     title: __("Processing")
-        // });
-        
-// If all entries are valid, proceed with the frappe.call
-if (is_cust_valid && is_entry_valid) {
-        frappe.call({
-            method: 'sil.services.paymentDetails.paymentEntry', // Path to your method
-            args: {
-                frm: frm.doc, // Pass the document data
-                formData: JSON.stringify(formData, null, 2)
-            },
-            callback: function(response) {
-                // Handle the response here
-                console.log(response.message);
-                // Hide the progress dialog
-                // frappe.hide_msgprint();
-                if (response.message) {
-                    // Handle successful response
-                    console.log("Received from server:", response.message.message);
-                } else {
-                    // Handle error or empty response
-                    console.log("No response from server or error occurred.");
+        // If all entries are valid, proceed with the frappe.call
+        if (is_cust_valid && is_entry_valid) {
+            frappe.call({
+                method: 'sil.services.paymentDetails.paymentEntry', // Path to your method
+                args: {
+                    frm: frm.doc, // Pass the document data
+                    formData: JSON.stringify(formData, null, 2)
+                },
+                callback: function (response) {
+                    // Handle the response here
+                    console.log(response.message);
+                    if (response.message) {
+                        // Handle successful response
+                        console.log("Received from server:", response.message.message);
+                    } else {
+                        // Handle error or empty response
+                        console.log("No response from server or error occurred.");
+                    }
+                },
+                error: function (error) {
+                    // Handle the error
+                    console.error("An error occurred:", error);
                 }
-            } ,
-            error: function(error) {
-                // Hide the progress dialog in case of error
-                // frappe.hide_msgprint();
-                
-                // Handle the error
-                console.error("An error occurred:", error);
-            }
-        });
-    } else {
-        // Prevent form from being saved if validation fails
-        frappe.validated = false;
-    }
+            });
+        } else {
+            // Prevent form from being saved if validation fails
+            frappe.validated = false;
+        }
     }
 });
-
