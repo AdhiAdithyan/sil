@@ -102,15 +102,13 @@
    "fieldname": "reference_no",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Cheque/Reference Date",
-   "reqd": 1
+   "label": "Cheque/Reference Date"
   },
   {
    "fieldname": "chequereference_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Cheque/Reference Number",
-   "reqd": 1
+   "label": "Cheque/Reference Number"
   },
   {
    "fieldname": "section_break_unpa",
@@ -164,7 +162,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-18 17:41:07.450055",
+ "modified": "2024-12-30 09:31:09.058295",
  "modified_by": "Administrator",
  "module": "sil",
  "name": "Payment Intimation",

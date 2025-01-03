@@ -60,46 +60,39 @@ def getPaymentInfoForApportion(receipt_2):
 @frappe.whitelist(allow_guest=True)
 def getAllReceiptDetailsForJournalEntry():
     try:
-        query1 = """
-            SELECT
-                name AS receipt_id_1,
-                amount_received AS amount_1,
-                executive,
-                COALESCE(reference_number,'') as reference_number_1,
-                COALESCE(chequereference_date,'') as reference_date_1
-            FROM
-                `tabPayment Receipt` 
-            WHERE 
-                payment_type='Internal Transfer' 
-                AND custom_status='Pending' 
-                AND custom_is_suspense_entry = 1 
-                AND docstatus = 1
-        """
+        # Fetch results for Query 1 using getSuspenseEntries function
+        table1_data = getSuspenseEntries()
+        
+        # Query 2 remains unchanged
         query2 = """
             SELECT
                 name AS receipt_id_2,
                 amount AS amount_2,
                 executive,
-                COALESCE(chequereference_number,'') as reference_number_2,
-                COALESCE(reference_no,'') as reference_date_2
+                COALESCE(chequereference_number, '') AS reference_number_2,
+                COALESCE(reference_no, '') AS reference_date_2
             FROM
                 `tabPayment Intimation` 
             WHERE 
-                custom_status='Pending' 
-                AND custom_receipt_status='Journal'
+                custom_status = 'In Progress'
+                AND custom_receipt_status = 'Journal'
         """
-        table1_data = frappe.db.sql(query1, as_dict=True)
+        
+        # Execute Query 2
         table2_data = frappe.db.sql(query2, as_dict=True)
 
-        # Validate query results
-        if not table1_data or not table2_data:
+        # Validate results
+        if not table1_data and not table2_data:
             frappe.throw(_("No records found for the given queries."))
-
+        
+        # Return combined data
         return {
-            "table1_data": table1_data,
-            "table2_data": table2_data
-        } 
+            "table1_data": table1_data,  # Data from getSuspenseEntries
+            "table2_data": table2_data  # Data from query 2
+        }
+    
     except Exception as e:
+        # Log and throw error
         frappe.log_error(frappe.get_traceback(), 'Error in getAllReceiptDetailsForJournalEntry')
         frappe.throw(_('Loading Failed'))
 
@@ -151,15 +144,11 @@ def UpdatePaymentInfoForRejection(receipt_no, remark):
             frappe.throw(_("Remark is required."))
 
         # Update the Payment Intimation table
-        rows_affected = frappe.db.sql("""
+        frappe.db.sql("""
             UPDATE `tabPayment Intimation` 
-            SET custom_status='Rejected', custom_receipt_status='Rejected', custom_rejected_remark=%s 
+            SET custom_status = %s, custom_rejected_remarks = %s 
             WHERE name = %s
-        """, (remark, receipt_no,),as_dict=True)
-
-        # Check if any rows were updated
-        if not rows_affected:
-            frappe.throw(_("No records found for the given receipt number."))
+        """, ('Rejected', remark, receipt_no))
 
         # Commit the transaction to apply the changes
         frappe.db.commit()
@@ -167,8 +156,8 @@ def UpdatePaymentInfoForRejection(receipt_no, remark):
         # Return a success response
         return {
             "status": "success",
-            "message": _("Updated {} record(s) successfully.").format(len(rows_affected)),
-            "data": rows_affected
+            "message": _("Payment Intimation record updated successfully."),
+            "data": {"receipt_no": receipt_no, "status": "Rejected"}
         }
     except Exception as e:
         # Log the error in the system
@@ -181,7 +170,6 @@ def UpdatePaymentInfoForRejection(receipt_no, remark):
             "error": str(e)
         }
 
-
 @frappe.whitelist(allow_guest=True)
 def MovePaymentInfoForJournalEntry(receipt_no):
     try:
@@ -192,13 +180,10 @@ def MovePaymentInfoForJournalEntry(receipt_no):
         # Update the Payment Intimation table
         rows_affected = frappe.db.sql("""
             UPDATE `tabPayment Intimation` 
-            SET custom_receipt_status = 'Journal' 
+            SET custom_receipt_status = 'Journal',
+                custom_status ="In Progress" 
             WHERE name = %s
         """, (receipt_no,), as_dict=True)
-
-        # Check if any rows were updated
-        if not rows_affected:
-            frappe.throw(_("No records found for the given receipt number."))
 
         # Commit the transaction to apply the changes
         frappe.db.commit()
@@ -219,34 +204,40 @@ def MovePaymentInfoForJournalEntry(receipt_no):
             "error": str(e)
         }
 
-
 @frappe.whitelist(allow_guest=True)
 def RemovePaymentInfoFromJournalEntry(receipt_no):
     try:
+        # Execute the update query (no need for as_dict or additional parameters)
         rows_affected = frappe.db.sql("""
             UPDATE `tabPayment Intimation` 
-            SET custom_receipt_status='Pending' 
+            SET custom_receipt_status='Pending',
+                custom_status = 'Pending'
+
             WHERE name = %s AND custom_receipt_status='Journal'
-        """, (receipt_no,), as_dict=True)
+        """, (receipt_no,))
+
+        # The rows_affected is now an integer, not a list
+        frappe.log_error(f"Rows affected: {rows_affected}", "Debug - RemovePaymentInfoFromJournalEntry")
+
+        # Check if rows were affected
         
-        if rows_affected:
-            frappe.db.commit()
-            return {
-                "status": "success",
-                "message": f"Updated {len(rows_affected)} record(s) successfully.",
-            }
-        else:
-            return {
-                "status": "error",
-                "message": "No records found for the given receipt number.",
-            }
+        frappe.db.commit()
+        return {
+            "status": "success",
+            "message": f"Updated {rows_affected} record(s) successfully.",
+        }
+   
+
     except Exception as e:
+        # Log the error traceback
         frappe.log_error(frappe.get_traceback(), 'Error in RemovePaymentInfoFromJournalEntry')
         return {
             "status": "error",
             "message": "An error occurred while updating the record.",
             "error": str(e)
         }
+
+
 
 
 @frappe.whitelist(allow_guest=True)
@@ -341,3 +332,149 @@ def getDetailsFromJournalEntry():
         pass 
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), 'Error in getDetailsFromJournalEntry')    
+
+
+@frappe.whitelist(allow_guest=True)
+def update_payment_and_receipt_on_submit(doc, method):
+    try:
+        # Fetch the required field values from the submitted document
+        custom_payment_info_id = doc.get('custom_payment_info_id')
+        custom_suspense_id = doc.get('custom_suspense_id')
+        
+        # Validate that required fields are present
+        if custom_payment_info_id and custom_suspense_id:
+            # Update the Payment Intimation table
+            frappe.db.sql(
+                """
+                UPDATE `tabPayment Intimation`
+                SET
+                    custom_status = 'Paid',
+                    custom_receipt_status = 'Paid'
+                WHERE name = %s
+                """,
+                (custom_payment_info_id,)
+            )
+            
+            # Check if custom_suspense_id exists as name in tabPayment Receipt
+            payment_receipt_exists = frappe.db.sql(
+                """
+                SELECT name 
+                FROM `tabPayment Receipt`
+                WHERE name = %s
+                """,
+                (custom_suspense_id,),
+                as_dict=1
+            )
+            
+            if payment_receipt_exists:
+                # Update the Payment Receipt table if record exists
+                frappe.db.sql(
+                    """
+                    UPDATE `tabPayment Receipt`
+                    SET
+                        custom_status = 'Paid'
+                    WHERE name = %s
+                    """,
+                    (custom_suspense_id,)
+                )
+            else:
+                # If not in Payment Receipt, update Journal Entry Account
+                frappe.db.sql(
+                    """
+                    UPDATE `tabJournal Entry Account`
+                    SET
+                        is_apportion_done = 1
+                    WHERE parent = %s
+                    """,
+                    (custom_suspense_id,)
+                )
+            
+            # Commit the changes to the database
+            frappe.db.commit()
+            
+    except frappe.exceptions.ValidationError as e:
+        # Handle known validation errors
+        frappe.log_error(message=str(e), title="Validation Error in update_payment_and_receipt_on_submit")
+        frappe.throw(f"Validation Error: {str(e)}")
+    except Exception as e:
+        # Handle any unexpected errors
+        frappe.log_error(message=str(e), title="Error in update_payment_and_receipt_on_submit")
+        frappe.throw(f"An unexpected error occurred: {str(e)}")
+
+@frappe.whitelist(allow_guest=True)
+def getSuspenseEntries():
+    try:
+        # First query for Payment Receipt entries
+        payment_receipt_query = """
+            SELECT
+                name as receipt_id_1,
+                amount_received as amount_1,
+                executive,
+                date,
+                mode_of_payment,
+                COALESCE(reference_number, '') AS reference_number_1,
+                COALESCE(chequereference_date, '') AS reference_date_1
+            FROM
+                `tabPayment Receipt`
+            WHERE
+                payment_type = 'Internal Transfer'
+                AND custom_status = 'Processing'
+                AND custom_is_suspense_entry = 1
+                AND docstatus = 1
+        """
+        
+        # Second query for Journal Entry Account entries
+        journal_entry_query = """
+            SELECT 
+                jo.parent as receipt_id_1,
+                jo.credit as amount_1,
+                '' as executive,
+                jo.creation as date,
+                '' as mode_of_payment,
+                '' as reference_number_1,
+                '' as reference_date_1
+            FROM 
+                `tabJournal Entry Account` jo
+            INNER JOIN 
+                `tabAccount` ta ON jo.account = ta.name
+            WHERE  
+                jo.docstatus = 1
+                AND ta.custom_is_suspense = 1
+                AND jo.is_apportion_done != 1
+                AND jo.debit = 0
+                AND jo.credit != 0
+
+        """
+        
+        # Execute both queries
+        payment_receipt_results = frappe.db.sql(payment_receipt_query, as_dict=True)
+        journal_entry_results = frappe.db.sql(journal_entry_query, as_dict=True)
+        
+        # Combine the results
+        combined_results = payment_receipt_results + journal_entry_results
+        
+        # Format dates if needed
+        for result in combined_results:
+            if result.get('date'):
+                result['date'] = frappe.utils.formatdate(result['date'])
+            if result.get('reference_date_1'):
+                result['reference_date_1'] = frappe.utils.formatdate(result['reference_date_1'])
+                
+            # Ensure amount is formatted as float
+            if result.get('amount_1'):
+                result['amount_1'] = float(result['amount_1'])
+                
+            # Ensure executive has a value
+            if not result.get('executive'):
+                result['executive'] = 'N/A'
+        
+        return combined_results
+        
+    except Exception as e:
+        frappe.log_error(
+            message=f"Error Fetching Suspense Entries: {str(e)}\n{frappe.get_traceback()}", 
+            title="Error Fetching Suspense Entries"
+        )
+        return []
+
+    

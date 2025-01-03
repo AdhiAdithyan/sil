@@ -646,3 +646,171 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
             "required_fields": required_fields,
         }, "Payment Receipt Validation Error")
         frappe.throw(_("An error occurred while processing Payment Receipt: {0}").format(str(e)))
+
+@frappe.whitelist(allow_guest=True)
+def getSuspenseEntries():
+    try:
+        # First query for Payment Receipt entries
+        payment_receipt_query = """
+            SELECT
+                name as receipt_id_1,
+                amount_received as amount_1,
+                executive,
+                date,
+                mode_of_payment,
+                COALESCE(reference_number, '') AS reference_number_1,
+                COALESCE(chequereference_date, '') AS reference_date_1
+            FROM
+                `tabPayment Receipt`
+            WHERE
+                payment_type = 'Internal Transfer'
+                AND custom_status = 'Processing'
+                AND custom_is_suspense_entry = 1
+                AND docstatus = 1
+        """
+        
+        # Second query for Journal Entry Account entries
+        journal_entry_query = """
+            SELECT 
+                jo.parent as receipt_id_1,
+                jo.credit as amount_1,
+                '' as executive,
+                jo.creation as date,
+                '' as mode_of_payment,
+                '' as reference_number_1,
+                '' as reference_date_1
+            FROM 
+                `tabJournal Entry Account` jo
+            INNER JOIN 
+                `tabAccount` ta ON jo.account = ta.name
+            WHERE  
+                jo.docstatus = 1
+                AND ta.custom_is_suspense = 1
+                AND jo.is_apportion_done != 1
+                AND jo.debit = 0
+                AND jo.credit != 0
+
+        """
+        
+        # Execute both queries
+        payment_receipt_results = frappe.db.sql(payment_receipt_query, as_dict=True)
+        journal_entry_results = frappe.db.sql(journal_entry_query, as_dict=True)
+        
+        # Combine the results
+        combined_results = payment_receipt_results + journal_entry_results
+        
+        # Format dates if needed
+        for result in combined_results:
+            if result.get('date'):
+                result['date'] = frappe.utils.formatdate(result['date'])
+            if result.get('reference_date_1'):
+                result['reference_date_1'] = frappe.utils.formatdate(result['reference_date_1'])
+                
+            # Ensure amount is formatted as float
+            if result.get('amount_1'):
+                result['amount_1'] = float(result['amount_1'])
+                
+            # Ensure executive has a value
+            if not result.get('executive'):
+                result['executive'] = 'N/A'
+        
+        return combined_results
+        
+    except Exception as e:
+        frappe.log_error(
+            message=f"Error Fetching Suspense Entries: {str(e)}\n{frappe.get_traceback()}", 
+            title="Error Fetching Suspense Entries"
+        )
+        return []
+
+    
+@frappe.whitelist(allow_guest=True)
+def getSuspenseFilters(filters=None):
+    filters = frappe.parse_json(filters) if filters else {}
+
+    conditions = []
+
+    # Fixed conditions (always applied)
+    conditions.append("payment_type = 'Internal Transfer'")
+    conditions.append("custom_status = 'Processing'")
+    conditions.append("custom_is_suspense_entry = 1")
+    conditions.append("docstatus = 1")
+    
+    # Apply dynamic filters based on user input
+    if filters:
+        if filters.get('executive'):
+            conditions.append(f"executive = '{filters['executive']}'")
+        if filters.get('deposit_date'):
+            conditions.append(f"date = '{filters['deposit_date']}'")
+        if filters.get('payment_mode'):
+            conditions.append(f"mode_of_payment = '{filters['payment_mode']}'")
+        if filters.get('reference_no'):
+            conditions.append(f"reference_number = '{filters['reference_no']}'")
+        if filters.get('reference_date'):
+            conditions.append(f"chequereference_date = '{filters['reference_date']}'")
+        if filters.get('amount'):
+            conditions.append(f"amount_received = '{filters['amount']}'")
+    
+    # Build the final WHERE clause
+    if conditions:
+        condition_str = " AND ".join(conditions)
+        condition_str = "WHERE " + condition_str
+    else:
+        condition_str = ""
+
+    # Query to fetch the filtered entries
+    query = f"""
+        SELECT name, amount_received, executive, date, mode_of_payment,
+               COALESCE(reference_number, '') AS reference_number,
+               COALESCE(chequereference_date, '') AS reference_date
+        FROM `tabPayment Receipt`
+        {condition_str}
+    """
+    
+    return frappe.db.sql(query, as_dict=True)
+
+@frappe.whitelist(allow_guest=True)
+def UpdateRejectionForPaymentReceipt(receipt_no, remark):
+    try:
+        # Validate input parameters
+        if not receipt_no:
+            frappe.throw(_("Receipt No is required."))
+        if not remark:
+            frappe.throw(_("Remark is required."))
+
+        # Update the Payment Intimation table
+        frappe.db.sql("""
+            UPDATE `tabPayment Intimation` 
+            SET 
+                custom_status = 'Rejected',
+                custom_receipt_status = 'Rejected',
+                custom_rejected_remarks = %s
+            WHERE name = %s
+        """, (remark, receipt_no,), as_dict=True)
+
+
+
+        # Commit the transaction to apply the changes
+        frappe.db.commit()
+
+        # Return a success response
+        return {
+            "status": "success",
+            "message": _("Record updated successfully."),
+            "data": {
+                "receipt_no": receipt_no,
+                "remark": remark,
+                "custom_status": "Rejected",
+                "custom_receipt_status": "Rejected"
+            }
+        }
+    except Exception as e:
+        # Log the error in the system
+        frappe.log_error(frappe.get_traceback(), 'Error in UpdatePaymentInfoForRejection')
+
+        # Return an error response
+        return {
+            "status": "error",
+            "message": _("An error occurred while updating the record."),
+            "error": str(e)
+        }
