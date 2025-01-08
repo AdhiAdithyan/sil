@@ -36,16 +36,17 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
                 response['allocated_amount'] = 0.0
 
         elif reference_type == "Slip No":
+            pass
             # Fetch the required fields from Issue Sales (Slip No equivalent)
-            slip = frappe.get_all("Issue", filters={"customer": customer,"docstatus":1}, fields=["name"])
-            if slip:
-                response['reference_name'] = slip
-                response['outstanding_amount'] = 0.0
-                response['allocated_amount'] = 0.0
-            else:
-                response['reference_name'] = None
-                response['outstanding_amount'] = 0.0
-                response['allocated_amount'] = 0.0
+            # slip = frappe.get_all("Issue", filters={"customer": customer,"docstatus":0}, fields=["name"])
+            # if slip:
+            #     response['reference_name'] = slip
+            #     response['outstanding_amount'] = 0.0
+            #     response['allocated_amount'] = 0.0
+            # else:
+            #     response['reference_name'] = None
+            #     response['outstanding_amount'] = 0.0
+            #     response['allocated_amount'] = 0.0
 
         elif reference_type == "Advance":
             # Fetch the required fields from Advance Payments (or Issue Sales, depending on your structure)
@@ -101,8 +102,8 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
             order = frappe.get_all("Sales Order", filters={"customer": customer,"name":reference_name}, fields=["name", "grand_total", "delivery_date"])
             sales_orders = frappe.db.sql("""SELECT (rounded_total-advance_paid) as outstanding_amount FROM `tabSales Order` 
              where customer=%s and name=%s """,(customer,reference_name,), as_dict=True)
-            print("get_all_receipt_info_by_reference_name")
-            print(f"sales_orders :{sales_orders}")
+            # print("get_all_receipt_info_by_reference_name")
+            # print(f"sales_orders :{sales_orders}")
             if sales_orders:
                 response['outstanding_amount'] = sales_orders[0].get('outstanding_amount')
                 response['allocated_amount'] = 0.0
@@ -224,12 +225,12 @@ def getAllReceiptInfoDetailsByReceiptNo(receipt_number):
         for recp in recp_info:
             try:
                 recp_entries = frappe.get_all("Receipt", filters={"parent": recp['name']}, fields=["*"])
-                recp["receipt_entries"] = recp_entries
+                recp["receipt_entries"] = sorted(recp_entries, key=lambda x: x.get("idx", 0))  # Default to 0 if 'idx' is missing
             except Exception as e:
                 frappe.log_error(frappe.get_traceback(), 'Error in getAllReceiptInfoDetailsByReceiptNo')
 
-        print("receipt_information:123")
-        print(recp_info)
+        # print("receipt_information:123")
+        # print(recp_info)
 
         return { 
             "receipt_information": recp_info
@@ -263,18 +264,19 @@ def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, depos
 
        
 
-        print("filters:::")
-        print(filters)
+        # print("filters:::")
+        # print(filters)
         # Construct the WHERE clause
         where_clause = "WHERE " + " AND ".join([f"{key}=%s" for key in filters.keys()]) if filters else ""
 
-        print("where_clause:::")
-        print(where_clause)
+        # print("where_clause:::")
+        # print(where_clause)
         # Fetch all relevant data in one query
         query = f"""
-            SELECT DISTINCT *
-            FROM `tabPayment Intimation`
-            {where_clause}
+                SELECT DISTINCT *
+                FROM `tabPayment Intimation`
+                {where_clause}
+                ORDER BY modified DESC
         """
         recp_info = frappe.db.sql(query, tuple(filters.values()), as_dict=True)
         if not recp_info:
@@ -286,6 +288,7 @@ def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, depos
             SELECT DISTINCT *
             FROM `tabReceipt`
             WHERE parent=%s
+            ORDER BY idx ASC
             """
             recp_entries = frappe.db.sql(query, (recp['name'],), as_dict=True)
             recp["receipt_entries"] = recp_entries    

@@ -567,12 +567,12 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
             "chequereference_date": chequereference_date
         }
 
-        print("")
-        print("required_fields:123")
-        print(required_fields)
+        # print("")
+        # print("required_fields:123")
+        # print(required_fields)
 
-        if receipt_number:
-            update_status_in_payment_info(receipt_number,'Payment Pending')
+        # if receipt_number:
+        #     update_status_in_payment_info(receipt_number,'Pending')
         # Validate required fields
         # missing_fields = [field for field, value in required_fields.items() if value is None or value == ""]
         # if missing_fields:
@@ -589,8 +589,8 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
         #     else:
         #         createJournelEntryForSuspense()
 
-        print("payment_type : ")
-        print(payment_type)
+        # print("payment_type : ")
+        # print(payment_type)
 
 
         if payment_type in ["Internal Transfer"] and custom_is_suspense_entry==True:     

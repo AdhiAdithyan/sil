@@ -362,11 +362,11 @@ def paymentEntry(frm,formData):
     customer_table = formData.get('child_tables', {}).get('customer', [])
     entry_table = formData.get('child_tables', {}).get('entries', [])
     
-    print(f"main_table: {main_table}")
-    print(f"customer_table: {customer_table}")
-    print(f"entry_table: {entry_table}")
+    # print(f"main_table: {main_table}")
+    # print(f"customer_table: {customer_table}")
+    # print(f"entry_table: {entry_table}")
     
-    print("Entries")
+    # print("Entries")
     total_amount_payed = 0
     company_name=None
     credit_account=None
@@ -382,8 +382,8 @@ def paymentEntry(frm,formData):
     company_details = frappe.db.sql("""Select * from `tabCompany` where `name`=%s;
     """,(company_name,),as_dict=True)
     
-    print("Company details")
-    print(f"Company details:{str(company_details)}")
+    # print("Company details")
+    # print(f"Company details:{str(company_details)}")
     """
     company_name
     abbr
@@ -431,13 +431,14 @@ def paymentEntry(frm,formData):
         # print(f"Parenttype: {entry['parenttype']}")
         # print(f"Doctype: {entry['doctype']}")
         # print("\n")
-        if entry['type']=="Sales Invoice":
-            print("Navigate to Sales Invoice section in payment entry")
-        elif entry['type']=="Sales Order":
-            print("Navigate to Sales Order section in payment entry") 
-        elif entry['type']=="Advance":
-            print("Navigate to Advance section in journal") 
+        # if entry['type']=="Sales Invoice":
+        #     print("Navigate to Sales Invoice section in payment entry")
+        # elif entry['type']=="Sales Order":
+        #     print("Navigate to Sales Order section in payment entry") 
+        # elif entry['type']=="Advance":
+        #     print("Navigate to Advance section in journal") 
             # create_advance_payment_journal_entry(entry['customer'],
             # debit_account,credit_account,entry['amount'])       
 
-    return {"message":"Save button clicked","result":f"{str(frm_doc)}"}
+    # return {"message":"Save button clicked","result":f"{str(frm_doc)}"}
+    return {"message":"Save button clicked"}

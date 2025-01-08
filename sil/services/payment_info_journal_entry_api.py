@@ -22,18 +22,40 @@ def get_data():
 @frappe.whitelist()
 def getSuspenseDetailsForApportion(receipt_1):
     try:
-        table1_data = frappe.db.sql("""
-            SELECT
-                *
-            FROM
-                `tabPayment Receipt` where name=%s 
+        # First check in Payment Receipt table
+        payment_receipt_exists = frappe.db.exists("Payment Receipt", receipt_1)
+        
+        if payment_receipt_exists:
+            # If found in Payment Receipt, get those details
+            table1_data = frappe.db.sql("""
+                SELECT *
+                FROM `tabPayment Receipt` 
+                WHERE name = %s
+            """, (receipt_1,), as_dict=True)
+            
+            return {
+                "table1_data": table1_data
+            }
+        else:
+            # If not found in Payment Receipt, check Journal Entry Account
+            journal_entries = frappe.db.sql("""
+                SELECT 
+                    *,
+                    credit as amount_paid,
+                    account as account_paid_to
 
-            """, (receipt_1,),as_dict=True) 
-        return {
-            "table1_data": table1_data
-        }     
+                FROM `tabJournal Entry Account`
+                WHERE 
+                    parent = %s 
+                    AND account = 'Suspense - SIL'
+            """, (receipt_1,), as_dict=True)
+            
+            return {
+                "table1_data": journal_entries
+            }
+            
     except Exception as e:
-        frappe.log_error(frappe.get_traceback(), 'Error in getSuspenseDetailsForApportion') 
+        frappe.log_error(frappe.get_traceback(), 'Error in getSuspenseDetailsForApportion')
 
 
 @frappe.whitelist()
@@ -104,9 +126,6 @@ def getDetailsForSelectedReceipts(receipt_1=None, receipt_2=None):
         receipt_1 = json.loads(receipt_1)
         receipt_2 = json.loads(receipt_2)
 
-
-        print(receipt_1)
-        print(receipt_2)
 
         # Validate input parameters
         if not receipt_1 or not receipt_2:
@@ -477,4 +496,26 @@ def getSuspenseEntries():
         )
         return []
 
+@frappe.whitelist(allow_guest=True)
+def get_test():
+    try:
+        # You can use the `receipt_2` parameter in your query if needed for filtering.
+        # For example, if you want to filter based on a receipt:
+        query = """
+            SELECT
+                *
+            FROM
+                `tabJournal Entry Account`
+
+        """
+        
+        # Execute the query
+        result = frappe.db.sql(query, as_dict=True)
+        
+        # Return the result
+        return result
     
+    except Exception as e:
+        # If there's an error, log it and return a message
+        frappe.log_error(f"Error in get_test function: {str(e)}", title="get_test Error")
+        return {"error": str(e)}

@@ -30,7 +30,7 @@ frappe.ui.form.on('Payment Intimation', {
             frappe.msgprint(__('Amount is required and should be greater than zero.'));
             is_main_doc_valid = false;
         }
-        if (frm.doc.unallocated_amount !== 0) {
+        if (frm.doc.unallocated_amount > 0 ) {
             frappe.msgprint(__('Unallocated Amount should be zero.'));
             is_main_doc_valid = false;
         }
@@ -140,15 +140,32 @@ frappe.ui.form.on('Payment Intimation', {
                     // Handle the response here
                     console.log(response.message);
                     if (response.message) {
+                        frappe.msgprint({
+                            title: __('Success'),
+                            indicator: 'blue',
+                            message: __('Payment saved Successfully')
+                        });
                         // Handle successful response
                         console.log("Received from server:", response.message.message);
                     } else {
+                        frappe.msgprint({
+                            title: __('Validation Error'),
+                            indicator: 'red',
+                            message: __("No response from server or error occurred.")
+                        });
                         // Handle error or empty response
                         console.log("No response from server or error occurred.");
                     }
                 },
                 error: function (error) {
                     // Handle the error
+                    frappe.msgprint({
+                        title: __('Validation Error'),
+                        indicator: 'red',
+                        message: __("No response from server or error occurred.")
+                    });                    
+                    
+                    
                     console.error("An error occurred:", error);
                 }
             });
