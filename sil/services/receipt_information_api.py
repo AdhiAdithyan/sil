@@ -373,3 +373,34 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
         return {"error": "An error occurred while fetching filter options. Please try again later."}
 
 
+@frappe.whitelist(allow_guest=True)
+def Is_SlipNo_Avail(slip_no=None):
+    try:
+        if slip_no:
+            filters.append(f"custom_slip_no = '{frappe.db.escape(slip_no)}'") 
+
+        filters.append(f"reference_type = '{frappe.db.escape('Slip No')}'") 
+
+        where_clause = "WHERE " + " AND ".join(filters) if filters else ""
+
+        # Fetch all relevant data in one query
+        query = f"""
+            SELECT DISTINCT *
+            FROM `tabReceipt`
+            {where_clause}
+        """
+        results = frappe.db.sql(query, as_dict=True)
+        if results:
+            return {
+                "message":"Data found"
+            }
+        else:
+            return{
+                "message":"Data not found"
+            }    
+
+    except Exception as e:
+        # Log the error with traceback for debugging
+        frappe.log_error(message=frappe.get_traceback(), title="Error fetching Slip No")
+        return {"error": "An error occurred while fetching Slip No. Please try again later."}
+
