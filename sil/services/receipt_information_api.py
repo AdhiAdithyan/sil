@@ -36,8 +36,8 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
                 response['allocated_amount'] = 0.0
 
         elif reference_type == "Slip No":
-            pass
             # Fetch the required fields from Issue Sales (Slip No equivalent)
+            response['reference_name'] = None
             # slip = frappe.get_all("Issue", filters={"customer": customer,"docstatus":0}, fields=["name"])
             # if slip:
             #     response['reference_name'] = slip
@@ -113,15 +113,16 @@ def get_all_receipt_info_by_reference_name(customer, reference_type,reference_na
 
         elif reference_type == "Slip No":
             # Fetch the required fields from Issue Sales (Slip No equivalent)
-            # slip = frappe.get_all("Issue", filters={"customer": customer,"name":reference_name}, fields=["slip_no", "total_amount"])
-            slip=frappe.db.sql("""SELECT *  FROM `tabIssue` where name=%s and `customer`=%s 
-            order by name asc;""",(reference_name,customer,), as_dict=True)
-            if slip:
-                response['outstanding_amount'] = 0.0
-                response['allocated_amount'] = 0.0
-            else:
-                response['outstanding_amount'] = 0.0
-                response['allocated_amount'] = 0.0
+            # slip = frappe.get_all("Issue", filters={"customer": customer,"name":reference_name}, fields=["slip_no", "total_amount"])           
+            pass
+            # slip=frappe.db.sql("""SELECT *  FROM `tabIssue` where name=%s and `customer`=%s 
+            # order by name asc;""",(reference_name,customer,), as_dict=True)
+            # if slip:
+            #     response['outstanding_amount'] = 0.0
+            #     response['allocated_amount'] = 0.0
+            # else:
+            #     response['outstanding_amount'] = 0.0
+            #     response['allocated_amount'] = 0.0
 
         elif reference_type == "Advance":
             # Fetch the required fields from Advance Payments (or Issue Sales, depending on your structure)
@@ -376,31 +377,32 @@ def get_filter_options(all=0, executive=None, deposit_date=None, deposit_amount=
 @frappe.whitelist(allow_guest=True)
 def Is_SlipNo_Avail(slip_no=None):
     try:
-        if slip_no:
-            filters.append(f"custom_slip_no = '{frappe.db.escape(slip_no)}'") 
-
-        filters.append(f"reference_type = '{frappe.db.escape('Slip No')}'") 
-
-        where_clause = "WHERE " + " AND ".join(filters) if filters else ""
+        if not slip_no:
+            frappe.throw(_("Slip number is required."))
 
         # Fetch all relevant data in one query
         query = f"""
             SELECT DISTINCT *
             FROM `tabReceipt`
-            {where_clause}
+            where reference_type='Slip No' and reference_name=%s
         """
-        results = frappe.db.sql(query, as_dict=True)
-        if results:
-            return {
-                "message":"Data found"
-            }
-        else:
-            return{
-                "message":"Data not found"
-            }    
+        exists = frappe.db.sql(query, (slip_no,), as_dict=True)
+        return True if exists else False
 
     except Exception as e:
         # Log the error with traceback for debugging
         frappe.log_error(message=frappe.get_traceback(), title="Error fetching Slip No")
         return {"error": "An error occurred while fetching Slip No. Please try again later."}
+        
 
+@frappe.whitelist(allow_guest=True)
+def check_slip_number_exists(slip_no):
+    # Check if a slip number already exists in the 'Payment Intimation' DocType.
+    # Returns:
+    #     dict: {"exists": bool} indicating if the slip number exists.
+    
+    exists = frappe.db.exists("Receipt", {
+        "reference_type": "Slip No",
+        "reference_name": slip_no
+    })
+    return {"exists": bool(exists)}

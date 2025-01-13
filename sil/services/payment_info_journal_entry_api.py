@@ -92,7 +92,7 @@ def getAllReceiptDetailsForJournalEntry():
                 amount AS amount_2,
                 executive,
                 COALESCE(chequereference_number, '') AS reference_number_2,
-                COALESCE(reference_no, '') AS reference_date_2
+                COALESCE(DATE_FORMAT(reference_no, '%d-%m-%Y'), '') AS reference_date_2
             FROM
                 `tabPayment Intimation` 
             WHERE 
