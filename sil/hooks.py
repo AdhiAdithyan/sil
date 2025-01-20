@@ -243,13 +243,15 @@ app_version = "0.1.2"  # Increment version here
 
 doc_events = {
     "Sales Invoice": {
-        "on_submit": "sil.services.sales_order_api.updateItemFamilySerialNoList"
+        "on_submit": [
+            "sil.services.sales_order_api.updateItemFamilySerialNoList",
+            "sil.services.payment_entry_api.updateSlipApportionStatus"
+        ]
     },
     "Journal Entry": {
         "on_submit": "sil.services.payment_info_journal_entry_api.update_payment_and_receipt_on_submit"
     }
 }
-
 
 
 # scheduler_events = {

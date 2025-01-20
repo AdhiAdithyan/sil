@@ -274,10 +274,14 @@ def getAllReceiptInfoDetailsByExecutive(executive, amount=None, date=None, depos
         # print(where_clause)
         # Fetch all relevant data in one query
         query = f"""
-                SELECT DISTINCT *
+                SELECT DISTINCT 
+                    *,
+                DATE_FORMAT(date, '%%d-%%m-%%Y') AS date,
+                DATE_FORMAT(reference_no, '%%d-%%m-%%Y') AS reference_no
                 FROM `tabPayment Intimation`
                 {where_clause}
-                ORDER BY modified DESC
+                ORDER BY modified DESC;
+
         """
         recp_info = frappe.db.sql(query, tuple(filters.values()), as_dict=True)
         if not recp_info:

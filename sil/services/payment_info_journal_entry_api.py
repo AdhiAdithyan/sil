@@ -440,6 +440,8 @@ def getSuspenseEntries():
                 AND custom_status = 'Processing'
                 AND custom_is_suspense_entry = 1
                 AND docstatus = 1
+            ORDER BY
+                modified DESC;
         """
         
         # Second query for Journal Entry Account entries
@@ -462,6 +464,9 @@ def getSuspenseEntries():
                 AND jo.is_apportion_done != 1
                 AND jo.debit = 0
                 AND jo.credit != 0
+            ORDER BY
+                jo.modified DESC;
+
 
         """
         

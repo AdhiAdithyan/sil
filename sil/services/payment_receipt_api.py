@@ -374,7 +374,8 @@ def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
         payment_entry.payment_type = payment_type  # Can also be "Pay"
         payment_entry.posting_date = nowdate()
         payment_entry.company = frappe.defaults.get_global_default("company")
-        payment_entry.party_type = "Customer"  # Can also be "Supplier"
+        payment_entry.party_type = "Customer"  # Can also be "Supplier".
+        payment_entry.custom_slip_no = invoice_name if invoice_name else ""
         payment_entry.party = customer
         payment_entry.paid_amount = float(payment_amount) # Amount paid
         payment_entry.received_amount = float(payment_amount)  # Amount received (same as paid_amount if no deductions)
@@ -605,7 +606,7 @@ def getAllReceiptDetailsFromDoc(payment_type=None, payment_entry_details=None, e
                         insertSalesInvoiceDetails(required_fields,entry ,receipt_number)
                     elif reference_type == "Sales Order":
                         insertSalesOrderDetails(required_fields,entry,receipt_number)
-                    elif reference_type == "Advance":
+                    elif reference_type == "Advance" or reference_type == "Slip No":
                         insertAdvanceDetails(required_fields,entry,receipt_number)
                     else:
                         # Log unknown reference types for debugging
