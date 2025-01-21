@@ -41,7 +41,7 @@ def getAllE_BillDetailsByBillNumber(data):
         data_dict=frappe.parse_json(data)
         #Extract the relevant data
         invoice_no=data_dict.get("InvoiceNo")
-        # for returning all the e-invoice details which are not updated in the tally application.
+        # for returning all the sales invoice details which are not updated in the tally application.
         return frappe.db.sql("""Select * from `tabe-Invoice Log` where `sales_invoice`=%s;""",(invoice_no,),as_dict=True)
     except Exception as e:
         # Log error
@@ -60,28 +60,7 @@ def getAllInvoiceDetails(data):
     data_dict=frappe.parse_json(data)
     #Extract the relevant data
     CompanyName=data_dict.get("CompanyName")
-
-    # ensure_column_exists("Sales Invoice", "is_tally_updated", "Int")
-    # invoices = frappe.db.sql("""
-    #     SELECT tsi.name,tsi.posting_date,tsi.base_total_taxes_and_charges,tsi.rounded_total,
-	# 	tsi.rounding_adjustment,tsi.total_taxes_and_charges,tsi.discount_amount,
-	# 	IF(tsi.tax_category='In-State',tsi.total_taxes_and_charges/2,0)CGST_Amount,
-	# 	IF(tsi.tax_category='In-State',tsi.total_taxes_and_charges/2,0)SGST_Amount,
-	# 	IF(tsi.tax_category='In-State',0,tsi.total_taxes_and_charges)IGST_Amount,
-	# 	tsi.customer_name,tsi.customer_address,tsi.paid_amount,tsi.grand_total,
-	# 	tsi.total_taxes_and_charges,tsi.remarks,tsi.custom_sales_type,
-	# 	tsi.billing_address_gstin,tsi.einvoice_status,customer_address,tsi.custom_clusterproduct, 
-	# 	til.irn, til.acknowledgement_number, til.acknowledged_on, SUBSTRING(tsi.place_of_supply, 1,
-	# 	INSTR(tsi.place_of_supply, '-') - 1) AS place_code_of_supply_,
-	# 	SUBSTRING(tsi.place_of_supply, INSTR(tsi.place_of_supply, '-')+ 1) AS place_name_of_supply_, 
-	# 	tc.custom_customer_category, ta.pincode, tsi.other_charges_calculation,tsi.custom_cluster  
-	# FROM `tabSales Invoice` tsi  
-	# 	LEFT OUTER JOIN `tabe-Invoice Log` til  ON til.sales_invoice = tsi.name  
-	# 	LEFT OUTER JOIN  `tabCustomer` tc ON tc.name = tsi.customer  
-	# 	LEFT OUTER JOIN  `tabAddress` ta  ON ta.name = tsi.customer  
-	# WHERE tsi.is_tally_updated = 0 and tsi.docstatus=1 ORDER BY tsi.creation;
-    # """, as_dict=True)
-
+    #invoices={}   
     invoices = frappe.db.sql("""
         SELECT tsi.name,tsi.posting_date,tsi.base_total_taxes_and_charges,tsi.rounded_total,
 		tsi.rounding_adjustment,tsi.total_taxes_and_charges,tsi.discount_amount,
@@ -148,6 +127,14 @@ def process_tax_amount(tax_str):
 def remove_html_tags(text):
     return re.sub('<.*?>', '', text)
 
+def ensure_column_exists(doctype, column_name, column_type):
+    try:
+        if column_name not in frappe.db.get_table_columns(doctype):
+            frappe.db.sql(f"ALTER TABLE `tab{doctype}` ADD COLUMN {column_name} {column_type} DEFAULT 0;")
+            frappe.db.sql(f"ALTER TABLE `tab{doctype}` ADD CONSTRAINT unique_{doctype}_{column_name} UNIQUE ({column_name});")
+    except Exception as e:
+        frappe.log_error(f"Error in ensure_column_exists: {str(e)}")
+
  
 
 @frappe.whitelist(allow_guest=True)
@@ -172,6 +159,7 @@ def getAllInvoiceDetailsWithStatus(data):
 
 
 
+
 @frappe.whitelist(allow_guest=True)
 def getAllInvoiceItemDetails(data):
     try: 
@@ -183,7 +171,7 @@ def getAllInvoiceItemDetails(data):
         #Extract the relevant data
         Invoice_No=data_dict.get("Invoice_no")
         if Invoice_No:
-            return frappe.db.sql(f"""SELECT SI.*,SNO.serial_no FROM `tabSales Invoice Item` SI LEFT OUTER JOIN `tabItem Series No` SNO ON SI.parent=SNO.parent AND SI.Item_code=SNO.Item_code where SI.parent=%s;""",(Invoice_No,),as_dict=True)    
+            return frappe.db.sql(f"""SELECT SI.*,SNO.serial_nos FROM `tabSales Invoice Item` SI LEFT OUTER JOIN `tabItem Series No` SNO ON SI.parent=SNO.parent AND SI.Item_code=SNO.Item_code1 where SI.parent=%s;""",(Invoice_No,),as_dict=True)    
         else:
             return "Invoice_no parameter is missing"
 

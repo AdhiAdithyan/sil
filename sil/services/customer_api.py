@@ -25,7 +25,6 @@ def getAllCustWithStatus(data):
         data_dict=frappe.parse_json(data)
         #Extract the relevant data
         status=data_dict.get("Status")
-
         CompanyName=data_dict.get("CompanyName")
         # Cast status to integer
         status = int(status)
@@ -33,8 +32,8 @@ def getAllCustWithStatus(data):
         #1 for uploaded to Tally
         #2 for if any fields updated which are related to tally
         #3 for new feild added
-        # ensure_column_exists("Customer", "custom_is_tallyupdated", "Int")
-        # for returning all the customer details which are not updated in the tally application.
+        # ensure_column_exists("Customer", "is_tally_updated", "Int")
+        # for returning all the sales invoice details which are not updated in the tally application.
         return frappe.db.sql(f"""SELECT TC.name,TC.creation,TC.docstatus,TC.idx,TC.customer_name,TC.customer_type,
         TC.customer_group,TC.territory,TC.gender,TC.default_currency,TC.is_internal_customer,TC.mobile_no,
         TC.email_id,TC.customer_primary_address,TC.tax_category,TC.pan,TC.gstin,TC.gst_category,
