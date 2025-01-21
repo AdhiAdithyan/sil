@@ -134,50 +134,88 @@ def updateSlipApportionStatus(doc, method):
 @frappe.whitelist(allow_guest=True)
 def get_custom_slip_nos(filters=None):
     try:
-        # Define base conditions: non-null custom_slip_no and custom_is_apportion_done=0
-        conditions = {
-            'custom_slip_no': ['is', 'set'],  # Only include non-null values
-            'custom_is_apportion_done': 0   # Only include entries where apportioning is not done
-        }
-        
         # Parse filters if provided as a JSON string
         if filters and isinstance(filters, str):
             filters = json.loads(filters)
             
-        # Add additional filter conditions based on input
-        if filters:
-            if filters.get('party'):
-                conditions['party_name'] = filters.get('party')
-            elif filters.get('slip_no'):
-                # If querying for a specific slip number, return customer info
-                payment_entry = frappe.get_all(
-                    'Payment Entry',
-                    filters={'custom_slip_no': filters.get('slip_no')},
-                    fields=['party_name'],
-                    order_by='creation DESC',
-                    limit=1
-                )
-                if payment_entry:
-                    return {'customer': payment_entry[0].party_name}
-                return {}
+        # Handle specific slip number search
+        if filters and filters.get('slip_no'):
+            # Check Payment Entry
+            payment_entry = frappe.get_all(
+                'Payment Entry',
+                filters={'custom_slip_no': filters.get('slip_no')},
+                fields=['party_name'],
+                order_by='creation DESC',
+                limit=1
+            )
+            if payment_entry:
+                return {'customer': payment_entry[0].party_name}
+            
+            # Check Journal Entry Account
+            journal_entry = frappe.get_all(
+                'Journal Entry Account',
+                filters={
+                    'slip_no': filters.get('slip_no'),
+                    'is_advance': 'Yes'
+                },
+                fields=['party'],
+                order_by='creation DESC',
+                limit=1
+            )
+            if journal_entry:
+                return {'customer': journal_entry[0].party}
+            return {}
+
+        # Base filters for Payment Entry
+        pe_filters = {
+            'custom_slip_no': ['is', 'set'],
+            'custom_is_apportion_done': 0
+        }
         
-        # Query "Payment Entry" for slip numbers matching the conditions
-        slip_nos = frappe.get_all(
+        # Add party filter if provided
+        if filters and filters.get('party'):
+            pe_filters['party_name'] = filters.get('party')
+
+        # Query slip numbers from Payment Entry
+        slip_nos_pe = frappe.get_all(
             'Payment Entry',
-            filters=conditions,
+            filters=pe_filters,
             fields=['custom_slip_no'],
             order_by='custom_slip_no ASC'
         )
         
-        # Filter out empty strings and convert to a unique, ordered list
-        valid_slip_nos = [
-            slip['custom_slip_no'] 
-            for slip in slip_nos 
-            if slip['custom_slip_no'] and slip['custom_slip_no'].strip()
-        ]
+        # Query slip numbers from Journal Entry Account
+        je_filters = {
+            'slip_no': ['is', 'set'],
+            'is_advance': 'Yes'
+        }
+        # Add party filter if provided
+        if filters and filters.get('party'):
+            je_filters['party'] = filters.get('party')
+            
+        slip_nos_je = frappe.get_all(
+            'Journal Entry Account',
+            filters=je_filters,
+            fields=['slip_no'],
+            order_by='slip_no ASC'
+        )
+        
+        # Combine slip numbers from both tables
+        valid_slip_nos = set()
+        
+        # Add Payment Entry slip numbers
+        for slip in slip_nos_pe:
+            if slip['custom_slip_no'] and slip['custom_slip_no'].strip():
+                valid_slip_nos.add(slip['custom_slip_no'])
+        
+        # Add Journal Entry Account slip numbers
+        for slip in slip_nos_je:
+            if slip['slip_no'] and slip['slip_no'].strip():
+                valid_slip_nos.add(slip['slip_no'])
         
         # Remove duplicates while maintaining order
-        return list(dict.fromkeys(valid_slip_nos))
+        return sorted(list(valid_slip_nos))
+        
     except Exception as e:
         frappe.log_error(f"Error in get_custom_slip_nos: {e}")
         return []
@@ -186,16 +224,75 @@ def get_custom_slip_nos(filters=None):
 
 @frappe.whitelist(allow_guest=True)
 def get_payment_entry_by_slip(slip_no):
-    if not slip_no:
-        return []
+    try:
+        # Input validation
+        if not slip_no or not isinstance(slip_no, str):
+            frappe.throw("Invalid slip number provided")
+            
+        slip_no = slip_no.strip()
+        if not slip_no:
+            frappe.throw("Slip number cannot be empty")
+            
+        # First check Payment Entry table
+        payment_entries = frappe.db.sql("""
+            SELECT NAME, custom_slip_no, paid_amount, remarks
+            FROM `tabPayment Entry`
+            WHERE custom_slip_no = %s 
+            AND custom_is_apportion_done = 0
+            AND docstatus = 1
+            ORDER BY modified DESC
+        """, (slip_no,), as_dict=1)
         
-    payment_entries = frappe.db.sql("""
-        SELECT NAME, custom_slip_no, paid_amount, remarks 
-        FROM `tabPayment Entry`
-        WHERE custom_slip_no = %s 
-        AND custom_is_apportion_done = 0
-        AND docstatus = 1
-        ORDER BY modified DESC
-    """, (slip_no,), as_dict=1)
-    
-    return payment_entries        
+        # If no entries found in Payment Entry, check Journal Entry Account
+        if not payment_entries:
+            payment_entries = frappe.db.sql("""
+                SELECT parent as NAME, slip_no as custom_slip_no, credit as paid_amount
+                FROM `tabJournal Entry Account`
+                WHERE slip_no = %s
+                AND is_advance = 'Yes'
+                AND docstatus = 1
+                ORDER BY modified DESC
+            """, (slip_no,), as_dict=1)
+        
+        # Validate amounts in results
+        for entry in payment_entries:
+            if not entry.get('paid_amount') or entry.get('paid_amount') <= 0:
+                frappe.throw(f"Invalid paid amount for entry {entry.get('NAME')}")
+        
+        return payment_entries
+        
+    except Exception as e:
+        frappe.log_error(f"Error in get_payment_entry_by_slip: {str(e)}")
+        frappe.throw("Error processing slip number")
+
+
+
+@frappe.whitelist(allow_guest=True)
+def check_slip_duplicate(slip_no):
+    try:
+        # Input validation
+        if not slip_no or not isinstance(slip_no, str):
+            frappe.throw("Invalid slip number provided")
+            
+        slip_no = slip_no.strip()
+        if not slip_no:
+            frappe.throw("Slip number cannot be empty")
+            
+       
+        payment_entries = frappe.db.sql("""
+                SELECT parent as NAME, slip_no as custom_slip_no, credit as paid_amount
+                FROM `tabJournal Entry Account`
+                WHERE slip_no = %s
+                AND is_advance = 'Yes'
+                AND docstatus = 1
+                ORDER BY modified DESC
+            """, (slip_no,), as_dict=1)
+        
+        if not payment_entries:
+            return []
+        else:
+            return payment_entries
+        
+    except Exception as e:
+        frappe.log_error(f"Error in get_payment_entry_by_slip: {str(e)}")
+        frappe.throw("Error processing slip number")
