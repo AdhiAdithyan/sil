@@ -628,5 +628,20 @@
   "name": "Audit Trail",
   "package": null,
   "restrict_to_domain": null
+ },
+ {
+  "_assign": null,
+  "_comments": null,
+  "_liked_by": null,
+  "_user_tags": null,
+  "app_name": "billing_solution",
+  "custom": 0,
+  "docstatus": 0,
+  "doctype": "Module Def",
+  "modified": "2025-01-22 09:49:12.989292",
+  "module_name": "Billing Solution",
+  "name": "Billing Solution",
+  "package": null,
+  "restrict_to_domain": null
  }
 ]
