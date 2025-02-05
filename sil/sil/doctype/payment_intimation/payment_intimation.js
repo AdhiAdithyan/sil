@@ -24,7 +24,92 @@ frappe.ui.form.on('Payment Intimation', {
                 frappe.validated = true;
                 }
         }
+        
+        if (frm.doc.unallocated_amount > 0) {
+            frappe.validated = false; // Prevent immediate save
+            let formattedAmount = parseFloat(frm.doc.unallocated_amount).toFixed(2);
+        
+            // Construct message
+            let message = `<p>Allocate amount <b>₹${formattedAmount}</b> to Executive <b>${frm.doc.executive}</b>?</p>`;
+            
+            // Create and show dialog
+            let d = new frappe.ui.Dialog({
+                title: 'Unallocated Amount',
+                fields: [
+                    {
+                       
+                        fieldname: 'message',
+                        fieldtype: 'HTML',
+                        options: message
+                    }
+                ],
+                primary_action_label: 'Yes',
+                secondary_action_label: 'No',
+                primary_action() {
+                    let remainingUnallocated = frm.doc.unallocated_amount;
+                    let receipt_entry = frm.doc.receipt_entry || [];
+                    let remarks = []
+                    
+                    // Iterate through each row in receipt_entry
+                    receipt_entry.forEach(entry => {
+                        if (remainingUnallocated > 0) {
+                            // Calculate outstanding difference for this row
+                            const outstanding = parseFloat(entry.outstanding_amount) || 0;
+                            const alreadyAllocated = parseFloat(entry.allocated_amount) || 0;
+                            const outstandingDifference = outstanding - alreadyAllocated;
+                            
+                            if (outstandingDifference > 0) {
+                                // Determine amount to allocate to this row
+                                const amountToAllocate = Math.min(remainingUnallocated, outstandingDifference);
+                                
+                                // Update custom_emp_liability_amount for this row
+                                entry.custom_emp_liability_amount = 
 
+                                    (parseFloat(entry.custom_emp_liability_amount) || 0) + amountToAllocate;
+
+                                                      // Construct remark entry
+                        let remarkEntry = `₹${amountToAllocate.toFixed(2)} allocated to ${frm.doc.executive} for ${entry.reference_type}: ${entry.reference_name}.`;
+                        remarks.push(remarkEntry);    
+                                
+                                // Reduce remaining unallocated amount
+                                remainingUnallocated -= amountToAllocate;
+                            }
+                        }
+                    });
+                    
+                    // Update parent's unallocated_amount
+                    frm.set_value('unallocated_amount', remainingUnallocated);
+                    frm.refresh_field('receipt_entry');
+                    
+                    if (remarks.length > 0) {
+                        frm.set_value('remark', remarks.join('\n')); // Join all remarks with a new line
+                    } else {
+                        frm.set_value('remark', 'No allocations made.');
+                    }
+
+                    frm.set_value('custom_is_employee_liability', 1);
+
+        
+                    frm.refresh_field('remark');
+                    
+                    if (remainingUnallocated === 0) {
+                        frappe.validated = true;
+                        d.hide();
+                    } else {
+                        frappe.msgprint(__(`Could only allocate ${frm.doc.unallocated_amount - remainingUnallocated}. Remaining unallocated amount: ${remainingUnallocated}`));
+                        d.hide();
+                    }
+                },
+                secondary_action() {
+                    frappe.validated = false;
+                    frappe.msgprint(__('Please allocate the unallocated amount before proceeding.'));
+                    d.hide();
+                }
+            });
+            
+            d.show();
+            return;
+        }
         // Validate main document fields
         if (!frm.doc.amount || parseFloat(frm.doc.amount) <= 0) {
             frappe.msgprint(__('Amount is required and should be greater than zero.'));

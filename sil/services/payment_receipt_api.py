@@ -215,7 +215,7 @@ def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payme
                                      custom_deposited_by_customer=None, cheque_reference_date=None,outstanding_amount=None,
                                      receipt_number=None):
     try:
-        print("create_payment_for_sales_invoice:")
+        # print("create_payment_for_sales_invoice:")
         # Validate inputs
         # validate_inputs(payment_type, customer, invoice_name, payment_amount, payment_account)
 
@@ -243,8 +243,8 @@ def create_payment_for_sales_invoice(payment_type, customer, invoice_name, payme
 
         totalAmt = sales_invoice_api.getGrandTotalByInvoiceNumber(invoice_name)
 
-        print("totalAmt:213")
-        print(totalAmt)
+        # print("totalAmt:213")
+        # print(totalAmt)
 
         # Optional: Set references (e.g., link to sales invoice)
         payment_entry.append("references", {
@@ -319,8 +319,8 @@ def create_payment_for_sales_order(payment_type, customer, invoice_name, payment
 
         totalAmt = sales_order_api.getGrandTotalByOrderNumber(invoice_name)
 
-        print("totalAmt:213")
-        print(totalAmt)
+        # print("totalAmt:213")
+        # print(totalAmt)
 
         # Optional: Set references (e.g., link to sales invoice)
         payment_entry.append("references", {
@@ -450,13 +450,27 @@ def create_payment_for_InternalTransfer(payment_type,
 @frappe.whitelist()
 def insertSalesInvoiceDetails(payment_entry_details, payment_entry,receipt_number=None):
     try:
-        print("insertSalesInvoiceDetails")
-        print("payment_entry_details:")
-        print(payment_entry_details)
-        print("payment_entry:")
-        print(payment_entry)
+        # print("insertSalesInvoiceDetails")
+        # print("payment_entry_details:")
+        # print(payment_entry_details)
+        # print("payment_entry:")
+        # print(payment_entry)
         
         # payment_details = payment_entry_details[0]
+        # if float(payment_entry['custom_employee_liability_amount']) > 0:
+
+            # try:
+            #     payment_entry_for_employee_liability(
+            #         payment_entry_details['executive'],
+            #         payment_entry['custom_employee_liability_amount'],
+            #         payment_entry_details['account_paid_to'],
+            #         payment_entry_details['name'],
+            #         payment_entry_details['reference_number'],
+            #         payment_entry_details['chequereference_date']
+
+            #     )
+            # except Exception as e:
+            #     frappe.log_error(frappe.get_traceback(), "Payment Entry Error for Payment Entry for Employee Liability")
 
         return create_payment_for_sales_invoice(
                     payment_entry_details['payment_type'],
@@ -815,3 +829,69 @@ def UpdateRejectionForPaymentReceipt(receipt_no, remark):
             "message": _("An error occurred while updating the record."),
             "error": str(e)
         }
+
+@frappe.whitelist(allow_guest=True)
+def payment_entry_for_employee_liability(executive_name, paid_amount, amount_paid_from, receipt_number=None, reference_number=None, cheque_reference_date=None, remark=None):
+    try:
+        # Fetch company details
+        company = frappe.defaults.get_global_default("company")
+        company_currency = frappe.get_cached_value("Company", company, "default_currency")
+
+        # Fetch currency for the "Paid To" account
+        account_currency = frappe.db.get_value("Account", amount_paid_from, "account_currency")
+
+        # Get exchange rates
+        target_exchange_rate, source_exchange_rate = get_exchange_rates(account_currency, company_currency)
+
+        # Step 1: Create Employee Advance
+        employee_advance = frappe.get_doc({
+            "doctype": "Employee Advance",
+            "employee": executive_name,
+            "posting_date": frappe.utils.nowdate(),
+            "company": company,
+            "purpose": remark,
+            "advance_amount": float(paid_amount),
+            "exchange_rate": target_exchange_rate,  # Add exchange rate
+            "currency": account_currency,  # Set the correct currency
+            "status": "Paid"
+        })
+        employee_advance.insert()
+        employee_advance.submit()
+
+        # Step 2: Create Payment Entry
+        payment_entry = frappe.get_doc({
+            "doctype": "Payment Entry",
+            "payment_type": "Pay",
+            "posting_date": frappe.utils.nowdate(),
+            "company": company,
+            "party_type": "Employee",
+            "party": executive_name,
+            "paid_amount": float(paid_amount),
+            "received_amount": float(paid_amount),
+            "paid_to": "Employee Advance - SIL",
+            "paid_from": amount_paid_from,
+            "reference_no": reference_number if reference_number else "",
+            "reference_date": cheque_reference_date if cheque_reference_date else ""
+        })
+
+        # Step 3: Append reference to the Employee Advance
+        payment_entry.append("references", {
+            "reference_doctype": "Employee Advance",
+            "reference_name": employee_advance.name,
+            "total_amount": float(paid_amount),
+            "allocated_amount": float(paid_amount)
+        })
+
+        # Insert and submit Payment Entry
+        payment_entry.insert()
+        payment_entry.submit()
+        frappe.db.commit()
+
+        return {
+            "status": "success",
+            "message": f"Payment Entry created successfully: {payment_entry.name}"
+        }
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Payment Entry Error for Employee Liability")
+        return {"status": "error", "message": str(e)}

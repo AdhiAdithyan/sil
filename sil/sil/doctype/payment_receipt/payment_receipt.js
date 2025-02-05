@@ -17,6 +17,51 @@ frappe.ui.form.on('Payment Receipt', {
             return;
         }
 
+        //Create EMPLOYEE ADVANCE AND PAYMENT ENTRY for it.
+        // Execute only if custom_is_employee_liability is 1
+        if (frm.doc.custom_is_employee_liability === 1) {
+            let total_paid_amount = 0;
+            
+            // Loop through child table to sum up custom_employee_liability_amount
+            if (frm.doc.payment_entry_details && frm.doc.payment_entry_details.length > 0) {
+                frm.doc.payment_entry_details.forEach(row => {
+                    total_paid_amount += row.custom_employee_liability_amount || 0;
+                });
+            }
+        
+            // Ensure necessary values are present before calling the function
+            if (!frm.doc.executive || !frm.doc.account_paid_to || total_paid_amount <= 0) {
+                frappe.msgprint(__('Missing required fields or invalid paid amount.'));
+                return;
+            }
+        
+            // Debug log to check remark value
+            console.log("Full frm.doc:", frm.doc);
+        
+            
+            console.log("Final remark value being sent:", frm.doc.custom_info_remarks);
+        
+            frappe.call({
+                method: "sil.services.payment_receipt_api.payment_entry_for_employee_liability",
+                args: {
+                    executive_name: frm.doc.executive,
+                    paid_amount: total_paid_amount,
+                    amount_paid_from: frm.doc.account_paid_to,
+                    receipt_number: frm.doc.name,
+                    remark: frm.doc.custom_info_remarks
+                },
+                callback: function(r) {
+                    if (r.message && r.message.status === "success") {
+                        frappe.msgprint(__(r.message.message));
+                        console.log("API Response:", r.message);
+                    } else {
+                        frappe.msgprint(__("Error: " + (r.message.message || "Unknown error")));
+                        console.log("API Error Response:", r.message);
+                    }
+                }
+            });
+        }
+
         // const data = {
         //     payment_type: frm.doc.payment_type || '', // Default to empty string if not set
         //     mode_of_payment: frm.doc.mode_of_payment || '', // Default to empty string if not set

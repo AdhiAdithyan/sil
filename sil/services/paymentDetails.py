@@ -414,6 +414,7 @@ def paymentEntry(frm,formData):
     paid_to_account_currency = currency
 
     for entry in entry_table:
+        pass
         # print(f"Name: {entry['name']}")
         # print(f"Owner: {entry['owner']}")
         # print(f"Creation: {entry['creation']}")
