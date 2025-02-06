@@ -382,6 +382,7 @@ def create_advance_payment(payment_type, customer, invoice_name, payment_amount,
         payment_entry.paid_to = payment_account  # Bank account or cash ledger
         payment_entry.reference_no=reference_number if reference_number else ""
         payment_entry.reference_date=cheque_reference_date if cheque_reference_date else ""
+        
 
         # Insert and submit the Payment Entry
         payment_entry.insert()
@@ -871,7 +872,8 @@ def payment_entry_for_employee_liability(executive_name, paid_amount, amount_pai
             "paid_to": "Employee Advance - SIL",
             "paid_from": amount_paid_from,
             "reference_no": reference_number if reference_number else "",
-            "reference_date": cheque_reference_date if cheque_reference_date else ""
+            "reference_date": cheque_reference_date if cheque_reference_date else "",
+            "custom_payment_receipt_ref_no": receipt_number if receipt_number else ""
         })
 
         # Step 3: Append reference to the Employee Advance

@@ -22,13 +22,6 @@ frappe.ui.form.on('Payment Receipt', {
         if (frm.doc.custom_is_employee_liability === 1) {
             let total_paid_amount = 0;
             
-            // Loop through child table to sum up custom_employee_liability_amount
-            if (frm.doc.payment_entry_details && frm.doc.payment_entry_details.length > 0) {
-                frm.doc.payment_entry_details.forEach(row => {
-                    total_paid_amount += row.custom_employee_liability_amount || 0;
-                });
-            }
-        
             // Ensure necessary values are present before calling the function
             if (!frm.doc.executive || !frm.doc.account_paid_to || total_paid_amount <= 0) {
                 frappe.msgprint(__('Missing required fields or invalid paid amount.'));
@@ -47,7 +40,9 @@ frappe.ui.form.on('Payment Receipt', {
                     executive_name: frm.doc.executive,
                     paid_amount: total_paid_amount,
                     amount_paid_from: frm.doc.account_paid_to,
-                    receipt_number: frm.doc.name,
+                    receipt_number: frm.doc.name || '', // Default to empty string if not set
+                    reference_number: frm.doc.reference_number || '',
+                    cheque_reference_date: frm.doc.chequereference_date || '',
                     remark: frm.doc.custom_info_remarks
                 },
                 callback: function(r) {
