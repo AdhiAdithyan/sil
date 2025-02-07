@@ -20,7 +20,7 @@ frappe.ui.form.on('Payment Receipt', {
         //Create EMPLOYEE ADVANCE AND PAYMENT ENTRY for it.
         // Execute only if custom_is_employee_liability is 1
         if (frm.doc.custom_is_employee_liability === 1) {
-            let total_paid_amount = 0;
+            let total_paid_amount = frm.doc.custom_employee_advance_amount;
             
             // Ensure necessary values are present before calling the function
             if (!frm.doc.executive || !frm.doc.account_paid_to || total_paid_amount <= 0) {

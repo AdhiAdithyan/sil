@@ -75,10 +75,10 @@ frappe.ui.form.on('Payment Intimation', {
             frappe.msgprint(__('Amount is required and should be greater than zero.'));
             is_main_doc_valid = false;
         }
-        if (frm.doc.unallocated_amount > 0 ) {
-            frappe.msgprint(__('Unallocated Amount should be zero.'));
-            is_main_doc_valid = false;
-        }
+        // if (frm.doc.unallocated_amount > 0 ) {
+        //     frappe.msgprint(__('Unallocated Amount should be zero.'));
+        //     is_main_doc_valid = false;
+        // }
         if (!frm.doc.mode_of_payment) {
             frappe.msgprint(__('Mode of payment is required.'));
             is_main_doc_valid = false;
@@ -99,9 +99,11 @@ frappe.ui.form.on('Payment Intimation', {
         //     frappe.msgprint(__('Please add at least one entry before proceeding'));
         //     return;
         // }
+        console.log(frm.doc)
         if (!frm.doc.entries || frm.doc.entries.length === 0) {
-            frappe.msgprint(__('Please add at least one outstanding entry before proceeding'));
+            // frappe.msgprint(__('Please add at least one outstanding entry before proceeding'));
             return;
+            
         }
 
         // Validate each row in the customer table
