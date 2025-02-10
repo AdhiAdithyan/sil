@@ -3,6 +3,7 @@ from frappe import _
 import json 
 
 
+
 @frappe.whitelist(allow_guest=True)
 def get_data():
     try:
@@ -58,23 +59,26 @@ def getSuspenseDetailsForApportion(receipt_1):
         frappe.log_error(frappe.get_traceback(), 'Error in getSuspenseDetailsForApportion')
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def getPaymentInfoForApportion(receipt_2):
     try:
-
         query = """
-            SELECT
-                *
-            FROM
-                `tabReceipt` 
-            WHERE 
-                parent = %s
+        SELECT 
+            t1.*,
+            t2.custom_is_employee_liability,
+            t2.custom_employee_advance_amount,
+            t2.executive 
+        FROM
+            `tabReceipt` t1
+        LEFT JOIN
+            `tabPayment Intimation` t2 ON t2.name = %s
+        WHERE
+            t1.parent = %s
         """
-        table2_data = frappe.db.sql(query,(receipt_2,), as_dict=True) 
-
+        table2_data = frappe.db.sql(query, (receipt_2, receipt_2), as_dict=True)
         return {
             "table2_data": table2_data
-        }     
+        }
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), 'Error in getPaymentInfoForApportion')
 
@@ -524,3 +528,9 @@ def get_test():
         # If there's an error, log it and return a message
         frappe.log_error(f"Error in get_test function: {str(e)}", title="get_test Error")
         return {"error": str(e)}
+
+
+# @frappe.whitelist(allow_guest=True)
+# def Employee_Liability_Journal(doc, method):
+#     try:
+#         payment_entry_for_employee_liability()

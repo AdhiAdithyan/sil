@@ -832,34 +832,19 @@ def UpdateRejectionForPaymentReceipt(receipt_no, remark):
         }
 
 @frappe.whitelist(allow_guest=True)
-def payment_entry_for_employee_liability(executive_name, paid_amount, amount_paid_from, receipt_number=None, reference_number=None, cheque_reference_date=None, remark=None):
+def payment_entry_for_employee_liability(executive_name, paid_amount, amount_paid_from,
+receipt_number=None, reference_number=None,
+cheque_reference_date=None, remark=None):
     try:
         # Fetch company details
         company = frappe.defaults.get_global_default("company")
         company_currency = frappe.get_cached_value("Company", company, "default_currency")
-
         # Fetch currency for the "Paid To" account
         account_currency = frappe.db.get_value("Account", amount_paid_from, "account_currency")
-
         # Get exchange rates
         target_exchange_rate, source_exchange_rate = get_exchange_rates(account_currency, company_currency)
-
-        # Step 1: Create Employee Advance
-        employee_advance = frappe.get_doc({
-            "doctype": "Employee Advance",
-            "employee": executive_name,
-            "posting_date": frappe.utils.nowdate(),
-            "company": company,
-            "purpose": remark,
-            "advance_amount": float(paid_amount),
-            "exchange_rate": target_exchange_rate,  # Add exchange rate
-            "currency": account_currency,  # Set the correct currency
-            "status": "Paid"
-        })
-        employee_advance.insert()
-        employee_advance.submit()
-
-        # Step 2: Create Payment Entry
+            
+        # Step 2: Create Payment Entry (Only if create_payment_entry is True)
         payment_entry = frappe.get_doc({
             "doctype": "Payment Entry",
             "payment_type": "Pay",
@@ -875,25 +860,18 @@ def payment_entry_for_employee_liability(executive_name, paid_amount, amount_pai
             "reference_date": cheque_reference_date if cheque_reference_date else "",
             "custom_payment_receipt_ref_no": receipt_number if receipt_number else ""
         })
-
-        # Step 3: Append reference to the Employee Advance
-        payment_entry.append("references", {
-            "reference_doctype": "Employee Advance",
-            "reference_name": employee_advance.name,
-            "total_amount": float(paid_amount),
-            "allocated_amount": float(paid_amount)
-        })
-
+        
         # Insert and submit Payment Entry
         payment_entry.insert()
         payment_entry.submit()
         frappe.db.commit()
-
+        
         return {
             "status": "success",
-            "message": f"Payment Entry created successfully: {payment_entry.name}"
+            "message": f"Payment Entry created successfully: {payment_entry.name}",
+            "payment_entry_id": payment_entry.name
         }
-
+        
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Payment Entry Error for Employee Liability")
         return {"status": "error", "message": str(e)}
