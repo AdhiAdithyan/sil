@@ -24,13 +24,13 @@ def generate_report_html(checkins, employee=None):
     max_logs_per_day = 0
     
     for checkin in checkins:
-        print('Check-in time123')
-        print(checkin['time'])
-        print(checkin['employee'])
+        # print('Check-in time123')
+        # print(checkin['time'])
+        # print(checkin['employee'])
         # checkin_date = format_datetime(checkin['time'], 'YYYY-MM-DD')
         checkin_date = format_datetime(checkin['time'], 'yyyy-MM-dd')
 
-        print(f"checkin_date:{checkin_date}")
+        # print(f"checkin_date:{checkin_date}")
         if checkin_date not in grouped_checkins:
             grouped_checkins[checkin_date] = []
         grouped_checkins[checkin_date].append({

@@ -253,9 +253,9 @@ def generate_excel_report(checkins):
                 unique_logs = []
                 seen_logs = set()
                 time_diff=calculate_daily_working_hours(logs)
-                print(f"Total Working Hours: {time_diff:.2f}")
-                print("Time Difference:")
-                print(time_diff)
+                # print(f"Total Working Hours: {time_diff:.2f}")
+                # print("Time Difference:")
+                # print(time_diff)
                 # time_diff=convert_hours_to_hms(time_diff)
                 # print(time_diff)
                 for log in logs:
@@ -265,8 +265,8 @@ def generate_excel_report(checkins):
                         seen_logs.add(log_identifier)
                         unique_logs.append(log)  # Keep the unique log
 
-                print("unique_logs:")
-                print(unique_logs)
+                # print("unique_logs:")
+                # print(unique_logs)
                 # Process unique logs
                 first_checkin = unique_logs[0]['Time'] if unique_logs else ""
                 last_checkout = unique_logs[-1]['Time'] if unique_logs else ""

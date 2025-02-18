@@ -13,8 +13,8 @@ def getLoggedemployee():
         email = "adithyans@windrolinx.com"
 
     # Debugging logs
-    print(f"Email: {email}")
-    print(f"Roles: {frappe.get_roles(email)}")
+    # print(f"Email: {email}")
+    # print(f"Roles: {frappe.get_roles(email)}")
 
     # Fetch the employee details linked to the email
     employee_details = frappe.db.sql("""
@@ -86,7 +86,7 @@ def getAccountByPaymentType(payment_type=None):
             WHERE ta.company = %s AND tmop.name=%s AND ta.is_group = 0 
         """, (logged_emp[0]["company"], payment_type,), as_dict=True)
 
-        print(f"Selected payment_accounts: {payment_accounts}")
+        # print(f"Selected payment_accounts: {payment_accounts}")
         # Return fetched data
         return  payment_accounts
 

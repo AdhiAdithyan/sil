@@ -322,9 +322,10 @@ def convert_html_to_pdf(html_file, output_pdf):
     try:
         # Read the HTML file and convert to PDF
         HTML(html_file).write_pdf(output_pdf)
-        print(f"Converted {html_file} to {output_pdf}")
+        # print(f"Converted {html_file} to {output_pdf}")
     except Exception as e:
-        print(f"Error: {e}")
+        # print(f"Error: {e}")
+        frappe.log_error(frappe.get_traceback(), _(""))
 
 
 def attach_pdf_to_email(pdf_path, recipient_email):

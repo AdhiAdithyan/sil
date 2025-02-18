@@ -9,11 +9,11 @@ def get_user_details():
     emp_detail = get_employee_by_email(user_email)  # Get employee details by email
     # emp_list = get_employee()
  
-    print(f"user_email:{user_email}")
-    print(f"user_details:{user_details}")
-    print(f"user_roles:{user_roles}")
-    # print(f"emp_list:{emp_list}")
-    print(f"emp_detail:{emp_detail}")
+    # print(f"user_email:{user_email}")
+    # print(f"user_details:{user_details}")
+    # print(f"user_roles:{user_roles}")
+    # # print(f"emp_list:{emp_list}")
+    # print(f"emp_detail:{emp_detail}")
     
     # return {
     #     "email": user_email

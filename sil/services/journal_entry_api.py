@@ -24,15 +24,15 @@ def getAccountDetailsByJournalNo():
         frappe.clear_cache()
         data = frappe.request.get_data(as_text=True)
 
-        print(f"getAccountDetailsByJournalNo data:{data}")
+        # print(f"getAccountDetailsByJournalNo data:{data}")
 
         json_data = json.loads(data)
 
-        print(f"getAccountDetailsByJournalNo json_data:{json_data}")
+        # print(f"getAccountDetailsByJournalNo json_data:{json_data}")
 
         journalNo = json_data.get("journalNo")
 
-        print(f"journalNo :{journalNo}")
+        # print(f"journalNo :{journalNo}")
 
         filters = {
                     "parent": journalNo

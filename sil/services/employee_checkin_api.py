@@ -200,8 +200,8 @@ def get_last_checkin_details(employee_name):
     )
 
     if checkin_details:
-        print("Previous checkin details......")
-        print(checkin_details[0])
+        # print("Previous checkin details......")
+        # print(checkin_details[0])
         return checkin_details[0]
     else:
         return None

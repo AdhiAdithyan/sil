@@ -39,15 +39,15 @@ def getAllDetailsByPaymentNo():
     
     data = frappe.request.get_data(as_text=True)
 
-    print(f"getAllDetailsByPaymentNo data:{data}")
+    # print(f"getAllDetailsByPaymentNo data:{data}")
 
     json_data = json.loads(data)
 
-    print(f"getAllDetailsByPaymentNo json_data:{json_data}")
+    # print(f"getAllDetailsByPaymentNo json_data:{json_data}")
 
     paymentNo = json_data.get("paymentNo")
 
-    print(f"PaymentNo :{paymentNo}")
+    # print(f"PaymentNo :{paymentNo}")
 
     filters = {
                 "parent": paymentNo

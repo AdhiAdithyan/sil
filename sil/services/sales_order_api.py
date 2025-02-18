@@ -93,11 +93,11 @@ def get_current_year_month():
 def generateSerialNo(items_series, form_doc):
     items_series = frappe.parse_json(items_series)
     # frappe.logger().info("generateSeriesNo items_series request: %s" % items_series)
-    print("items_series")
-    print(items_series)
+    # print("items_series")
+    # print(items_series)
     serial_nos = {}
     current_year_month = get_current_year_month()
-    print(f"current_year_month:{current_year_month}")
+    # print(f"current_year_month:{current_year_month}")
     for item_index, itemDetails in items_series.items():
         # print("items_series")
         # print(items_series)
@@ -122,7 +122,7 @@ def generateSerialNo(items_series, form_doc):
                 filters={"family_name": itemDetails["item_family"]},
                 fields=["name", "family_name", "series_prefix", "last_serial_no","do_you_have_a_serial_no"]
             )
-            print(f"item_family_details:{str(item_family_details)}")
+            # print(f"item_family_details:{str(item_family_details)}")
             if item_family_details:
                 item_family = item_family_details[0]
                 try:
@@ -139,8 +139,8 @@ def generateSerialNo(items_series, form_doc):
                 item_prefix = f"{current_year_month}{item_family['series_prefix']}"
                 hasSerialNo = item_family["do_you_have_a_serial_no"]
 
-                print(f"item_prefix:{item_prefix}")
-                print(f"hasSerialNo:{hasSerialNo}")
+                # print(f"item_prefix:{item_prefix}")
+                # print(f"hasSerialNo:{hasSerialNo}")
 
                 if hasSerialNo=="NO" or hasSerialNo=="No":
                     updated_last_series = pad_string_with_zeros(str(last_series + 1),15)
@@ -321,7 +321,7 @@ def generateSerialNo(items_series, form_doc):
             return {"success": False, "message": "Duplicate entry", "serial_nos": serial_nos}
 
         frappe.db.commit()
-    print(f"serial_nos: {str(serial_nos)}")
+    # print(f"serial_nos: {str(serial_nos)}")
     return {"success": True, "serial_nos": serial_nos}
 
 

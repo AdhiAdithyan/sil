@@ -702,7 +702,7 @@ def getSuspenseEntries():
             WHERE  
                 jo.docstatus = 1
                 AND ta.custom_is_suspense = 1
-                AND jo.is_apportion_done != 1
+                AND jo.custom_is_apportion_done != 1
                 AND jo.debit = 0
                 AND jo.credit != 0
 

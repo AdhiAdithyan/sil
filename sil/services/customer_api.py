@@ -135,9 +135,9 @@ def getCustomerBySerialNo(serial_no):
     issue_history = getIssueList(serial_no)
 
     # SQL query with corrected joins
-    print(f"linked_with_table:{linked_with_table}")
-    print(f"getCustomerBySerialNo customer:{customer}")
-    print(f"getCustomerBySerialNo issue:{issue_history}")
+    # print(f"linked_with_table:{linked_with_table}")
+    # print(f"getCustomerBySerialNo customer:{customer}")
+    # print(f"getCustomerBySerialNo issue:{issue_history}")
 
     return {
         "cust_name":customer[0]['customer'],
@@ -179,7 +179,7 @@ def getIssueList(serial_no):
          "custom_payment_terms","custom_item_group","subject","status","issue_type"]
     )
     
-    print(f"linked_Issue:{linked_Issue}")
+    # print(f"linked_Issue:{linked_Issue}")
     return linked_Issue    
 
 

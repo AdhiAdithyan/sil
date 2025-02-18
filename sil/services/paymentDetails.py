@@ -20,7 +20,7 @@ def enterDetailsToSubTable(outstanding_invoice, outstanding_order, advance_detai
         return False
 
     if outstanding_invoice:
-        print("outstanding_invoice")
+        # print("outstanding_invoice")
         for item in outstanding_invoice:
             name = item.get('name')
             customer = item.get('customer')
@@ -39,10 +39,10 @@ def enterDetailsToSubTable(outstanding_invoice, outstanding_order, advance_detai
                 entry_table.append(new_entry)
 
     if outstanding_order:
-        print("outstanding_order")
+        # print("outstanding_order")
         # ['name', 'customer', 'grand_total', 'transaction_date', 'delivery_date'])
         for item in outstanding_order:
-            print(f"item: {item}")
+            # print(f"item: {item}")
             name = item.get('name')
             customer = item.get('customer')
             outstanding_amount = item.get('grand_total')
@@ -60,7 +60,7 @@ def enterDetailsToSubTable(outstanding_invoice, outstanding_order, advance_detai
                 entry_table.append(new_entry)
 
     if advance_details:
-        print("advance_details")
+        # print("advance_details")
         customer = advance_details.get('customer')
         typeName = advance_details.get('type')
         
@@ -72,9 +72,9 @@ def enterDetailsToSubTable(outstanding_invoice, outstanding_order, advance_detai
         }
         if not is_duplicate(new_entry, entry_table):
             entry_table.append(new_entry)
-        print(f"advance_details item: {advance_details}")
+        # print(f"advance_details item: {advance_details}")
 
-    print(f"entry_table123: {entry_table}")
+    # print(f"entry_table123: {entry_table}")
     return entry_table
 
 
@@ -145,11 +145,11 @@ def get_filtered_receipt_info(formData):
         customer_table = formData.get('child_tables', {}).get('customer', [])
         entry_table = formData.get('child_tables', {}).get('entries', [])
 
-        print(f"start_date: {start_date}")
-        print(f"end_date: {end_date}")
-        print(f"main_table: {main_table}")
-        print(f"customer_table: {customer_table}")
-        print(f"entry_table: {entry_table}")
+        # print(f"start_date: {start_date}")
+        # print(f"end_date: {end_date}")
+        # print(f"main_table: {main_table}")
+        # print(f"customer_table: {customer_table}")
+        # print(f"entry_table: {entry_table}")
         outstanding_invoice={}
         outstanding_order={}
         advance_details={}
@@ -170,17 +170,17 @@ def get_filtered_receipt_info(formData):
                     elif typeName == "Advance": 
                         advance_details = {"customer":customerName,"type":typeName}
 
-                        print(f"{customerName}: {typeName}")
+                        # print(f"{customerName}: {typeName}")
         
         enterDetailsToSubTable(outstanding_invoice,outstanding_order,advance_details,entry_table)
-        print(f"outstanding_invoice:{outstanding_invoice}")
-        print(f"outstanding_order:{outstanding_order}")
-        print(f"advance_details:{advance_details}")
+        # print(f"outstanding_invoice:{outstanding_invoice}")
+        # print(f"outstanding_order:{outstanding_order}")
+        # print(f"advance_details:{advance_details}")
         return {"success": True,"message":formData}
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), 'Error in get_filtered_receipt_info')
-        print(f"Error:{str(e)}")
-        print(f"Error:{frappe.get_traceback()}")
+        # print(f"Error:{str(e)}")
+        # print(f"Error:{frappe.get_traceback()}")
         return {'error': str(e)}     
 
 
@@ -352,94 +352,94 @@ def create_payment_entry_new(payment_type, party_type, party, company,
     return pe.name
 
 
-@frappe.whitelist()
-def paymentEntry(frm,formData):
-    # frm is passed as a JSON string, so we need to parse it
-    frm_doc = frappe.parse_json(frm)
-    formData=frappe.parse_json(formData)
-    # Extract form data
-    main_table = formData.get('main_document', {})
-    customer_table = formData.get('child_tables', {}).get('customer', [])
-    entry_table = formData.get('child_tables', {}).get('entries', [])
+# @frappe.whitelist()
+# def paymentEntry(frm,formData):
+#     # frm is passed as a JSON string, so we need to parse it
+#     frm_doc = frappe.parse_json(frm)
+#     formData=frappe.parse_json(formData)
+#     # Extract form data
+#     main_table = formData.get('main_document', {})
+#     customer_table = formData.get('child_tables', {}).get('customer', [])
+#     entry_table = formData.get('child_tables', {}).get('entries', [])
     
-    # print(f"main_table: {main_table}")
-    # print(f"customer_table: {customer_table}")
-    # print(f"entry_table: {entry_table}")
+#     # print(f"main_table: {main_table}")
+#     # print(f"customer_table: {customer_table}")
+#     # print(f"entry_table: {entry_table}")
     
-    # print("Entries")
-    total_amount_payed = 0
-    company_name=None
-    credit_account=None
-    debit_account=None
-    currency=None
+#     # print("Entries")
+#     total_amount_payed = 0
+#     company_name=None
+#     credit_account=None
+#     debit_account=None
+#     currency=None
 
-    for entry in main_table:
-        total_amount_payed = main_table['amount']
-        company_name = main_table['company']
+#     for entry in main_table:
+#         total_amount_payed = main_table['amount']
+#         company_name = main_table['company']
     
-        print(f"{entry}:{main_table[entry]}")
+#         print(f"{entry}:{main_table[entry]}")
 
-    company_details = frappe.db.sql("""Select * from `tabCompany` where `name`=%s;
-    """,(company_name,),as_dict=True)
+#     company_details = frappe.db.sql("""Select * from `tabCompany` where `name`=%s;
+#     """,(company_name,),as_dict=True)
     
-    # print("Company details")
-    # print(f"Company details:{str(company_details)}")
-    """
-    company_name
-    abbr
-    default_currency
-    default_cash_account
-    default_receivable_account
-    default_payable_account
-    pan
-    gstin
-    default_gst_rate
-    cost_center
-    depreciation_cost_center
-    """
-    for company in company_details:
-        for key, value in company.items():
-            print(f"{key}: {value}")
-            if key == 'default_payable_account':
-                credit_account=value
-            if key == 'default_receivable_account':   
-                debit_account=value
-            if key == 'default_currency':   
-                currency=value    
+#     # print("Company details")
+#     # print(f"Company details:{str(company_details)}")
+#     """
+#     company_name
+#     abbr
+#     default_currency
+#     default_cash_account
+#     default_receivable_account
+#     default_payable_account
+#     pan
+#     gstin
+#     default_gst_rate
+#     cost_center
+#     depreciation_cost_center
+#     """
+#     for company in company_details:
+#         for key, value in company.items():
+#             print(f"{key}: {value}")
+#             if key == 'default_payable_account':
+#                 credit_account=value
+#             if key == 'default_receivable_account':   
+#                 debit_account=value
+#             if key == 'default_currency':   
+#                 currency=value    
 
-    payment_type = "Receive"  # Assuming this is a payment to multiple customers
-    company = company_name
-    paid_from = debit_account
-    paid_from_account_currency = currency
-    paid_to_account_currency = currency
+#     payment_type = "Receive"  # Assuming this is a payment to multiple customers
+#     company = company_name
+#     paid_from = debit_account
+#     paid_from_account_currency = currency
+#     paid_to_account_currency = currency
 
-    for entry in entry_table:
-        pass
-        # print(f"Name: {entry['name']}")
-        # print(f"Owner: {entry['owner']}")
-        # print(f"Creation: {entry['creation']}")
-        # print(f"Modified: {entry['modified']}")
-        # print(f"Modified By: {entry['modified_by']}")
-        # print(f"Docstatus: {entry['docstatus']}")
-        # print(f"Index: {entry['idx']}")
-        # print(f"Customer: {entry['customer']}")
-        # print(f"ID: {entry['id']}")
-        # print(f"Pending Amount: {entry['pending_amount']}")
-        # print(f"Amount: {entry['amount']}")
-        # print(f"Type: {entry['type']}")
-        # print(f"Parent: {entry['parent']}")
-        # print(f"Parentfield: {entry['parentfield']}")
-        # print(f"Parenttype: {entry['parenttype']}")
-        # print(f"Doctype: {entry['doctype']}")
-        # print("\n")
-        # if entry['type']=="Sales Invoice":
-        #     print("Navigate to Sales Invoice section in payment entry")
-        # elif entry['type']=="Sales Order":
-        #     print("Navigate to Sales Order section in payment entry") 
-        # elif entry['type']=="Advance":
-        #     print("Navigate to Advance section in journal") 
-            # create_advance_payment_journal_entry(entry['customer'],
-            # debit_account,credit_account,entry['amount'])       
+#     # for entry in entry_table:
+#     #     pass
+#     #     # print(f"Name: {entry['name']}")
+#     #     # print(f"Owner: {entry['owner']}")
+#     #     # print(f"Creation: {entry['creation']}")
+#     #     # print(f"Modified: {entry['modified']}")
+#     #     # print(f"Modified By: {entry['modified_by']}")
+#     #     # print(f"Docstatus: {entry['docstatus']}")
+#     #     # print(f"Index: {entry['idx']}")
+#     #     # print(f"Customer: {entry['customer']}")
+#     #     # print(f"ID: {entry['id']}")
+#     #     # print(f"Pending Amount: {entry['pending_amount']}")
+#     #     # print(f"Amount: {entry['amount']}")
+#     #     # print(f"Type: {entry['type']}")
+#     #     # print(f"Parent: {entry['parent']}")
+#     #     # print(f"Parentfield: {entry['parentfield']}")
+#     #     # print(f"Parenttype: {entry['parenttype']}")
+#     #     # print(f"Doctype: {entry['doctype']}")
+#     #     # print("\n")
+#     #     # if entry['type']=="Sales Invoice":
+#     #     #     print("Navigate to Sales Invoice section in payment entry")
+#     #     # elif entry['type']=="Sales Order":
+#     #     #     print("Navigate to Sales Order section in payment entry") 
+#     #     # elif entry['type']=="Advance":
+#     #     #     print("Navigate to Advance section in journal") 
+#     #         # create_advance_payment_journal_entry(entry['customer'],
+#     #         # debit_account,credit_account,entry['amount'])       
 
-    # return {"message":"Save button clicked","result":f"{str(frm_doc)}"}
-    return {"message":"Save button clicked"}
+#     # # return {"message":"Save button clicked","result":f"{str(frm_doc)}"}
+#     # return {"message":"Save button clicked"}

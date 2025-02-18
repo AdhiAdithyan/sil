@@ -13,11 +13,11 @@ def getAllPaymentEntryDetails():
     payment_details = frappe.get_all("Payment Entry",fields=["*"])
 
     for payment in payment_details:
-        print(f"getAllPaymentEntryDetails payment:{payment}")
+        # print(f"getAllPaymentEntryDetails payment:{payment}")
         payment["payment_referrence"] = GetAllPaymentRefferenceByPaymentNumber(payment['name'])
-        for datails in payment:
-            print(f"getAllPaymentEntryDetails datails:{datails}")
-            print(f"getAllPaymentEntryDetails datails {datails}:{payment[datails]}")
+        # for datails in payment:
+        #     print(f"getAllPaymentEntryDetails datails:{datails}")
+        #     print(f"getAllPaymentEntryDetails datails {datails}:{payment[datails]}")
 
     return payment_details if payment_details else []
 
