@@ -81,7 +81,7 @@ def getAllPaidSlipDetails():
                 SELECT NAME, custom_slip_no, paid_amount 
                 FROM `tabPayment Entry` 
                 WHERE custom_slip_no !='' 
-                AND docstatus=1 AND is_apportion_done=0
+                AND docstatus=1 AND custom_is_apportion_done=0
                 ORDER BY modified DESC
                 """
     
