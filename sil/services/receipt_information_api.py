@@ -2,18 +2,27 @@ import frappe
 from frappe import _
 
 @frappe.whitelist()
-def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_type):
+def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_type, search_text=None):
     try:
         # Log the inputs for debugging
-        frappe.logger().info(f"Customer: {customer}, Reference Type: {reference_type}")
-
+        frappe.logger().info(f"Customer: {customer}, Reference Type: {reference_type}, Search Text: {search_text}")
         # Initialize response dictionary
         response = {}
-
         # Logic for handling different reference types
         if reference_type == "Sales Invoice":
-            # Fetch the required fields from Sales Invoice
-            invoice = frappe.get_all("Sales Invoice", filters={"customer": customer,"docstatus":1,"outstanding_amount": [">", 0] }, fields=["name"])
+            # Apply contains filter if search_text is provided
+            if search_text:
+                invoice = frappe.db.sql("""
+                    SELECT name
+                    FROM `tabSales Invoice`
+                    WHERE customer = %s AND docstatus = 1 AND outstanding_amount > 0
+                    AND name LIKE %s
+                """, (customer, f"%{search_text}%"), as_dict=1)
+            else:
+                invoice = frappe.get_all("Sales Invoice", 
+                                         filters={"customer": customer, "docstatus": 1, "outstanding_amount": [">", 0]}, 
+                                         fields=["name"])
+                
             if invoice:
                 response['reference_name'] = invoice
                 response['outstanding_amount'] = 0.0
@@ -22,10 +31,19 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
                 response['reference_name'] = None
                 response['outstanding_amount'] = 0.0
                 response['allocated_amount'] = 0.0
-
+        # Keep the rest of your function as is for other reference types
         elif reference_type == "Sales Order":
-            # Fetch the required fields from Sales Order
-            order = frappe.get_all("Sales Order", filters={"customer": customer,"docstatus":1}, fields=["name"])
+            # Same pattern for Sales Order
+            if search_text:
+                order = frappe.db.sql("""
+                    SELECT name
+                    FROM `tabSales Order`
+                    WHERE customer = %s AND docstatus = 1
+                    AND name LIKE %s
+                """, (customer, f"%{search_text}%"), as_dict=1)
+            else:
+                order = frappe.get_all("Sales Order", filters={"customer": customer, "docstatus": 1}, fields=["name"])
+                
             if order:
                 response['reference_name'] = order
                 response['outstanding_amount'] = 0.0
@@ -34,39 +52,23 @@ def get_all_receipt_info_by_reference_type_and_cust_name(customer, reference_typ
                 response['reference_name'] = None
                 response['outstanding_amount'] = 0.0
                 response['allocated_amount'] = 0.0
-
+        # Keep the rest unchanged
         elif reference_type == "Slip No":
-            # Fetch the required fields from Issue Sales (Slip No equivalent)
             response['reference_name'] = None
-            # slip = frappe.get_all("Issue", filters={"customer": customer,"docstatus":0}, fields=["name"])
-            # if slip:
-            #     response['reference_name'] = slip
-            #     response['outstanding_amount'] = 0.0
-            #     response['allocated_amount'] = 0.0
-            # else:
-            #     response['reference_name'] = None
-            #     response['outstanding_amount'] = 0.0
-            #     response['allocated_amount'] = 0.0
-
         elif reference_type == "Advance":
-            # Fetch the required fields from Advance Payments (or Issue Sales, depending on your structure)
             response['reference_name'] = None
             response['outstanding_amount'] = 0.0
             response['allocated_amount'] = 0.0
-
         else:
             frappe.throw(_("Invalid Reference Type"))
-
+            
         # Log the response for debugging
         frappe.logger().info(f"Response: {response}")
-
-        # Return the response to the client-side
         return response
-
     except Exception as e:
-        # Log the error and return it as a message
         frappe.log_error(frappe.get_traceback(), 'Error in get_item_details')
         return {"status": "error", "message": str(e)}
+
 
 
 @frappe.whitelist()
