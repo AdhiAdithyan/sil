@@ -4,6 +4,8 @@ import sil.services.customer_api as cust_api
 import sil.services.stock_item_api as stock_api
 import sil.services.address_api as address_api
 import sil.services.sales_invoice_api as invoice_api
+import sil.services.tally_api as journal_api
+
 
 
 # For getting all customer details
@@ -92,3 +94,23 @@ def updateInvoiceUploadStatus(data):
 def updateInvoiceUploadStatusWithDate(data):
     # Input example: {"posting_date": ""}
     return invoice_api.updateInvoiceUploadStatusWithDate(data)
+
+# Bank to Suspense and Bank to Party
+@frappe.whitelist(allow_guest=True)
+def get_payment_entries():
+    return journal_api.get_payment_entries()
+
+#Suspense to party and party to suspense
+@frappe.whitelist(allow_guest=True)
+def get_journal_entries():
+    return journal_api.get_journal_entries()
+
+# is tally updated to 1
+@frappe.whitelist(allow_guest=True)
+def update_payment_entry_tally_status(name):
+    return journal_api.update_payment_entry_tally_status(name)
+
+# is tally updated to 1
+@frappe.whitelist(allow_guest=True)
+def update_journal_entry_tally_status(name):
+    return journal_api.update_journal_entry_tally_status(name)

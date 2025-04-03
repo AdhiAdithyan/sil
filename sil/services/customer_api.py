@@ -37,12 +37,10 @@ def getAllCustWithStatus(data):
         return frappe.db.sql(f"""SELECT TC.name,TC.creation,TC.docstatus,TC.idx,TC.customer_name,TC.customer_type,
         TC.customer_group,TC.territory,TC.gender,TC.default_currency,TC.is_internal_customer,TC.mobile_no,
         TC.email_id,TC.customer_primary_address,TC.tax_category,TC.pan,TC.gstin,TC.gst_category,
-        TC.custom_customer_category,TC.custom_customer_location_type,TC.custom_clusterproduct,
-        TC.custom_cluster_managerproduct,TC.custom_zonal_managerproduct,TC.custom_zonal_managerspares,
-        TC.custom_zonal_managerconsumables,TC.custom_zonal_manageramc,TC.custom_regionproduct,TC.custom_regionspares,
-        TC.custom_regionconsumables,TC.custom_regionamc,TC.custom_state,TC.custom_citytown,
-        TC.custom_is_tallyupdated,TA.address_line1,TA.gst_state_number,custom_customer_sub_category FROM tabCustomer TC LEFT 
-        OUTER JOIN tabAddress TA ON TC.name=TA.name WHERE TC.custom_is_tallyupdated={status};""",as_dict=True)
+        TC.custom_customer_category,TC.custom_customer_location_type,
+        TC.custom_state,TC.custom_city_or_town,
+        TC.is_tallyupdated AS custom_is_tallyupdated,TA.address_line1,TA.gst_state_number,custom_customer_sub_category FROM tabCustomer TC LEFT 
+        OUTER JOIN tabAddress TA ON TC.name=TA.name WHERE TC.is_tallyupdated={status};""",as_dict=True)
     except Exception as e:
         # Log error
         frappe.logger().error(f"Error parsing JSON data: {e}")
@@ -66,7 +64,7 @@ def updateCustomerUploadStatus(data):
         if custName:
             try:
                 # Update the database record 
-                sql_query = """UPDATE `tabCustomer` SET custom_is_tallyupdated = 1 WHERE name=%s """
+                sql_query = """UPDATE `tabCustomer` SET is_tallyupdated = 1 WHERE name=%s """
                 frappe.db.sql(sql_query, (custName,))
                 
                 # Commit the transaction
@@ -106,7 +104,7 @@ def getAllCustDetails():
             TC.email_id,TC.customer_primary_address,TC.tax_category,TC.pan,TC.gstin,TC.gst_category,
             TC.custom_customer_category,TC.custom_customer_location_type,TC.custom_clusterproduct,
             TC.custom_cluster_managerproduct,TC.custom_zonal_managerproduct,TC.custom_zonal_managerspares,
-            TC.custom_zonal_managerconsumables,TC.custom_zonal_manageramc,TC.custom_regionproduct,TC.custom_regionspares,
+            TC.custom_zonal_managerconsumables,TC.custom_zonal_manageramc,TC.custom_regionspares,
             TC.custom_regionconsumables,TC.custom_regionamc,TC.custom_state as State,TC.custom_citytown as City,'' as Msg,0 as Status,0 as CreatedBy,
             TC.custom_is_tallyupdated,TA.address_line1,TA.gst_state_number,custom_customer_sub_category FROM tabCustomer TC LEFT 
             OUTER JOIN tabAddress TA ON TC.name=TA.name WHERE TC.customer_name LIKE %s LIMIT 10;""",(starting_text+'%',),as_dict=True)

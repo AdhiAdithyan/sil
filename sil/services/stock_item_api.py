@@ -20,7 +20,7 @@ def getAllStockWithUploadStatus(data):
         status = int(status)
         # ensure_column_exists("Item", "is_tally_updated", "Int")
         # for returning all the sales invoice details which are not updated in the tally application.
-        return frappe.db.sql(f"""Select * from `tabItem` where is_tally_updated={status};""",as_dict=True)
+        return frappe.db.sql(f"""Select * from `tabItem` where is_tallyupdated={status};""",as_dict=True)
     except Exception as e:
         # Log error
         frappe.logger().error(f"Error parsing JSON data: {e}")

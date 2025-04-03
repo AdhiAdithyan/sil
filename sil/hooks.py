@@ -4,7 +4,7 @@ app_publisher = "Softland"
 app_description = "Billing Solution"
 app_email = "admin@softlandindia.co.in"
 app_license = "mit"
-app_version = "0.1.3"  # Increment version here
+app_version = "0.2.0"  # Increment version here
 
 
 # required_apps = []
@@ -145,7 +145,7 @@ app_version = "0.1.3"  # Increment version here
 # 	],
 # 	"hourly": [
 # 		"sil.tasks.hourly"
-# 	],
+# 	],ike i need to install my custom app in which 
 # 	"weekly": [
 # 		"sil.tasks.weekly"
 # 	],

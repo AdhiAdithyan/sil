@@ -210,3 +210,41 @@ def update_journal_entry_tally_status(name=None):
     except Exception as e:
         frappe.log_error(message=str(e), title="update_journal_entry_tally_status API Error")
         return {"status": "error", "message": f"Error updating Journal Entry: {str(e)}"}
+
+import frappe
+from frappe import _
+from datetime import datetime
+
+@frappe.whitelist(allow_guest=True)
+def update_sales_invoice_tally(company, date):
+    try:
+        # Clear the cache
+        frappe.clear_cache()
+
+        # Convert date format from DD-MM-YYYY to YYYY-MM-DD
+        formatted_date = datetime.strptime(date, "%d-%m-%Y").strftime("%Y-%m-%d")
+        
+        # SQL Query to update invoices
+        sql_query = """
+            UPDATE `tabSales Invoice`
+            SET custom_is_tallyupdated = 1
+            WHERE company = %s
+            AND posting_date <= %s
+        """
+        frappe.db.sql(sql_query, (company, formatted_date))
+        
+        # Commit the changes
+        frappe.db.commit()
+        
+        # Log successful update
+        frappe.logger().info(f"Sales invoices for company {company} updated successfully on or before {formatted_date}.")
+        
+        return {"success": True, "message": "Sales invoices updated successfully."}
+    
+    except ValueError:
+        return {"success": False, "message": "Invalid date format. Please use DD-MM-YYYY."}
+    
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.logger().error(f"Error updating sales invoices for company {company} on or before {formatted_date}: {e}")
+        return {"success": False, "message": f"An error occurred: {str(e)}"}
