@@ -542,15 +542,6 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "question-sign",
-  "modified": "2024-07-09 17:01:30.598412",
-  "name": "Pending",
-  "style": "",
-  "workflow_state_name": "Pending"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
   "icon": "",
   "modified": "2024-07-18 12:05:49.969160",
   "name": "To AA Approver",
@@ -902,15 +893,6 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "remove",
-  "modified": "2024-07-09 17:01:30.604085",
-  "name": "Rejected",
-  "style": "Danger",
-  "workflow_state_name": "Rejected"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
   "icon": "",
   "modified": "2024-07-18 12:05:50.080337",
   "name": "Rejected by SCM2",
@@ -1033,15 +1015,6 @@
   "name": "Pending Approval from Acc Manager3",
   "style": "",
   "workflow_state_name": "Pending Approval from Acc Manager3"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "ok-sign",
-  "modified": "2024-07-09 17:01:30.602587",
-  "name": "Approved",
-  "style": "Success",
-  "workflow_state_name": "Approved"
  },
  {
   "docstatus": 0,
@@ -1186,5 +1159,32 @@
   "name": "Pending Approval from Customer Support4",
   "style": "",
   "workflow_state_name": "Pending Approval from Customer Support4"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2025-02-19 18:41:55.367265",
+  "name": "Pending",
+  "style": "",
+  "workflow_state_name": "Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2025-02-19 18:41:55.368643",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2025-02-19 18:41:55.370082",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
  }
 ]

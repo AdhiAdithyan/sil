@@ -289,14 +289,14 @@ fixtures = [
     {"dt": "Portal Menu Item"},
     {"dt": "Web Page"},
     {"dt": "Web Form"},
-    {"dt": "Notification"},
+    # {"dt": "Notification"},
     # {"dt": "Email Alert"},
-    {"dt": "Email Template"},
+    # {"dt": "Email Template"},
     #{"dt": "Dashboard"},
-     {"dt": "Dashboard",
-        "filters": [["is_standard", "=", "0"]],
-        "ignore_version": 1},
-    {"dt": "Dashboard Chart"},
+    #  {"dt": "Dashboard",
+    #     "filters": [["is_standard", "=", "0"]],
+    #     "ignore_version": 1},
+    # {"dt": "Dashboard Chart"},
     {"dt": "User Permission"}
 ]
 

@@ -98,7 +98,7 @@ def generateSerialNo(items_series, form_doc):
     serial_nos = {}
     current_year_month = get_current_year_month()
     # print(f"current_year_month:{current_year_month}")
-    for item_index, itemDetails in items_series.items():
+    for item_index, itemDetails in items_series.itlems():
         # print("items_series")
         # print(items_series)
         # print("items_series.items()")
