@@ -89,239 +89,200 @@ def get_current_year_month():
 
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def generateSerialNo(items_series, form_doc):
     items_series = frappe.parse_json(items_series)
-    # frappe.logger().info("generateSeriesNo items_series request: %s" % items_series)
-    # print("items_series")
-    # print(items_series)
     serial_nos = {}
     current_year_month = get_current_year_month()
-    # print(f"current_year_month:{current_year_month}")
-    for item_index, itemDetails in items_series.itlems():
-        # print("items_series")
-        # print(items_series)
-        # print("items_series.items()")
-        # print(items_series.items())
-        # print("itemDetails")
-        # print(itemDetails)
-        # print("item_index")
-        # print(item_index)
+    
+    for item_index, itemDetails in items_series.items():
         item_code = itemDetails["item_code"]
         itemQty = itemDetails["quantity"]
 
+        # Check if serial numbers already exist
         try:
-            length = len(itemDetails["serial_Nos"])
+            length = len(itemDetails["serial_nos"])
         except KeyError:
             length = 0
 
         if length < 5:
-
-            item_family_details = frappe.get_all(
-                "Item Family", 
-                filters={"family_name": itemDetails["item_family"]},
-                fields=["name", "family_name", "series_prefix", "last_serial_no","do_you_have_a_serial_no"]
-            )
-            # print(f"item_family_details:{str(item_family_details)}")
-            if item_family_details:
-                item_family = item_family_details[0]
+            # Begin transaction with FOR UPDATE lock to prevent race conditions
+            try:
+                # Lock the item family row for the duration of this transaction
+                item_family = frappe.db.sql("""
+                    SELECT name, family_name, series_prefix, last_serial_no, do_you_have_a_serial_no 
+                    FROM `tabItem Family` 
+                    WHERE family_name = %s
+                    FOR UPDATE
+                """, (itemDetails["item_family"],), as_dict=1)
+                
+                if not item_family:
+                    serial_nos[item_index] = None
+                    return {"success": False, "message": "Item family details missing...", "serial_nos": serial_nos}
+                
+                item_family = item_family[0]
+                
+                # Convert quantity to integer safely
                 try:
                     qty = int(itemQty)
                 except ValueError:
-                    qty = 0    
-
-                last_series=0
+                    qty = 0
+                
+                # Convert last_serial_no to integer safely
                 try:
                     last_series = int(item_family["last_serial_no"])
-                except Exception as e:
-                    last_series=0    
+                except Exception:
+                    last_series = 0
                 
                 item_prefix = f"{current_year_month}{item_family['series_prefix']}"
                 hasSerialNo = item_family["do_you_have_a_serial_no"]
-
-                # print(f"item_prefix:{item_prefix}")
-                # print(f"hasSerialNo:{hasSerialNo}")
-
-                if hasSerialNo=="NO" or hasSerialNo=="No":
-                    updated_last_series = pad_string_with_zeros(str(last_series + 1),15)
+                
+                # Process based on serial number configuration
+                if hasSerialNo.upper() == "NO":
+                    updated_last_series = pad_string_with_zeros(str(last_series + 1), 15)
                     starting_serialNo = f"{updated_last_series}B"
-                    itemDetails["serial_Nos"] = ''
+                    itemDetails["serial_nos"] = ''
                     serial_nos[item_index] = itemDetails
                 else:
-                    item_prefix_len=len(item_prefix)
-                    updated_last_series = pad_string_with_zeros(str(last_series + 1),15-item_prefix_len)
-                    starting_serialNo = f"{item_prefix}{updated_last_series}B"  
-
+                    # Generate serial numbers with prefix
+                    item_prefix_len = len(item_prefix)
+                    updated_last_series = pad_string_with_zeros(str(last_series + 1), 15-item_prefix_len)
+                    starting_serialNo = f"{item_prefix}{updated_last_series}B"
+                    
+                    # Create an array to store all serial numbers we'll generate
+                    serial_numbers_to_create = []
+                    
+                    # Pre-generate all serial numbers
                     for i in range(qty):
                         current_count = (i + 1)
                         count = last_series + current_count
-                        if hasSerialNo=="NO" or hasSerialNo=="No":
-                            value=pad_string_with_zeros(str(count),15)
+                        
+                        if hasSerialNo.upper() == "NO":
+                            value = pad_string_with_zeros(str(count), 15)
+                            serial_number = f"{value}B"
                         else:
-                            value = pad_string_with_zeros(str(count),5)
-
-                        itemCode = itemDetails["item_code"]
+                            value = pad_string_with_zeros(str(count), 15-item_prefix_len)
+                            serial_number = f"{item_prefix}{value}B"
+                        
+                        # Prepare data for serial number entry
                         cust_name = itemDetails["customer"]
+                        itemCode = itemDetails["item_code"]
                         itemName = itemDetails["item_name"]
-                        if hasSerialNo=="NO" or hasSerialNo=="No":
-                            # Check for duplicate entry
-                            duplicate_check = frappe.db.exists("Item Family Serial No List", {
-                                "customer": cust_name,
-                                "item_code": item_index,
-                                "item_name": itemName,
-                                "item_family": itemDetails["item_family"],
-                                "serial_no": f"{value}B"
-                            })
-                        else:
-                            # Check for duplicate entry
-                            duplicate_check = frappe.db.exists("Item Family Serial No List", {
-                                "customer": cust_name,
-                                "item_code": item_index,
-                                "item_name": itemName,
-                                "item_family": itemDetails["item_family"],
-                                "serial_no": f"{item_prefix}{value}B"
-                            })
-
+                        
+                        # Check for duplicate entry
+                        duplicate_check = frappe.db.exists("Item Family Serial No List", {
+                            "customer": cust_name,
+                            "item_code": itemCode,
+                            "item_name": itemName,
+                            "item_family": itemDetails["item_family"],
+                            "serial_no": serial_number
+                        })
+                        
                         if duplicate_check:
                             frappe.logger().info(f"Duplicate entry detected: {duplicate_check}")
                             return {"success": False, "message": "Duplicate entry detected"}
-                        else:
-                            # Get current date and time as a string
-                            current_time_str = now()
-                            item_classification = frappe.db.get_value('Item', itemCode, 'custom_item_classification')
-
-                            frappe.logger().info("Current Date String: %s" % current_time_str)
-                            if hasSerialNo=="NO" or hasSerialNo=="No":
-                                value=pad_string_with_zeros(str(value),15)
-                                item_family_serial_no_list = {
-                                "doctype": "Item Family Serial No List",
-                                "customer": cust_name,
-                                "item": itemCode,
-                                "custom_item_classification":item_classification,
-                                "custom_sales_order":itemDetails["sales_order_name"],
-                                "item_name": itemName,
-                                "item_family": itemDetails["item_family"],
-                                "dateTime": current_time_str,
-                                "serial_no": f"{value}B"
-                                }
-                            else:
-                                item_prefix_len=len(item_prefix)
-                                value=pad_string_with_zeros(str(value),15-item_prefix_len)
-
-                                item_family_serial_no_list = {
-                                "doctype": "Item Family Serial No List",
-                                "customer": cust_name,
-                                "item": itemCode,
-                                "custom_item_classification":item_classification,
-                                "custom_sales_order":itemDetails["sales_order_name"],
-                                "item_name": itemName,
-                                "item_family": itemDetails["item_family"],
-                                "dateTime": current_time_str,
-                                "serial_no": f"{item_prefix}{value}B"
-                                }
-
-
-                            frappe.logger().info("item_family_serial_no_list: %s" % item_family_serial_no_list)
-                            
-                            # Insert data into the database
-                            frappe.get_doc(item_family_serial_no_list).insert(ignore_permissions=True)
-                            
-
-                            # Update the Item Family with the latest series number
-                            frappe.db.sql(
-                                    """UPDATE `tabItem Family` SET `last_serial_no` = %s WHERE `family_name`=%s;""",
-                                    (value, itemDetails["item_family"])
-                                )
-                            
                         
-                        try:
-                            
-                            
-                            if hasSerialNo=="NO" or hasSerialNo=="No":
-                                value=pad_string_with_zeros(str(last_series + 1),15)
-                                if updated_last_series == value:
-                                    current_serialNo = f"{updated_last_series}B"
-                                else:
-                                    current_serialNo = f"{updated_last_series}B - {value}B"    
-                            else:
-                                item_prefix_len=len(item_prefix)
-                                value=pad_string_with_zeros(str(last_series + 1),15-item_prefix_len)
-                                if updated_last_series == value:
-                                    current_serialNo = f"{item_prefix}{updated_last_series}B"   
-                                else:
-                                    current_serialNo = f"{item_prefix}{updated_last_series}B - {item_prefix}{value}B"       
-
-
-                            # Update the Item Series No with the new serial numbers
-                            frappe.db.sql(
-                                """UPDATE `tabItem Series No` SET `serial_nos` = %s WHERE `parent`=%s AND `item_series`=%s;""",
-                                (current_serialNo, form_doc, itemName)
-                            )
-                            
-
-                            frappe.logger().info(f"Serial {value} updated successfully.")
-                        except Exception as e:
-                            frappe.logger().error(f"Error updating order : {e}")
-                            
+                        # Get current date and time
+                        current_time_str = now()
+                        item_classification = frappe.db.get_value('Item', itemCode, 'custom_item_classification')
+                        
+                        # Prepare serial number entry
+                        item_family_serial_no_list = {
+                            "doctype": "Item Family Serial No List",
+                            "customer": cust_name,
+                            "item": itemCode,
+                            "custom_item_classification": item_classification,
+                            "custom_sales_order": itemDetails["sales_order_name"],
+                            "item_name": itemName,
+                            "item_family": itemDetails["item_family"],
+                            "dateTime": current_time_str,
+                            "serial_no": serial_number
+                        }
+                        
+                        serial_numbers_to_create.append(item_family_serial_no_list)
+                        
+                        # If we've processed all quantities, update the serial_nos in itemDetails
                         if qty == current_count:
-                            if hasSerialNo=="NO" or hasSerialNo=="No":
-                                last_series=pad_string_with_zeros(str(last_series + qty),15)
-                                starting_serialNo = f"{updated_last_series}B"
-                                ending_serialNo = f"{last_series}B"
-                                if updated_last_series == last_series:
-                                    itemDetails["serial_Nos"] = f'{starting_serialNo}'
+                            if hasSerialNo.upper() == "NO":
+                                last_series_str = pad_string_with_zeros(str(last_series + qty), 15)
+                                ending_serialNo = f"{last_series_str}B"
+                                
+                                if updated_last_series == last_series_str:
+                                    itemDetails["serial_nos"] = f'{starting_serialNo}'
                                 else:
-                                    itemDetails["serial_Nos"] = f'{starting_serialNo} - {ending_serialNo}'    
-                                # itemDetails["serial_Nos"] = f'{starting_serialNo} - {ending_serialNo}'    
+                                    itemDetails["serial_nos"] = f'{starting_serialNo} - {ending_serialNo}'
                             else:
-                                item_prefix_len=len(item_prefix)
-                                last_series=pad_string_with_zeros(str(last_series + qty),15-item_prefix_len)
-                                starting_serialNo = f"{item_prefix}{updated_last_series}B"
-                                ending_serialNo = f"{item_prefix}{last_series}B"
-                                if updated_last_series == last_series:
-                                    itemDetails["serial_Nos"] = f'{starting_serialNo}'
+                                last_series_str = pad_string_with_zeros(str(last_series + qty), 15-item_prefix_len)
+                                ending_serialNo = f"{item_prefix}{last_series_str}B"
+                                
+                                if updated_last_series == last_series_str:
+                                    itemDetails["serial_nos"] = f'{starting_serialNo}'
                                 else:
-                                    itemDetails["serial_Nos"] = f'{starting_serialNo} - {ending_serialNo}'    
-                                # itemDetails["serial_Nos"] = f'{starting_serialNo} - {ending_serialNo}'    
-                            
-                            # checking for warranty applicable items.
-                            stock_check = frappe.db.exists("Item", {
-                                "item_code": itemDetails["item_code"],
-                                "custom_item_classification": "Finished Products"
-                            })
-                            if stock_check:
-                                current_datetime = now_datetime()
-                                warranty_card_details = {
-                                    "doctype": "Warranty Card",
-                                    "customer": cust_name,
-                                    "item": itemCode,
-                                    "item_name": itemName,
-                                    "item_family": itemDetails["item_family"],
-                                    "dateTime": current_time_str,
-                                    "serial_no": itemDetails["serial_Nos"],
-                                    "date":current_datetime
-                                    # "serial_no": f"{item_prefix}{value}B"
-                                }
-
-                                frappe.logger().info("warranty_card_details: %s" % warranty_card_details)
-                                
-                                # Insert data into the database
-                                frappe.get_doc(warranty_card_details).insert(ignore_permissions=True)
-                                
-
-                                # frappe.db.set_value("Item Family", item_family["name"], "last_serial_no", int(last_series) + qty)
-                                # frappe.db.commit()
-                                serial_nos[item_index] = itemDetails
-            else:
-                serial_nos[item_index] = None  # Handle cases where item family details are not found
-                return {"success": False, "message": "Item family details missing...", "serial_nos": serial_nos}
+                                    itemDetails["serial_nos"] = f'{starting_serialNo} - {ending_serialNo}'
+                    
+                    # Now insert all serial numbers at once
+                    for entry in serial_numbers_to_create:
+                        frappe.get_doc(entry).insert(ignore_permissions=True)
+                    
+                    # Update the Item Family with the latest series number - we're still in the lock
+                    final_value = pad_string_with_zeros(str(last_series + qty), 15-item_prefix_len if hasSerialNo.upper() != "NO" else 15)
+                    frappe.db.sql(
+                        """UPDATE `tabItem Family` SET `last_serial_no` = %s WHERE `name`=%s;""",
+                        (final_value, item_family["name"])
+                    )
+                    
+                    # Update the Item Series No with the new serial numbers
+                    try:
+                        if hasSerialNo.upper() == "NO":
+                            value = pad_string_with_zeros(str(last_series + qty), 15)
+                            current_serialNo = itemDetails["serial_nos"]
+                        else:
+                            current_serialNo = itemDetails["serial_nos"]
+                        
+                        frappe.db.sql(
+                            """UPDATE `tabItem Series No` SET `serial_no` = %s WHERE `parent`=%s AND `item_name`=%s;""",
+                            (current_serialNo, form_doc, itemName)
+                        )
+                    except Exception as e:
+                        frappe.logger().error(f"Error updating order: {e}")
+                    
+                    # Check if warranty is applicable and create warranty card
+                    stock_check = frappe.db.exists("Item", {
+                        "item_code": itemDetails["item_code"],
+                        "custom_item_classification": "Finished Products"
+                    })
+                    
+                    if stock_check:
+                        current_datetime = now_datetime()
+                        warranty_card_details = {
+                            "doctype": "Warranty Card",
+                            "customer": cust_name,
+                            "item": itemCode,
+                            "item_name": itemName,
+                            "item_family": itemDetails["item_family"],
+                            "dateTime": current_time_str,
+                            "serial_no": itemDetails["serial_nos"],
+                            "date": current_datetime
+                        }
+                        
+                        frappe.logger().info("warranty_card_details: %s" % warranty_card_details)
+                        frappe.get_doc(warranty_card_details).insert(ignore_permissions=True)
+                    
+                    # Store the result
+                    serial_nos[item_index] = itemDetails
+                
+                # Commit the transaction to release the lock
+                frappe.db.commit()
+                
+            except Exception as e:
+                # Rollback in case of any error
+                frappe.db.rollback()
+                frappe.logger().error(f"Error generating serial number: {e}")
+                return {"success": False, "message": f"Error generating serial number: {str(e)}", "serial_nos": serial_nos}
         else:
-            frappe.logger().info("Duplicate entry")
-            serial_nos[item_index] = None
-            return {"success": False, "message": "Duplicate entry", "serial_nos": serial_nos}
-
-        frappe.db.commit()
-    # print(f"serial_nos: {str(serial_nos)}")
+            frappe.logger().info("Serial numbers already exist")
+            serial_nos[item_index] = itemDetails
+    
     return {"success": True, "serial_nos": serial_nos}
 
 
