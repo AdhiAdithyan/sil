@@ -284,7 +284,7 @@ fixtures = [
     {"dt": "Custom DocPerm"},
     {"dt": "Role"},
     {"dt": "Custom Role"},
-    {"dt": "Module Def"},
+    # {"dt": "Module Def"},
     {"dt": "Translation"},
     {"dt": "Portal Menu Item"},
     {"dt": "Web Page"},
